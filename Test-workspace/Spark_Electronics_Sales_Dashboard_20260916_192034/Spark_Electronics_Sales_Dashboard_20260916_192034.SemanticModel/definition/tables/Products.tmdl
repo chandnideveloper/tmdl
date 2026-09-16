@@ -1,0 +1,87 @@
+table Products
+	lineageTag: 7ee3cfdd-a859-5494-8162-e91a7dbe0aa7
+
+	column ProductID
+		dataType: string
+		lineageTag: 4d2bed8a-bcdc-5b72-818a-95add18031bb
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductName
+		dataType: string
+		lineageTag: e741129b-aa9c-59f1-a9e1-fab7f85d6115
+		summarizeBy: none
+		sourceColumn: ProductName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: ed08bfd7-238a-5d1b-a5e3-789a614ed25a
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column SubCategory
+		dataType: string
+		lineageTag: dbcfdfd8-2780-5e77-b897-23acdbc00012
+		summarizeBy: none
+		sourceColumn: SubCategory
+
+		annotation SummarizationSetBy = Automatic
+
+	column Brand
+		dataType: string
+		lineageTag: 5e70d00a-495e-5cf0-ac8e-67edba7c44f3
+		summarizeBy: none
+		sourceColumn: Brand
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitCost
+		dataType: decimal
+		lineageTag: c3c92a5f-2283-5f95-a134-263cfe7542fc
+		summarizeBy: sum
+		sourceColumn: UnitCost
+		formatString: #,##0.00
+
+		annotation SummarizationSetBy = Automatic
+
+	column RetailPrice
+		dataType: decimal
+		lineageTag: f023ee8c-fd57-59d8-8f53-0054a441ca03
+		summarizeBy: sum
+		sourceColumn: RetailPrice
+		formatString: #,##0.00
+
+		annotation SummarizationSetBy = Automatic
+
+	column MarginPct
+		dataType: decimal
+		lineageTag: 856473b7-92fe-5514-a96d-2d377615ace9
+		summarizeBy: sum
+		sourceColumn: MarginPct
+		formatString: #,##0.00
+
+		annotation SummarizationSetBy = Automatic
+
+	column Supplier
+		dataType: string
+		lineageTag: b247c796-33f8-57a6-b1ea-dc32a05784b4
+		summarizeBy: none
+		sourceColumn: Supplier
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Products = m
+		mode: import
+		source =
+				let
+				    Source = #table({"ProductID", "ProductName", "Category", "SubCategory", "Brand", "UnitCost", "RetailPrice", "MarginPct", "Supplier"}, {})
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
