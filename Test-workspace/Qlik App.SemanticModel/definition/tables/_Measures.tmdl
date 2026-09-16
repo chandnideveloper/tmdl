@@ -1,0 +1,119 @@
+table _Measures
+	lineageTag: 7724e053-781a-51b9-b665-e9ad6750f4b4
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	measure Measure = BLANK()
+		lineageTag: ecdd3933-0b21-534c-a406-9028c2411bbe
+
+	column _placeholder
+		dataType: string
+		isHidden
+		lineageTag: da4619db-a22e-548c-945a-314c8c5ff5f9
+		summarizeBy: none
+		sourceColumn: _placeholder
+
+	partition _Measures = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows({}, {"_placeholder"})
+				in
+				    Source
