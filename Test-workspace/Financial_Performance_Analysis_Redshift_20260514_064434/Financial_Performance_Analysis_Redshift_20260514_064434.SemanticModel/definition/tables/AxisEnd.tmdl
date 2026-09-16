@@ -1,0 +1,16 @@
+table AxisEnd
+
+	measure SelectedAxisEnd = SELECTEDVALUE('AxisEnd'[Value], 0)
+		formatString: 0
+		isHidden
+
+	column Value
+		isNameInferred
+		sourceColumn: [Value]
+
+	partition AxisEnd = calculated
+		mode: import
+		source = DATATABLE("Value", INTEGER, {{0}})
+
+	annotation PBI_Id = 120eea072e2f45678f2fe4745355cfb0
+

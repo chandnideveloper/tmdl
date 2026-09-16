@@ -1,0 +1,76 @@
+table DOCTORS
+	lineageTag: 7290afc0-0c5a-4e63-8aff-c9111097b4f0
+
+	column 'Doctor Id (Doctors)'
+		dataType: string
+		lineageTag: a81442f6-2fda-4248-9f38-258f38888064
+		summarizeBy: none
+		sourceColumn: Doctor Id (Doctors)
+
+	column 'Full Name'
+		dataType: string
+		lineageTag: 5209131f-bd59-460e-a706-225aeee7d5bf
+		summarizeBy: none
+		sourceColumn: Full Name
+
+	column Specialization
+		dataType: string
+		lineageTag: 079666a3-538a-4119-8013-2d6192ec06cf
+		summarizeBy: none
+		sourceColumn: Specialization
+
+	column 'Department (Doctors)'
+		dataType: string
+		lineageTag: 2a866db9-94a8-43f7-9dbe-3c732718c43f
+		summarizeBy: none
+		sourceColumn: Department (Doctors)
+
+	column 'Contact Number (Doctors)'
+		dataType: string
+		lineageTag: 1f665d82-4acb-4389-8ab6-993e3608582c
+		summarizeBy: none
+		sourceColumn: Contact Number (Doctors)
+
+	column 'Email Address (Doctors)'
+		dataType: string
+		lineageTag: 5088bdf5-e2ce-495a-b753-26a9993eec2e
+		summarizeBy: none
+		sourceColumn: Email Address (Doctors)
+
+	column 'Availability Days'
+		dataType: string
+		lineageTag: 92e7a5bf-bf92-4957-b4fc-57676a70288e
+		summarizeBy: none
+		sourceColumn: Availability Days
+
+	column 'Consultation Fee'
+		dataType: double
+		lineageTag: f723751c-867d-4337-925c-74263abfec40
+		summarizeBy: none
+		sourceColumn: Consultation Fee
+
+	column 'Experience Years'
+		dataType: double
+		lineageTag: 97f0bca6-2f9f-4a3c-b867-300a5d660d81
+		summarizeBy: none
+		sourceColumn: Experience Years
+
+	column 'Registration Number'
+		dataType: string
+		lineageTag: 09393c72-b9d4-4e70-85c0-f013c00489b6
+		summarizeBy: none
+		sourceColumn: Registration Number
+
+	partition DOCTORS = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("zldagwo-pw94760.snowflakecomputing.com", "COMPUTE_WH"),
+				    DB = Source{[Name="CITY_HOSPITAL"]}[Data],
+				    Schema = DB{[Name="PUBLIC"]}[Data],
+				    Table = Schema{[Name="DOCTORS"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Table, {{"DOCTOR_ID", type text}, {"FULL_NAME", type text}, {"SPECIALIZATION", type text}, {"DEPARTMENT", type text}, {"CONTACT_NUMBER", type text}, {"EMAIL_ADDRESS", type text}, {"AVAILABILITY_DAYS", type text}, {"CONSULTATION_FEE", type number}, {"EXPERIENCE_YEARS", type number}, {"REGISTRATION_NUMBER", type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"DOCTOR_ID", "Doctor Id (Doctors)"}, {"FULL_NAME", "Full Name"}, {"SPECIALIZATION", "Specialization"}, {"DEPARTMENT", "Department (Doctors)"}, {"CONTACT_NUMBER", "Contact Number (Doctors)"}, {"EMAIL_ADDRESS", "Email Address (Doctors)"}, {"AVAILABILITY_DAYS", "Availability Days"}, {"CONSULTATION_FEE", "Consultation Fee"}, {"EXPERIENCE_YEARS", "Experience Years"}, {"REGISTRATION_NUMBER", "Registration Number"}})
+				in
+				    #"Renamed Columns"
+

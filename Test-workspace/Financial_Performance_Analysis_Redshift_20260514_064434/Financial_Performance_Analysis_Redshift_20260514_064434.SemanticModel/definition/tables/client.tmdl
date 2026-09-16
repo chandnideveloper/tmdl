@@ -1,0 +1,51 @@
+table client
+	lineageTag: 201aa83d-c1a6-4268-81d4-5bb1a06ae022
+
+	measure 'Total Customers' = DISTINCTCOUNT('client'[Client Id])
+
+	measure 'Avg Loan per Customer' = DIVIDE(SUM('loan'[Amount]), DISTINCTCOUNT('client'[Client Id]))
+
+	measure '% Contribution' = DIVIDE(DISTINCTCOUNT('client'[Client Id]), CALCULATE(DISTINCTCOUNT('client'[Client Id]), ALLSELECTED('client')))*100
+
+	measure 'Customer Level Loan (FIXED LOD)' = CALCULATE(SUM('loan'[Amount]), ALLEXCEPT('client', 'client'[Client Id]))
+
+	column 'Client Id'
+		dataType: double
+		lineageTag: 8de926af-0b50-4cc4-a50b-4d37af9e9c9f
+		summarizeBy: none
+		sourceColumn: Client Id
+
+	column Gender
+		dataType: string
+		lineageTag: 95f976e0-c299-49f1-8c9b-289c8334cf1d
+		summarizeBy: none
+		sourceColumn: Gender
+
+	column 'Birth Date'
+		dataType: string
+		lineageTag: 95cf1c0b-0a1b-4417-9395-c390d4a4b414
+		summarizeBy: none
+		sourceColumn: Birth Date
+
+	column 'District Id'
+		dataType: double
+		lineageTag: 8807431d-8653-4be8-a458-f4033305b8b3
+		summarizeBy: none
+		sourceColumn: District Id
+
+	column 'Customer Segmentation' = VAR _CustomerLoan = [Customer Level Loan (FIXED LOD)] RETURN SWITCH( TRUE(), _CustomerLoan > 100000, "High Value", _CustomerLoan > 50000, "Medium", "Low" )
+		dataType: string
+		summarizeBy: none
+
+	partition client = m
+		mode: import
+		source =
+				let
+				    Source = AmazonRedshift.Database("financial-workgroup.164761934860.ap-southeast-2.redshift-serverless.amazonaws.com:5439", "dev", [ProviderName = null, BatchSize = null]),
+				    #"Navigation 1" = Source{[Name = "public"]}[Data],
+				    #"Navigation 2" = #"Navigation 1"{[Name = "client"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(#"Navigation 2", {{"client_id", type number}, {"gender", type text}, {"birth_date", type text}, {"district_id", type number}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"client_id", "Client Id"}, {"gender", "Gender"}, {"birth_date", "Birth Date"}, {"district_id", "District Id"}})
+				in
+				    #"Renamed Columns"
+

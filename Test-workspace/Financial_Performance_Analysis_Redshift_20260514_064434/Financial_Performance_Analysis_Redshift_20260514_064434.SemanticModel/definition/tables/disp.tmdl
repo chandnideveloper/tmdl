@@ -1,0 +1,41 @@
+table disp
+	lineageTag: f964a200-967c-4578-b310-faa84199f37d
+
+	measure 'CNTD of Account Id (disp)' = DISTINCTCOUNT('disp'[Account Id])
+
+	column 'Disp Id'
+		dataType: double
+		lineageTag: fe8629f0-df38-4ab6-9892-c21a78e28940
+		summarizeBy: none
+		sourceColumn: Disp Id
+
+	column 'Client Id (Disp)'
+		dataType: double
+		lineageTag: 54dbac35-3ecb-48e5-bd28-f61522345f60
+		summarizeBy: none
+		sourceColumn: Client Id (Disp)
+
+	column 'Account Id'
+		dataType: double
+		lineageTag: 9afd0aed-b977-4ef3-a21c-6142fc158ec0
+		summarizeBy: none
+		sourceColumn: Account Id
+
+	column Type
+		dataType: string
+		lineageTag: 78296816-1768-45f8-8f3b-3df7c2d18618
+		summarizeBy: none
+		sourceColumn: Type
+
+	partition disp = m
+		mode: import
+		source =
+				let
+				    Source = AmazonRedshift.Database("financial-workgroup.164761934860.ap-southeast-2.redshift-serverless.amazonaws.com:5439", "dev", [ProviderName = null, BatchSize = null]),
+				    #"Navigation 1" = Source{[Name = "public"]}[Data],
+				    #"Navigation 2" = #"Navigation 1"{[Name = "disp"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(#"Navigation 2", {{"disp_id", type number}, {"client_id", type number}, {"account_id", type number}, {"type", type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"disp_id", "Disp Id"}, {"client_id", "Client Id (Disp)"}, {"account_id", "Account Id"}, {"type", "Type"}})
+				in
+				    #"Renamed Columns"
+

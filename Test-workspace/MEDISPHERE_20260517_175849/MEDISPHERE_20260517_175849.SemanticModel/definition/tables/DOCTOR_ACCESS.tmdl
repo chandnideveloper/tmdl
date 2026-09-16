@@ -1,0 +1,30 @@
+table DOCTOR_ACCESS
+	lineageTag: eedc3fe5-110d-4b46-af55-68dcde7795b4
+
+	measure 'User Scope Filter' = SELECTEDVALUE('DOCTOR_ACCESS'[Username])
+
+	column Username
+		dataType: string
+		lineageTag: 3853dfd0-85ef-47b5-8a4f-b7d8326b1543
+		summarizeBy: none
+		sourceColumn: Username
+
+	column 'Doctor Id (Doctor Access)'
+		dataType: string
+		lineageTag: 921d26b1-66ea-478a-b9b3-20ebba3390f0
+		summarizeBy: none
+		sourceColumn: Doctor Id (Doctor Access)
+
+	partition DOCTOR_ACCESS = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("zldagwo-pw94760.snowflakecomputing.com", "COMPUTE_WH"),
+				    DB = Source{[Name="CITY_HOSPITAL"]}[Data],
+				    Schema = DB{[Name="PUBLIC"]}[Data],
+				    Table = Schema{[Name="DOCTOR_ACCESS"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Table, {{"USERNAME", type text}, {"DOCTOR_ID", type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"USERNAME", "Username"}, {"DOCTOR_ID", "Doctor Id (Doctor Access)"}})
+				in
+				    #"Renamed Columns"
+

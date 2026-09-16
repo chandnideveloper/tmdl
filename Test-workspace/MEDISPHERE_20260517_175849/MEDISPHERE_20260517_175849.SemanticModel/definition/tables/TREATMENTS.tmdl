@@ -1,0 +1,106 @@
+table TREATMENTS
+	lineageTag: 56b42f14-08c6-4634-9d4c-9f80cfbf24a8
+
+	column 'Treatment Id'
+		dataType: string
+		lineageTag: 53deb72f-32fe-4c6f-be8a-b2fcfa8b7872
+		summarizeBy: none
+		sourceColumn: Treatment Id
+
+	column 'Appointment Id (Treatments)'
+		dataType: string
+		lineageTag: 134f2ae0-1239-4f88-b5a5-ab94ca3a178b
+		summarizeBy: none
+		sourceColumn: Appointment Id (Treatments)
+
+	column 'Treatment Type'
+		dataType: string
+		lineageTag: 7c2b2e92-8460-4c20-bb2a-c77523eac598
+		summarizeBy: none
+		sourceColumn: Treatment Type
+
+	column 'Treatment Description'
+		dataType: string
+		lineageTag: 5a674278-321a-419e-92fb-7da3a7c18f67
+		summarizeBy: none
+		sourceColumn: Treatment Description
+
+	column 'Prescribed Medication'
+		dataType: string
+		lineageTag: c4adcd14-73f6-47b9-942a-24a8f5e18765
+		summarizeBy: none
+		sourceColumn: Prescribed Medication
+
+	column 'Start Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 3f4ff1fd-2e1a-45d0-84b2-385bc3d2b56c
+		summarizeBy: none
+		sourceColumn: Start Date
+
+		variation Variation
+			isDefault
+			relationship: 00cf506d-e596-4852-93bb-292a9d02f2d3
+			defaultHierarchy: LocalDateTable_75319827-d767-4575-bbf7-9c1a62f29928.'Date Hierarchy'
+
+		changedProperty = DataType
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'End Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 15d29559-817d-4659-aa1b-176ad0f561ea
+		summarizeBy: none
+		sourceColumn: End Date
+
+		variation Variation
+			isDefault
+			relationship: ef6eb615-4ac1-4072-9dd5-17ee3f9c441e
+			defaultHierarchy: LocalDateTable_a9c6c254-4806-4fd0-9916-869d577277dd.'Date Hierarchy'
+
+		changedProperty = DataType
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Outcome Status'
+		dataType: string
+		lineageTag: 395736a9-8c98-469f-9b7e-375bdfc85da3
+		summarizeBy: none
+		sourceColumn: Outcome Status
+
+	column 'Follow Up Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 81f2b0ba-3afa-4de8-b1ec-fffafeb869d1
+		summarizeBy: none
+		sourceColumn: Follow Up Date
+
+		variation Variation
+			isDefault
+			relationship: a43f8590-e34f-42fe-94b7-9d2332950e0a
+			defaultHierarchy: LocalDateTable_526942a6-f2fa-4969-8315-2ccdd4cc07c8.'Date Hierarchy'
+
+		changedProperty = DataType
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Treatment Cost'
+		dataType: double
+		lineageTag: 14caa553-fda1-40f4-8c59-c4c6e405b857
+		summarizeBy: none
+		sourceColumn: Treatment Cost
+
+	partition TREATMENTS = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("zldagwo-pw94760.snowflakecomputing.com", "COMPUTE_WH"),
+				    DB = Source{[Name="CITY_HOSPITAL"]}[Data],
+				    Schema = DB{[Name="PUBLIC"]}[Data],
+				    Table = Schema{[Name="TREATMENTS"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Table, {{"TREATMENT_ID", type text}, {"APPOINTMENT_ID", type text}, {"TREATMENT_TYPE", type text}, {"TREATMENT_DESCRIPTION", type text}, {"PRESCRIBED_MEDICATION", type text}, {"START_DATE", type date}, {"END_DATE", type date}, {"OUTCOME_STATUS", type text}, {"FOLLOW_UP_DATE", type date}, {"TREATMENT_COST", type number}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"TREATMENT_ID", "Treatment Id"}, {"APPOINTMENT_ID", "Appointment Id (Treatments)"}, {"TREATMENT_TYPE", "Treatment Type"}, {"TREATMENT_DESCRIPTION", "Treatment Description"}, {"PRESCRIBED_MEDICATION", "Prescribed Medication"}, {"START_DATE", "Start Date"}, {"END_DATE", "End Date"}, {"OUTCOME_STATUS", "Outcome Status"}, {"FOLLOW_UP_DATE", "Follow Up Date"}, {"TREATMENT_COST", "Treatment Cost"}})
+				in
+				    #"Renamed Columns"
+

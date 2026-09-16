@@ -1,0 +1,118 @@
+table Trucks
+	lineageTag: 73040672-c518-5b15-ba0c-643ceb78be53
+
+	column truck_id
+		dataType: string
+		lineageTag: b7013c61-049e-5aa8-ba0f-e722fd6b91a8
+		summarizeBy: none
+		sourceColumn: truck_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column unit_number
+		dataType: string
+		lineageTag: 0e1ef306-99e3-50e5-a961-5ac3429de1ae
+		summarizeBy: none
+		sourceColumn: unit_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column make
+		dataType: string
+		lineageTag: dedc418c-722c-52e7-b7f7-d19d7d951059
+		summarizeBy: none
+		sourceColumn: make
+
+		annotation SummarizationSetBy = Automatic
+
+	column truck_model_year
+		dataType: int64
+		formatString: #,##0
+		lineageTag: 5a007012-c08e-5d30-8d3a-04b12852280b
+		summarizeBy: none
+		sourceColumn: truck_model_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column truck_vin
+		dataType: string
+		lineageTag: bd430b8b-5845-581e-ae1c-55b5040bd471
+		summarizeBy: none
+		sourceColumn: truck_vin
+
+		annotation SummarizationSetBy = Automatic
+
+	column truck_acquisition_date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 2e4c72cd-e481-55b7-867c-42ca2fc6fb24
+		summarizeBy: none
+		sourceColumn: truck_acquisition_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column acquisition_mileage
+		dataType: double
+		formatString: #,##0.00
+		lineageTag: 250cf308-dbe2-5b4f-8a59-47ce9e99fdf8
+		summarizeBy: sum
+		sourceColumn: acquisition_mileage
+
+		annotation SummarizationSetBy = Automatic
+
+	column fuel_type
+		dataType: string
+		lineageTag: 4cb86b0b-807b-5b29-bbd0-5187c33b2d9a
+		summarizeBy: none
+		sourceColumn: fuel_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column tank_capacity_gallons
+		dataType: double
+		formatString: #,##0.00
+		lineageTag: 3bf65880-7cf0-55d9-a4be-fcb8a908112f
+		summarizeBy: sum
+		sourceColumn: tank_capacity_gallons
+
+		annotation SummarizationSetBy = Automatic
+
+	column truck_status
+		dataType: string
+		lineageTag: 3140ac2e-3bdc-58ac-a113-fa169e3d4934
+		summarizeBy: none
+		sourceColumn: truck_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column truck_home_terminal
+		dataType: string
+		lineageTag: bb3b2d4c-4c72-5a36-8a99-9af955ca22cf
+		summarizeBy: none
+		sourceColumn: truck_home_terminal
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Trucks = m
+		mode: import
+		source =
+				let
+				    Source = AmazonRedshift.Database("fleetvision-wg.881226714470.ap-southeast-2.redshift-serverless.amazonaws.com:5439", "dev"),
+				    Result = Value.NativeQuery(Source, "SELECT
+				        truck_id,
+				        unit_number,
+				        make,
+				        model_year            AS truck_model_year,
+				        vin                   AS truck_vin,
+				        acquisition_date      AS truck_acquisition_date,
+				        acquisition_mileage,
+				        fuel_type,
+				        tank_capacity_gallons,
+				        status                AS truck_status,
+				        home_terminal         AS truck_home_terminal
+				        FROM fleetvision.trucks", null, [EnableFolding=false])
+				in
+				    Result
+
+	annotation PBI_ResultType = Table
+

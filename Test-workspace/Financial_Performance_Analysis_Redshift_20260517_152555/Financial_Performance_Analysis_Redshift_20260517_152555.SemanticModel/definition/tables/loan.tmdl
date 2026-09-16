@@ -1,0 +1,84 @@
+table loan
+	lineageTag: 6aa66f36-861a-4d2a-aee3-9fd6151c14d0
+
+	measure 'Total Loan' = SUM('loan'[Amount])
+
+	measure 'Total Loans' = COUNT('loan'[Loan Id])
+
+	measure 'Select Metric' =
+			VAR _MetricVal = SELECTEDVALUE('Select Metric'[Value])
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    _MetricVal = "Total Loans", COUNT('loan'[Loan Id]),
+			    _MetricVal = "Total Amount", SUM('loan'[Amount]),
+			    _MetricVal = "Avg Loan", AVERAGE('loan'[Amount]),
+			    BLANK()
+			)
+
+	measure Loans = DISTINCTCOUNT('loan'[Loan Id])
+
+	measure 'Account Level Loan' = CALCULATE(SUM('loan'[Amount]), ALLEXCEPT('loan', 'loan'[Account Id (Loan)]))
+
+	column 'Loan Id'
+		dataType: double
+		lineageTag: 20a2444c-87a7-41c0-b412-96b6f6530806
+		summarizeBy: none
+		sourceColumn: Loan Id
+
+	column 'Account Id (Loan)'
+		dataType: double
+		lineageTag: acc97c88-d572-46d1-ad8a-b73b40f23785
+		summarizeBy: none
+		sourceColumn: Account Id (Loan)
+
+	column 'Date (Loan)'
+		dataType: string
+		lineageTag: 0a457483-38fc-49b6-b088-64c4ba2e931a
+		summarizeBy: none
+		sourceColumn: Date (Loan)
+
+	column Amount
+		dataType: double
+		lineageTag: 58e017c2-e4a0-4119-9447-c04cb026c991
+		summarizeBy: none
+		sourceColumn: Amount
+
+	column Duration
+		dataType: double
+		lineageTag: 103423db-0e15-4895-af12-a5c23cc1a3ce
+		summarizeBy: none
+		sourceColumn: Duration
+
+	column Payments
+		dataType: double
+		lineageTag: 258a6762-432d-4ca8-86c7-83882e87a7ae
+		summarizeBy: none
+		sourceColumn: Payments
+
+	column Status
+		dataType: string
+		lineageTag: 4c602759-e06f-48cd-beca-0625ef9f8803
+		summarizeBy: none
+		sourceColumn: Status
+
+	column 'Loan Risk Category' = SWITCH(TRUE(), 'loan'[Status] & "" = "A", "Low Risk", 'loan'[Status] & "" = "B", "Medium Risk", "High Risk")
+		dataType: string
+		summarizeBy: none
+
+	column 'Loan Status Category (Business Logic)' = SWITCH(TRUE(), 'loan'[Status] & "" = "A", "Good Loan", 'loan'[Status] & "" = "B", "Defaulter", "Risky")
+		dataType: string
+		summarizeBy: none
+
+	partition loan = m
+		mode: import
+		source =
+				let
+				    Source = AmazonRedshift.Database("financial-workgroup.164761934860.ap-southeast-2.redshift-serverless.amazonaws.com:5439", "dev", [ProviderName = null, BatchSize = null]),
+				    #"Navigation 1" = Source{[Name = "public"]}[Data],
+				    #"Navigation 2" = #"Navigation 1"{[Name = "loan"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(#"Navigation 2", {{"loan_id", type number}, {"account_id", type number}, {"date", type text}, {"amount", type number}, {"duration", type number}, {"payments", type number}, {"status", type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"loan_id", "Loan Id"}, {"account_id", "Account Id (Loan)"}, {"date", "Date (Loan)"}, {"amount", "Amount"}, {"duration", "Duration"}, {"payments", "Payments"}, {"status", "Status"}})
+				in
+				    #"Renamed Columns"
+

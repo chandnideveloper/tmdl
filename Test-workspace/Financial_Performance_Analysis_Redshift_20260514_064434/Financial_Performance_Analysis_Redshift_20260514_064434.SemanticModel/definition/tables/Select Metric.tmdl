@@ -1,0 +1,16 @@
+table 'Select Metric'
+
+	measure SelectedSelectMetric = SELECTEDVALUE('Select Metric'[Value], "0")
+		formatString: General
+		isHidden
+
+	column Value
+		isNameInferred
+		sourceColumn: [Value]
+
+	partition 'Select Metric' = calculated
+		mode: import
+		source = DATATABLE("Value", STRING, {{"Total Loans"}, {"Total Amount"}, {"Avg Loan"}})
+
+	annotation PBI_Id = 381d2a9ca45d41398ed513682102c6e0
+

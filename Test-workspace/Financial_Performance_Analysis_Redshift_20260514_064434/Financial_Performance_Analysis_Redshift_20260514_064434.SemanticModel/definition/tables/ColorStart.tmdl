@@ -1,0 +1,16 @@
+table ColorStart
+
+	measure SelectedColorStart = SELECTEDVALUE('ColorStart'[Value], 0)
+		formatString: General
+		isHidden
+
+	column Value
+		isNameInferred
+		sourceColumn: [Value]
+
+	partition ColorStart = calculated
+		mode: import
+		source = DATATABLE("Value", INTEGER, {{0}})
+
+	annotation PBI_Id = c27a77a177a74472b5a1f9f29e389950
+

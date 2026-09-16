@@ -1,0 +1,58 @@
+table account
+	lineageTag: 78e93dc4-7511-49b1-bb7e-92e319562770
+
+	measure 'YEAR of Loan Date' = YEAR('account'[Loan Date])
+
+	measure 'District Level Loan' = CALCULATE(SUM('loan'[Amount]), ALLEXCEPT('district', 'district'[District Id (District)]))
+
+	column 'Account Id (Account)'
+		dataType: double
+		lineageTag: f0e0d865-51b7-4026-bca7-4613cb1caa9f
+		summarizeBy: none
+		sourceColumn: Account Id (Account)
+
+	column 'District Id (Account)'
+		dataType: double
+		lineageTag: 8ecb6150-d901-4a90-838b-ce81d7f9a3ad
+		summarizeBy: none
+		sourceColumn: District Id (Account)
+
+	column Frequency
+		dataType: string
+		lineageTag: 94a5d99d-3cd2-44b3-90cd-697b23970f0f
+		summarizeBy: none
+		sourceColumn: Frequency
+
+	column Date
+		dataType: string
+		lineageTag: e9e1b139-d021-4a37-8712-98b6f9b75815
+		summarizeBy: none
+		sourceColumn: Date
+
+	column 'Loan Date' = DATE( YEAR( MAXX( RELATEDTABLE('loan'), 'loan'[Date (Loan)] ) ), MONTH( MAXX( RELATEDTABLE('loan'), 'loan'[Date (Loan)] ) ), DAY( MAXX( RELATEDTABLE('loan'), 'loan'[Date (Loan)] ) ) )
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 3ce6c4b2-3a85-4e4e-8e7a-554b11ba99ce
+		summarizeBy: none
+
+		variation Variation
+			isDefault
+			relationship: 5e4822f3-76db-4fb1-ad3e-ae540a276a65
+			defaultHierarchy: LocalDateTable_b02e1faf-b0ed-47fe-ac1f-4bfcbb208ff2.'Date Hierarchy'
+
+		changedProperty = DataType
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition account = m
+		mode: import
+		source =
+				let
+				    Source = AmazonRedshift.Database("financial-workgroup.164761934860.ap-southeast-2.redshift-serverless.amazonaws.com:5439", "dev", [ProviderName = null, BatchSize = null]),
+				    #"Navigation 1" = Source{[Name = "public"]}[Data],
+				    #"Navigation 2" = #"Navigation 1"{[Name = "account"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(#"Navigation 2", {{"account_id", type number}, {"district_id", type number}, {"frequency", type text}, {"date", type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"account_id", "Account Id (Account)"}, {"district_id", "District Id (Account)"}, {"frequency", "Frequency"}, {"date", "Date"}})
+				in
+				    #"Renamed Columns"
+

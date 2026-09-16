@@ -1,0 +1,30 @@
+relationship 4a8c911d-8b48-4871-b923-f60a502de112
+	crossFilteringBehavior: bothDirections
+	fromColumn: disp.'Account Id'
+	toColumn: account.'Account Id (Account)'
+
+relationship 60a8911b-14f6-4158-884f-66254b351e06
+	crossFilteringBehavior: bothDirections
+	fromColumn: card.'Disp Id (Card)'
+	toColumn: disp.'Disp Id'
+
+relationship f728d35a-03d4-4e1c-b936-8c14743472cd
+	crossFilteringBehavior: bothDirections
+	fromColumn: disp.'Client Id (Disp)'
+	toColumn: client.'Client Id'
+
+relationship 20c42c31-48d2-4187-8a6b-303d77038cb5
+	crossFilteringBehavior: bothDirections
+	fromColumn: client.'District Id'
+	toColumn: district.'District Id (District)'
+
+relationship 8531ca25-b26e-4540-b346-6fb68e91fd09
+	crossFilteringBehavior: bothDirections
+	fromColumn: loan.'Account Id (Loan)'
+	toColumn: account.'Account Id (Account)'
+
+relationship 5e4822f3-76db-4fb1-ad3e-ae540a276a65
+	joinOnDateBehavior: datePartOnly
+	fromColumn: account.'Loan Date'
+	toColumn: LocalDateTable_b02e1faf-b0ed-47fe-ac1f-4bfcbb208ff2.Date
+
