@@ -1,0 +1,99 @@
+table Calendar
+	lineageTag: 3e8768d4-2c5d-519b-a88b-9a72ddeafd79
+
+	column DispatchDate
+		dataType: dateTime
+		lineageTag: 384a1023-b3ac-5475-83c0-2919eaba147c
+		summarizeBy: none
+		sourceColumn: DispatchDate
+		formatString: General Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarYear
+		dataType: int64
+		lineageTag: d6ee7cf6-bb79-55e2-83a1-4d5300e381b6
+		summarizeBy: none
+		sourceColumn: CalendarYear
+		formatString: #,##0
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarQuarter
+		dataType: string
+		lineageTag: e7b59f15-82da-5553-b2f6-cc80d8adcba1
+		summarizeBy: none
+		sourceColumn: CalendarQuarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarMonth
+		dataType: string
+		lineageTag: 35c59a6b-12fe-5d37-ae03-8cedef6fcd9f
+		summarizeBy: none
+		sourceColumn: CalendarMonth
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarMonthYear = FORMAT('Calendar'[vMinDate], "mmmm")
+		dataType: int64
+		lineageTag: c0e70147-64b5-5bfe-88b2-ec25cc1e77cd
+		summarizeBy: none
+		formatString: #,##0
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarMonthStart = DATE(YEAR('Calendar'[vMinDate]), MONTH('Calendar'[vMinDate]), 1)
+		dataType: dateTime
+		lineageTag: 8a16538b-80e4-5cb1-b3bb-6694129064f0
+		summarizeBy: none
+		formatString: General Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarWeek
+		dataType: string
+		lineageTag: 36aeaadc-3b48-53be-82c6-e7c49d844dbc
+		summarizeBy: none
+		sourceColumn: CalendarWeek
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarWeekDay
+		dataType: string
+		lineageTag: 3bd941a2-d151-5d89-a65e-b934854a9f33
+		summarizeBy: none
+		sourceColumn: CalendarWeekDay
+
+		annotation SummarizationSetBy = Automatic
+
+	column CalendarDay
+		dataType: string
+		lineageTag: f4dfdae1-326c-5b35-930f-9fbf11c50547
+		summarizeBy: none
+		sourceColumn: CalendarDay
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Calendar = m
+		mode: import
+		source =
+				let
+				    StartDate = #date(2020, 1, 1),
+				    EndDate = #date(2026, 12, 31),
+				    NumberOfDays = Duration.Days(EndDate - StartDate) + 1,
+				    DateList = List.Dates(StartDate, NumberOfDays, #duration(1, 0, 0, 0)),
+				    #"Converted to Table" = Table.FromList(DateList, Splitter.SplitByNothing(), {"DispatchDate"}, null, ExtraValues.Error),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Converted to Table", {{"DispatchDate", type date}}),
+				    #"Added CalendarYear" = Table.AddColumn(#"Changed Type", "CalendarYear", each Date.Year([DispatchDate]), Int64.Type),
+				    #"Added CalendarQuarter" = Table.AddColumn(#"Added CalendarYear", "CalendarQuarter", each "Q" & Text.From(Date.QuarterOfYear([DispatchDate])), type text),
+				    #"Added CalendarMonth" = Table.AddColumn(#"Added CalendarQuarter", "CalendarMonth", each Date.Month([DispatchDate]), Int64.Type),
+				    #"Added CalendarMonthYear" = Table.AddColumn(#"Added CalendarMonth", "CalendarMonthYear", each Date.ToText([DispatchDate], "MMM yyyy"), type text),
+				    #"Added CalendarMonthStart" = Table.AddColumn(#"Added CalendarMonthYear", "CalendarMonthStart", each Date.StartOfMonth([DispatchDate]), type date),
+				    #"Added CalendarWeek" = Table.AddColumn(#"Added CalendarMonthStart", "CalendarWeek", each Date.WeekOfYear([DispatchDate]), Int64.Type),
+				    #"Added CalendarWeekDay" = Table.AddColumn(#"Added CalendarWeek", "CalendarWeekDay", each Date.DayOfWeekName([DispatchDate]), type text),
+				    #"Added CalendarDay" = Table.AddColumn(#"Added CalendarWeekDay", "CalendarDay", each Date.Day([DispatchDate]), Int64.Type)
+				in
+				    #"Added CalendarDay"
+
+	annotation PBI_ResultType = Table

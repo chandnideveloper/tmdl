@@ -1,0 +1,33 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+
+	annotation PBI_QueryOrder = ["Trips", "Drivers", "DriverPerformance", "Trucks", "Maintenance", "TruckPerformance", "MaintenanceByTruck", "Trailers", "Customers", "Loads", "Facilities", "DeliveryEvents", "Routes", "FuelPurchases", "SafetyIncidents", "FuelByTrip", "DeliveryByTrip", "SafetyByTrip", "Calendar", "TruckMap", "TempCalendar", "_Measures"]
+	annotation PBI_ProTooling = ["DevMode"]
+
+ref table Trips
+ref table Drivers
+ref table DriverPerformance
+ref table Trucks
+ref table Maintenance
+ref table TruckPerformance
+ref table MaintenanceByTruck
+ref table Trailers
+ref table Customers
+ref table Loads
+ref table Facilities
+ref table DeliveryEvents
+ref table Routes
+ref table FuelPurchases
+ref table SafetyIncidents
+ref table FuelByTrip
+ref table DeliveryByTrip
+ref table SafetyByTrip
+ref table Calendar
+ref table TruckMap
+ref table TempCalendar
+ref table _Measures
+
+ref cultureInfo en-US
