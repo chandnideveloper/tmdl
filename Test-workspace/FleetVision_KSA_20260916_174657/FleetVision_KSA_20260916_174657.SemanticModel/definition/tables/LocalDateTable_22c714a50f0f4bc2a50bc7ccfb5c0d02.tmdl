@@ -1,0 +1,96 @@
+table LocalDateTable_22c714a50f0f4bc2a50bc7ccfb5c0d02
+	isHidden
+	lineageTag: 1684e7ae-cc7b-4163-9f3d-f3dd11b10405
+
+	column Date
+		dataType: dateTime
+		isHidden
+		formatString: General Date
+		lineageTag: 02350278-8586-4cc3-8145-0bf86efec0c0
+		dataCategory: PaddedDateTableDates
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+		annotation SummarizationSetBy = User
+
+	column Year = YEAR([Date])
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 07a3af7c-4f09-4145-b2ae-9c9eda814799
+		dataCategory: Years
+		summarizeBy: none
+		annotation SummarizationSetBy = User
+		annotation TemplateId = Year
+
+	column MonthNo = MONTH([Date])
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 19860a44-ab6a-4ecf-acf5-e184fcc69bca
+		dataCategory: MonthOfYear
+		summarizeBy: none
+		annotation SummarizationSetBy = User
+		annotation TemplateId = MonthNumber
+
+	column Month = FORMAT([Date], "MMMM")
+		dataType: string
+		isHidden
+		lineageTag: 465250b4-2eea-45ba-92a0-404847355d11
+		dataCategory: Months
+		summarizeBy: none
+		sortByColumn: MonthNo
+		annotation SummarizationSetBy = User
+		annotation TemplateId = Month
+
+	column QuarterNo = INT(([MonthNo] + 2) / 3)
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f092afa9-0e1f-4206-a94e-85d34af1a88a
+		dataCategory: QuarterOfYear
+		summarizeBy: none
+		annotation SummarizationSetBy = User
+		annotation TemplateId = QuarterNumber
+
+	column Quarter = "Qtr " & [QuarterNo]
+		dataType: string
+		isHidden
+		lineageTag: 5b3faa76-a22f-487b-9dd0-0d78484b0262
+		dataCategory: Quarters
+		summarizeBy: none
+		sortByColumn: QuarterNo
+		annotation SummarizationSetBy = User
+		annotation TemplateId = Quarter
+
+	column Day = DAY([Date])
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ea926dc5-4be1-4c16-a6c4-9bba2e350712
+		dataCategory: DayOfMonth
+		summarizeBy: none
+		annotation SummarizationSetBy = User
+		annotation TemplateId = Day
+
+	hierarchy 'Date Hierarchy'
+		lineageTag: 8f080a9f-8bfe-4123-95e2-5f62abe0a8a6
+		level Year
+			lineageTag: 944b4b91-a786-45e3-8fdb-2a7ab884cf65
+			column: Year
+		level Quarter
+			lineageTag: 984c6536-aad9-4449-8654-6ec26249de6d
+			column: Quarter
+		level Month
+			lineageTag: d24a5d63-5f8b-4fb4-935c-aa1798e3706b
+			column: Month
+		level Day
+			lineageTag: 5e6b1207-f4be-4202-ba63-bf8532b3b80c
+			column: Day
+		annotation TemplateId = DateHierarchy
+
+	partition LocalDateTable_22c714a50f0f4bc2a50bc7ccfb5c0d02 = calculated
+		mode: import
+		source = Calendar(Date(Year(MIN('Drivers'[date_of_birth])), 1, 1), Date(Year(MAX('Drivers'[date_of_birth])), 12, 31))
+
+	annotation __PBI_LocalDateTable = true

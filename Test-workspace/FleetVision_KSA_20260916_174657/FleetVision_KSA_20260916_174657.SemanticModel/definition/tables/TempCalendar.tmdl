@@ -1,0 +1,30 @@
+table TempCalendar
+	lineageTag: 5e0cd0f0-e0ba-57de-8846-e7ae4705b534
+
+	column MinDate
+		dataType: dateTime
+		lineageTag: 684b2574-4b39-53f6-93bb-0271715bf31f
+		summarizeBy: none
+		sourceColumn: MinDate
+		formatString: General Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column MaxDate
+		dataType: dateTime
+		lineageTag: 22d091f3-9138-5e68-8cdf-d6b4c35c21f3
+		summarizeBy: none
+		sourceColumn: MaxDate
+		formatString: General Date
+
+		annotation SummarizationSetBy = Automatic
+
+	partition TempCalendar = m
+		mode: import
+		source =
+				let
+				    Source = #table({"MinDate", "MaxDate"}, {{#date(2020, 1, 1), #date(2026, 12, 31)}})
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
