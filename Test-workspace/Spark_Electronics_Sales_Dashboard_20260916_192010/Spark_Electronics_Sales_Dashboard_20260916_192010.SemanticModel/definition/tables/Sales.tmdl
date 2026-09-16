@@ -1,0 +1,131 @@
+table Sales
+	lineageTag: 54d16448-af3e-5e63-b5e1-f3f297e57e2d
+
+	column TransactionID
+		dataType: string
+		lineageTag: 44583eca-7d20-5f58-a21f-b5ac322ba2ba
+		summarizeBy: none
+		sourceColumn: TransactionID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		lineageTag: caddd7d4-7af5-52c7-8116-09e966e0fa35
+		summarizeBy: none
+		sourceColumn: Date
+		formatString: General Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date_monthLabel
+		dataType: string
+		lineageTag: bf6bbac2-9436-5604-af14-8c98551fc7a2
+		summarizeBy: none
+		sourceColumn: Date_monthLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date_quarterLabel
+		dataType: string
+		lineageTag: 148f34cd-334e-5251-8174-2d3e6265dfe8
+		summarizeBy: none
+		sourceColumn: Date_quarterLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthYear
+		dataType: int64
+		lineageTag: b978f2ce-89f2-58d7-b608-2ac998b02dbf
+		summarizeBy: none
+		sourceColumn: MonthYear
+		formatString: #,##0
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date_year
+		dataType: int64
+		lineageTag: 5ce2c50a-7b31-5593-8af7-f56807a856eb
+		summarizeBy: none
+		sourceColumn: Date_year
+		formatString: #,##0
+
+		annotation SummarizationSetBy = Automatic
+
+	column StoreID
+		dataType: string
+		lineageTag: 424ce5c3-7969-5a84-8cd7-8b1808cab64b
+		summarizeBy: none
+		sourceColumn: StoreID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductID
+		dataType: string
+		lineageTag: 28351206-4018-51cc-96c4-ae82460b2566
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column EmployeeID
+		dataType: string
+		lineageTag: fe7ddc6b-57d0-5c6c-9295-9574e73c40de
+		summarizeBy: none
+		sourceColumn: EmployeeID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantity
+		dataType: int64
+		lineageTag: f1372aab-5eba-58a0-a685-d66d435e23f0
+		summarizeBy: sum
+		sourceColumn: Quantity
+		formatString: #,##0
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitPrice
+		dataType: decimal
+		lineageTag: d0d80468-226b-5c5f-995a-00bf15bef551
+		summarizeBy: sum
+		sourceColumn: UnitPrice
+		formatString: #,##0.00
+
+		annotation SummarizationSetBy = Automatic
+
+	column DiscountPct
+		dataType: decimal
+		lineageTag: 61b5763b-f5f2-5f5d-abd6-41b9355d20aa
+		summarizeBy: sum
+		sourceColumn: DiscountPct
+		formatString: #,##0.00
+
+		annotation SummarizationSetBy = Automatic
+
+	column TotalAmount
+		dataType: decimal
+		lineageTag: 45f91b5a-6369-5a7f-aadc-d712ea6e306a
+		summarizeBy: sum
+		sourceColumn: TotalAmount
+		formatString: #,##0.00
+
+		annotation SummarizationSetBy = Automatic
+
+	column PaymentMethod
+		dataType: string
+		lineageTag: 7526b3c0-4ce4-5862-a6a5-1d45d4f2dfbe
+		summarizeBy: none
+		sourceColumn: PaymentMethod
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Sales = m
+		mode: import
+		source =
+				let
+				    Source = #table({"TransactionID", "Date", "Date_monthLabel", "Date_quarterLabel", "MonthYear", "Date_year", "StoreID", "ProductID", "EmployeeID", "Quantity", "UnitPrice", "DiscountPct", "TotalAmount", "PaymentMethod"}, {})
+				in
+				    Source
+
+	annotation PBI_ResultType = Table

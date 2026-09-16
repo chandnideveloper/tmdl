@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Spark_Electronics_Sales_Dashboard_20260916_192010"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "c32866a4-87bf-519e-9d05-d3dc5d307380"
+  }
+}
