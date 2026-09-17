@@ -8,3 +8,4 @@ expression Learning_Analytics =
 	annotation PBI_NavigationStepName = Navigation
 
 	annotation PBI_ResultType = Table
+

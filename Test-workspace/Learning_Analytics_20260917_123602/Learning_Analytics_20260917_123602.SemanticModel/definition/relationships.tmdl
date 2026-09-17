@@ -13,3 +13,4 @@ relationship b94c4cd7-ac0d-59cc-b74d-98bd4b1198e5
 relationship 5086e455-7dfe-5327-a957-c4bdb7f5cd5b
 	fromColumn: STUDENT_COURSES.STUDENT_ID
 	toColumn: STUDENTS.STUDENT_ID
+
