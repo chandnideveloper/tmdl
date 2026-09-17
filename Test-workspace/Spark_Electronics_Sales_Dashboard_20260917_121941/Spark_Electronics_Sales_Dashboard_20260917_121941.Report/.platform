@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Spark_Electronics_Sales_Dashboard_20260917_121941"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "d3ee4e5b-f668-5d56-bc8f-0aa5c8c2619b"
+  }
+}
