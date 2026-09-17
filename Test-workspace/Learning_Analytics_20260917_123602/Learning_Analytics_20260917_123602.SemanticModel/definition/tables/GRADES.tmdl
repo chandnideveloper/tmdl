@@ -1,0 +1,77 @@
+table GRADES
+	lineageTag: 277a1a66-f2c1-535c-b7c6-27a44fccbe8c
+
+	measure 'Total Enrollments' = COUNT('GRADES'[ENROLLMENT_ID])
+		formatString: "#,##0.00"
+		lineageTag: ec6d7f73-9e34-535e-b331-5ee9fa1808d1
+
+	measure 'Average Grade Point' = AVERAGE(SWITCH(Match('GRADES'[GRADE],'A','B','C','D','F'), 1, 5, 2, 4, 3, 3, 4, 2, 5, 0, BLANK()))
+		formatString: "#,##0.00"
+		lineageTag: b9692873-f903-5494-9325-fb3ef7a8ca4c
+
+	measure 'GPA (4.0 scale) average (1)' =
+			AVERAGE(
+			SWITCH(Match(Upper(Trim('GRADES'[GRADE])),'A+','A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F'), 1, 4.0, 2, 4.0, 3, 3.7, 4, 3.3, 5, 3.0, 6, 2.7, 7, 2.3, 8, 2.0, 9, 1.7, 10, 1.3, 11, 1.0, 12, 0.7, 13, 0.0, BLANK())
+			)
+		formatString: "#,##0.00"
+		lineageTag: 782e2a10-258e-584a-918c-6f8c66eadf02
+
+	/// TODO (Qlik AGGR() has no DAX equivalent): Rebuild with SUMMARIZE/ADDCOLUMNS and an iterator, e.g. MAXX(SUMMARIZE(Table, Table[Key], "v", SUM(Table[Col])), [v]).
+	/// Original Qlik: // Decayed GPA Quality Index, 0–100 // - Uses last 180 days anchored to max grade date // - Falls back to all-time GPA if the 180d window is empty 25 * (   // -------- helpers computed via AGGR (legal in Qlik) --------   // window row count   If(     SUM(       Aggr(         If(           FLOOR(GRADED_DATE_DATE, 1) >= FLOOR(MAX({1} TOTAL GRADED_DATE_DATE), 1) - 179           and FLOOR(GRADED_DATE_DATE, 1) <= FLOOR(MAX({1} TOTAL GRADED_DATE_DATE), 1),           1, 0         ),         'GRADES'[GRADE_ID]       )     ) > 0,     // ---------- WINDOWED, DECAYED GPA (when window has rows) ----------     // numerator     SUM(       Aggr(         If(           FLOOR(GRADED_DATE_DATE, 1) >= FLOOR(MAX({1} TOTAL GRADED_DATE_DATE), 1) - 179           and FLOOR(GRADED_DATE_DATE, 1) <= FLOOR(MAX({1} TOTAL GRADED_DATE_DATE), 1),           // decay weight (half-life 30 days)           Exp(             -0.6931471805599453 *             ( FLOOR(MAX({1} TOTAL GRADED_DATE_DATE), 1) - FLOOR(GRADED_DATE_DATE, 1) ) / 30           )           *           // GPA mapping: numeric % OR letters           If(             IsNum('GRADES'[GRADE]),               RangeMax(0, RangeMin(4,                 If('GRADES'[GRADE]>=90, 4,                 If('GRADES'[GRADE]>=85, 3.7 + ('GRADES'[GRADE]-85)*0.06,                 If('GRADES'[GRADE]>=75, 3.0 + ('GRADES'[GRADE]-75)*0.07,                 If('GRADES'[GRADE]>=65, 2.0 + ('GRADES'[GRADE]-65)*0.10,                 If('GRADES'[GRADE]>=50, 1.0 + ('GRADES'[GRADE]-50)*0.0667, 0))))))),               SWITCH(Match(Upper(Trim('GRADES'[GRADE])),                   'A+','A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F',                   'HD','DI','CR','P','N','PASS','FAIL'                 ), 1, 4.0, 2, 4.0, 3, 3.7, 4, 3.3, 5, 3.0, 6, 2.7, 7, 2.3, 8, 2.0, 9, 1.7, 10, 1.3, 11, 1.0, 12, 0.7, 13, 0.0, 14, 4.0, 15, 3.7, 16, 2.5, 17, 1.0, 18, 0.0, 19, 1.0, 20, 0.0, BLANK())           ),           0         ),         'GRADES'[GRADE_ID]       )     )     /     // denominator (guarded)     MAX(       1e-9,       SUM(         Aggr(           If(             FLOOR(GRADED_DATE_DATE, 1) >= FLOOR(MAX({1} TOTAL GRADED_DATE_DATE), 1) - 179             and FLOOR(GRADED_DATE_DATE, 1) <= FLOOR(MAX({1} TOTAL GRADED_DATE_DATE), 1),             Exp(               -0.6931471805599453 *               ( FLOOR(MAX({1} TOTAL GRADED_DATE_DATE), 1) - FLOOR(GRADED_DATE_DATE, 1) ) / 30             ),             0           ),           'GRADES'[GRADE_ID]         )       )     ),     // ---------- FALLBACK: ALL-TIME GPA (no window rows) ----------     (       SUM( Aggr(         If(           IsNum('GRADES'[GRADE]),             RangeMax(0, RangeMin(4,               If('GRADES'[GRADE]>=90, 4,               If('GRADES'[GRADE]>=85, 3.7 + ('GRADES'[GRADE]-85)*0.06,               If('GRADES'[GRADE]>=75, 3.0 + ('GRADES'[GRADE]-75)*0.07,               If('GRADES'[GRADE]>=65, 2.0 + ('GRADES'[GRADE]-65)*0.10,               If('GRADES'[GRADE]>=50, 1.0 + ('GRADES'[GRADE]-50)*0.0667, 0))))))),             SWITCH(Match(Upper(Trim('GRADES'[GRADE])),                 'A+','A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F',                 'HD','DI','CR','P','N','PASS','FAIL'               ), 1, 4.0, 2, 4.0, 3, 3.7, 4, 3.3, 5, 3.0, 6, 2.7, 7, 2.3, 8, 2.0, 9, 1.7, 10, 1.3, 11, 1.0, 12, 0.7, 13, 0.0, 14, 4.0, 15, 3.7, 16, 2.5, 17, 1.0, 18, 0.0, 19, 1.0, 20, 0.0, BLANK())         ),         'GRADES'[GRADE_ID]       ))        /       MAX(1, SUM( Aggr(1, 'GRADES'[GRADE_ID]) ))     )   ) )
+	measure 'Decayed GPA Quality Index' = BLANK()
+		formatString: "#,##0.00"
+		lineageTag: 01e7dc9d-e669-513e-a53b-4d39466e2a3e
+
+	measure 'GPA (4.0 scale) average' =
+			AVERAGE(
+			SWITCH(Match(Upper(Trim('GRADES'[GRADE])),'A+','A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F'), 1, 4.0, 2, 4.0, 3, 3.7, 4, 3.3, 5, 3.0, 6, 2.7, 7, 2.3, 8, 2.0, 9, 1.7, 10, 1.3, 11, 1.0, 12, 0.7, 13, 0.0, BLANK())
+			)
+		formatString: "#,##0.00"
+		lineageTag: 19110caf-88aa-5293-abb9-0d16883074c8
+
+	measure 'Count of Grade' = COUNT('GRADES'[GRADE])
+		formatString: "#,##0.00"
+		lineageTag: 033ada9b-007a-592a-a0d1-6d67742cc0fd
+
+	column GRADE_ID
+		dataType: string
+		lineageTag: eb125775-ec8c-580b-9e4e-7866dce1ed07
+		summarizeBy: none
+		sourceColumn: GRADE_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ENROLLMENT_ID
+		dataType: string
+		lineageTag: fa905acc-03cb-526b-984d-7797ee1289dd
+		summarizeBy: none
+		sourceColumn: ENROLLMENT_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column GRADE
+		dataType: string
+		lineageTag: 4dc4d5de-406d-50ce-b1a8-6cea8fe04ef4
+		summarizeBy: none
+		sourceColumn: GRADE
+
+		annotation SummarizationSetBy = Automatic
+
+	column GRADED_DATE
+		dataType: dateTime
+		lineageTag: 2cce7886-b84c-54df-be81-02188581e667
+		summarizeBy: none
+		sourceColumn: GRADED_DATE
+		formatString: M/D/YYYY
+
+		annotation SummarizationSetBy = Automatic
+
+	partition GRADES = m
+		mode: import
+		source =
+				let
+				    Source = #table({"GRADE_ID", "ENROLLMENT_ID", "GRADE", "GRADED_DATE"}, {})
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
