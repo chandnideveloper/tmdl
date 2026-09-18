@@ -11,28 +11,28 @@ table FuelByTrip
 
 	column PurchasedGallons
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: 1324fdf1-26e7-5e3c-a8f4-ca515e388028
 		summarizeBy: sum
 		sourceColumn: PurchasedGallons
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column TotalFuelCost
 		dataType: decimal
+		formatString: #,##0.00
 		lineageTag: 8125f77c-fd8f-5fd0-b14b-192a0bd182e4
 		summarizeBy: sum
 		sourceColumn: TotalFuelCost
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column AvgFuelPricePerGallon
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: 19375e2e-a18e-5c24-9538-f5e5a73f7c1e
 		summarizeBy: sum
 		sourceColumn: AvgFuelPricePerGallon
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
@@ -53,3 +53,4 @@ table FuelByTrip
 				    Source
 
 	annotation PBI_ResultType = Table
+

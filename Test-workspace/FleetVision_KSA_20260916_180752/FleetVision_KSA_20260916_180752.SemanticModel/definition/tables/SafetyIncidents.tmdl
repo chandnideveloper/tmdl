@@ -19,10 +19,15 @@ table SafetyIncidents
 
 	column incident_date
 		dataType: dateTime
+		formatString: General Date
 		lineageTag: 3940a4eb-c4af-5d7d-b179-4dbbb54cce4e
 		summarizeBy: none
 		sourceColumn: incident_date
-		formatString: General Date
+
+		variation Variation
+			isDefault
+			relationship: 56e847c4-f743-4c99-be69-fdb2333ca06b
+			defaultHierarchy: LocalDateTable_49c4c77e-8adc-4b16-b4d9-c6e3342030c2.'Date Hierarchy'
 
 		annotation SummarizationSetBy = Automatic
 
@@ -68,28 +73,28 @@ table SafetyIncidents
 
 	column vehicle_damage_cost
 		dataType: decimal
+		formatString: #,##0.00
 		lineageTag: 28fe3887-f05b-51b8-841f-d268204c9874
 		summarizeBy: sum
 		sourceColumn: vehicle_damage_cost
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column cargo_damage_cost
 		dataType: decimal
+		formatString: #,##0.00
 		lineageTag: daa92f9c-c5b3-5115-8ce8-1a56cbe6aa6d
 		summarizeBy: sum
 		sourceColumn: cargo_damage_cost
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column claim_amount
 		dataType: decimal
+		formatString: #,##0.00
 		lineageTag: 3860c0c0-6df4-531d-a92b-da1716e1af52
 		summarizeBy: sum
 		sourceColumn: claim_amount
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
@@ -133,3 +138,4 @@ table SafetyIncidents
 				    Result
 
 	annotation PBI_ResultType = Table
+

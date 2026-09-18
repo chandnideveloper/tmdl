@@ -11,10 +11,10 @@ table TruckMap
 
 	column unit_number
 		dataType: decimal
+		formatString: #,##0.00
 		lineageTag: 707814c6-679d-50f6-9025-05bb8a6a9b91
 		summarizeBy: sum
 		sourceColumn: unit_number
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
@@ -28,3 +28,4 @@ table TruckMap
 				    #"Distinct Rows"
 
 	annotation PBI_ResultType = Table
+

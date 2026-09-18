@@ -2,15 +2,15 @@ table COURSES
 	lineageTag: aef0d33b-71a4-5d33-acdb-9c8f236a6bb5
 
 	measure 'Total Courses (1)' = DISTINCTCOUNT('COURSES'[COURSE_ID])
-		formatString: "#,##0.00"
+		formatString: #,##0.00
 		lineageTag: 28b0578f-8c76-5cfc-bc03-b53df99a61f3
 
 	measure 'Average Credits' = AVERAGE('COURSES'[CREDITS])
-		formatString: "#,##0.00"
+		formatString: #,##0.00
 		lineageTag: 6423b155-78fd-5c68-816d-d2a029603e99
 
 	measure 'Total Courses' = DISTINCTCOUNT('COURSES'[COURSE_ID])
-		formatString: "#,##0.00"
+		formatString: #,##0.00
 		lineageTag: c3d88ac9-c95e-50d1-b772-ad5b195a12a3
 
 	column 'Course Category' = 'COURSES'[COURSE_NAME]
@@ -43,11 +43,10 @@ table COURSES
 		annotation SummarizationSetBy = Automatic
 
 	column CREDITS
-		dataType: double
+		dataType: string
 		lineageTag: 55d744ab-d716-55db-bfe5-175c2d70b20c
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: CREDITS
-		formatString: ##############
 
 		annotation SummarizationSetBy = Automatic
 
@@ -60,3 +59,4 @@ table COURSES
 				    Source
 
 	annotation PBI_ResultType = Table
+

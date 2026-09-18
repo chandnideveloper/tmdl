@@ -43,19 +43,19 @@ table Facilities
 
 	column latitude
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: 10ba13ce-58c1-5dd0-ad5a-863e782c5f21
 		summarizeBy: sum
 		sourceColumn: latitude
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column longitude
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: 6f624232-1bfb-57e6-bb68-5688203ca06f
 		summarizeBy: sum
 		sourceColumn: longitude
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
@@ -69,10 +69,10 @@ table Facilities
 
 	column operating_hours
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: 085355eb-63c6-56ba-a29d-e0bcf0dcdf27
 		summarizeBy: sum
 		sourceColumn: operating_hours
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
@@ -94,3 +94,4 @@ table Facilities
 				    Result
 
 	annotation PBI_ResultType = Table
+

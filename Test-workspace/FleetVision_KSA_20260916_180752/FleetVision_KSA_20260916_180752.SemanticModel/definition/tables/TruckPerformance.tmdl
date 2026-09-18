@@ -19,55 +19,55 @@ table TruckPerformance
 
 	column TruckMiles
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: 61cd7d72-c934-5d24-bcbd-4d4a7aa0a0ba
 		summarizeBy: sum
 		sourceColumn: TruckMiles
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column TruckHours
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: 4d08bd4d-6d19-51ec-a8c0-7e9949ceb3d2
 		summarizeBy: sum
 		sourceColumn: TruckHours
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column TruckFuelGallons
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: 8f25cb4f-f83a-56d4-a428-d3e85f6742ec
 		summarizeBy: sum
 		sourceColumn: TruckFuelGallons
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column TruckMPG
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: 384ea1ed-afcf-5f6b-8f67-7a55b4596283
 		summarizeBy: sum
 		sourceColumn: TruckMPG
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column TruckAvgIdleHours
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: a8769a6e-9da8-5d92-8bff-1fa222209c07
 		summarizeBy: sum
 		sourceColumn: TruckAvgIdleHours
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column TruckIdleHours
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: b5ec3feb-86f2-555c-8530-6f72d2c7a9fa
 		summarizeBy: sum
 		sourceColumn: TruckIdleHours
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
@@ -80,3 +80,4 @@ table TruckPerformance
 				    Source
 
 	annotation PBI_ResultType = Table
+

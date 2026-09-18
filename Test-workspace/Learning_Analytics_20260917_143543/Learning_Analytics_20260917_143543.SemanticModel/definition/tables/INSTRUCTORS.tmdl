@@ -14,36 +14,35 @@ table INSTRUCTORS
 
 		annotation SummarizationSetBy = Automatic
 
+	column HIRE_DATE
+		dataType: string
+		lineageTag: a80abd68-2c6d-51bf-8b86-7726e667db93
+		summarizeBy: none
+		sourceColumn: HIRE_DATE
+
+		annotation SummarizationSetBy = Automatic
+
 	column INSTRUCTORS_FIRST_NAME
 		dataType: string
-		lineageTag: aed8170c-dc5d-53c6-b080-f83bf5d7944b
+		lineageTag: 4c8c6025-3f2d-43c2-9c0b-5d41603d1b7f
 		summarizeBy: none
-		sourceColumn: INSTRUCTORS.FIRST_NAME
+		sourceColumn: INSTRUCTORS_FIRST_NAME
 
 		annotation SummarizationSetBy = Automatic
 
 	column INSTRUCTORS_LAST_NAME
 		dataType: string
-		lineageTag: 087d4711-3ff5-5a2b-a9ed-d10f6de4ad41
+		lineageTag: a0c397c2-0942-4b3c-9544-dcaeaccce0a3
 		summarizeBy: none
-		sourceColumn: INSTRUCTORS.LAST_NAME
+		sourceColumn: INSTRUCTORS_LAST_NAME
 
 		annotation SummarizationSetBy = Automatic
 
 	column INSTRUCTORS_EMAIL
 		dataType: string
-		lineageTag: 0cc5a89e-8771-5afe-860f-df6c6146e4ea
+		lineageTag: e13d1ad7-fa83-48a4-8c4f-82818247c8d0
 		summarizeBy: none
-		sourceColumn: INSTRUCTORS.EMAIL
-
-		annotation SummarizationSetBy = Automatic
-
-	column HIRE_DATE
-		dataType: dateTime
-		lineageTag: a80abd68-2c6d-51bf-8b86-7726e667db93
-		summarizeBy: none
-		sourceColumn: HIRE_DATE
-		formatString: M/D/YYYY
+		sourceColumn: INSTRUCTORS_EMAIL
 
 		annotation SummarizationSetBy = Automatic
 
@@ -56,3 +55,4 @@ table INSTRUCTORS
 				    Source
 
 	annotation PBI_ResultType = Table
+

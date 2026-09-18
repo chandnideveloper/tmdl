@@ -35,28 +35,38 @@ table DeliveryEvents
 
 	column scheduled_datetime
 		dataType: dateTime
+		formatString: General Date
 		lineageTag: 482c832f-a235-54f9-ac1b-009a261720a9
 		summarizeBy: none
 		sourceColumn: scheduled_datetime
-		formatString: General Date
+
+		variation Variation
+			isDefault
+			relationship: 9f162aba-1dc3-4b23-866c-c6f4539159a8
+			defaultHierarchy: LocalDateTable_67b0c7a2-3f0d-457a-b486-2dc42bddc1cb.'Date Hierarchy'
 
 		annotation SummarizationSetBy = Automatic
 
 	column actual_datetime
 		dataType: dateTime
+		formatString: General Date
 		lineageTag: 03590705-13b4-5dc6-885d-a1f5ae637966
 		summarizeBy: none
 		sourceColumn: actual_datetime
-		formatString: General Date
+
+		variation Variation
+			isDefault
+			relationship: 9c6f6750-3976-4875-b8a0-4c090ad5b0e4
+			defaultHierarchy: LocalDateTable_ec78c3f0-eaf4-44a1-9276-f5a0c3b4f364.'Date Hierarchy'
 
 		annotation SummarizationSetBy = Automatic
 
 	column detention_minutes
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: e0ae6536-e685-504f-a3f5-6e7ae6717b9c
 		summarizeBy: sum
 		sourceColumn: detention_minutes
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
@@ -105,3 +115,4 @@ table DeliveryEvents
 				    Result
 
 	annotation PBI_ResultType = Table
+

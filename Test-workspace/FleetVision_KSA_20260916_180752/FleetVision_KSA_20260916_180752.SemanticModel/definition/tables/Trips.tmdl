@@ -43,46 +43,46 @@ table Trips
 
 	column actual_distance_miles
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: a004a973-4cc0-54a1-b1cc-93e53f3baebd
 		summarizeBy: sum
 		sourceColumn: actual_distance_miles
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column actual_duration_hours
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: adee4386-7c9e-537e-a68e-f34c676feeab
 		summarizeBy: sum
 		sourceColumn: actual_duration_hours
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column fuel_gallons_used
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: 9fd8b063-6828-516a-bf44-49ace097b0d7
 		summarizeBy: sum
 		sourceColumn: fuel_gallons_used
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column average_mpg
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: f8b79f28-4d66-5115-a313-9a2d5db414a5
 		summarizeBy: sum
 		sourceColumn: average_mpg
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column idle_time_hours
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: a86e4c62-3297-59ae-805f-073e8fd8c1c2
 		summarizeBy: sum
 		sourceColumn: idle_time_hours
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
@@ -103,9 +103,14 @@ table Trips
 
 	column DispatchDate = 'Trips'[dispatch_date]
 		dataType: dateTime
+		formatString: General Date
 		lineageTag: 6d76169b-6ede-540e-b064-7644c8d1b3f2
 		summarizeBy: none
-		formatString: General Date
+
+		variation Variation
+			isDefault
+			relationship: 12083a9d-248c-4b84-9103-216d33405f9c
+			defaultHierarchy: LocalDateTable_46f32557-2b13-4d97-ba7c-fb496019e5cc.'Date Hierarchy'
 
 		annotation SummarizationSetBy = Automatic
 
@@ -125,33 +130,43 @@ table Trips
 
 	column MonthStartDate = DATE(YEAR('Trips'[dispatch_date]), MONTH('Trips'[dispatch_date]), 1)
 		dataType: dateTime
+		formatString: General Date
 		lineageTag: 1ca03fd6-490f-58a9-8c09-57d005442371
 		summarizeBy: none
-		formatString: General Date
+
+		variation Variation
+			isDefault
+			relationship: e086b802-e9b6-4e2d-968a-3ececc61aa8d
+			defaultHierarchy: LocalDateTable_ee4324c1-21d4-4cd7-9155-c8d6436307df.'Date Hierarchy'
 
 		annotation SummarizationSetBy = Automatic
 
 	column MonthYear = FORMAT('Trips'[dispatch_date], "mmmm")
 		dataType: int64
-		lineageTag: 1fd18945-0767-5c21-b6bb-7ec4be1ca5a9
-		summarizeBy: none
 		formatString: #,##0
+		lineageTag: 1fd18945-0767-5c21-b6bb-7ec4be1ca5a9
+		summarizeBy: sum
 
 		annotation SummarizationSetBy = Automatic
 
 	column MonthSort = DATE(YEAR('Trips'[dispatch_date]), MONTH('Trips'[dispatch_date]), 1)
 		dataType: dateTime
+		formatString: General Date
 		lineageTag: 366fd966-946d-50e0-ba39-e6a81006f822
 		summarizeBy: none
-		formatString: General Date
+
+		variation Variation
+			isDefault
+			relationship: 3f215c30-e8d6-4c95-98af-ae05aca237d2
+			defaultHierarchy: LocalDateTable_2502e847-8c36-42ef-a22e-5ec14282315c.'Date Hierarchy'
 
 		annotation SummarizationSetBy = Automatic
 
 	column TripYear = YEAR('Trips'[dispatch_date])
 		dataType: int64
-		lineageTag: 218aba61-06ec-54fd-8602-cfb0bcd1554f
-		summarizeBy: none
 		formatString: #,##0
+		lineageTag: 218aba61-06ec-54fd-8602-cfb0bcd1554f
+		summarizeBy: sum
 
 		annotation SummarizationSetBy = Automatic
 
@@ -213,3 +228,4 @@ table Trips
 				    Result
 
 	annotation PBI_ResultType = Table
+

@@ -19,9 +19,14 @@ table DeliveryByTrip
 
 	column OnTimeEvents = SWITCH(TRUE(), 'DeliveryByTrip'[on_time_flag], 1, 0)
 		dataType: dateTime
+		formatString: General Date
 		lineageTag: 16d2e960-c7b1-52e4-8527-0f11324b83c8
 		summarizeBy: none
-		formatString: General Date
+
+		variation Variation
+			isDefault
+			relationship: e800f241-bc7e-4861-a290-eb95ba477989
+			defaultHierarchy: LocalDateTable_290950eb-aa9a-4ae5-b16e-d50fca84d261.'Date Hierarchy'
 
 		annotation SummarizationSetBy = Automatic
 
@@ -34,27 +39,27 @@ table DeliveryByTrip
 
 	column OnTimeRate = SWITCH(TRUE(), Count(DISTINCT 'DeliveryByTrip'[event_id]) > 0, Sum( If('DeliveryByTrip'[on_time_flag], 1, 0) ) / Count(DISTINCT event_id), 0)
 		dataType: decimal
+		formatString: #,##0.00
 		lineageTag: 8d7d28f8-bd6a-5b80-8e42-f59315501f58
 		summarizeBy: sum
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column TotalDetentionMinutes
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: 1b4d5f37-0adc-57cb-9131-bb3ebc44bf13
 		summarizeBy: sum
 		sourceColumn: TotalDetentionMinutes
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column AvgDetentionMinutes
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: 3d3520f3-6ef4-5a73-9da7-884aa1bf0766
 		summarizeBy: sum
 		sourceColumn: AvgDetentionMinutes
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
@@ -67,3 +72,4 @@ table DeliveryByTrip
 				    Source
 
 	annotation PBI_ResultType = Table
+

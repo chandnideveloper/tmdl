@@ -43,28 +43,28 @@ table SafetyByTrip
 
 	column VehicleDamageCost
 		dataType: decimal
+		formatString: #,##0.00
 		lineageTag: dceec3bc-c146-5c4e-9ced-aa6bc728f9be
 		summarizeBy: sum
 		sourceColumn: VehicleDamageCost
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column CargoDamageCost
 		dataType: decimal
+		formatString: #,##0.00
 		lineageTag: bf16af75-143b-539f-977e-65d73e977b5a
 		summarizeBy: sum
 		sourceColumn: CargoDamageCost
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column ClaimAmount
 		dataType: decimal
+		formatString: #,##0.00
 		lineageTag: e49b00b3-7f3b-59f0-a985-84df8cc7bcf4
 		summarizeBy: sum
 		sourceColumn: ClaimAmount
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
@@ -77,3 +77,4 @@ table SafetyByTrip
 				    Source
 
 	annotation PBI_ResultType = Table
+

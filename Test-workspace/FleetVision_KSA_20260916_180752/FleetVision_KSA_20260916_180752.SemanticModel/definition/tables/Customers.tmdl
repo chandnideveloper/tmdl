@@ -51,19 +51,24 @@ table Customers
 
 	column contract_start_date
 		dataType: dateTime
+		formatString: General Date
 		lineageTag: 6339cc9c-bb4e-5d95-9051-8df23c70e46a
 		summarizeBy: none
 		sourceColumn: contract_start_date
-		formatString: General Date
+
+		variation Variation
+			isDefault
+			relationship: 197ddc37-f116-470f-ae89-4f0927882d0e
+			defaultHierarchy: LocalDateTable_bd79c2d5-3074-48cf-964c-8ae22b5f95b4.'Date Hierarchy'
 
 		annotation SummarizationSetBy = Automatic
 
 	column annual_revenue_potential
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: 3c2ae234-c1c7-5e20-b644-1e03f1081517
 		summarizeBy: sum
 		sourceColumn: annual_revenue_potential
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
@@ -78,3 +83,4 @@ table Customers
 				    Result
 
 	annotation PBI_ResultType = Table
+

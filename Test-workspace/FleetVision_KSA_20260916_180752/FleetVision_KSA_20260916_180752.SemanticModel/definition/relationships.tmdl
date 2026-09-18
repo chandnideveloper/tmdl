@@ -65,3 +65,104 @@ relationship 866b89a5-0870-5faa-99c7-883cccfb3e58
 relationship 9686f357-f377-5b44-a1b0-7499c90273e8
 	fromColumn: DeliveryEvents.facility_id
 	toColumn: Facilities.facility_id
+
+relationship 12083a9d-248c-4b84-9103-216d33405f9c
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Trips.DispatchDate
+	toColumn: LocalDateTable_46f32557-2b13-4d97-ba7c-fb496019e5cc.Date
+
+relationship e086b802-e9b6-4e2d-968a-3ececc61aa8d
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Trips.MonthStartDate
+	toColumn: LocalDateTable_ee4324c1-21d4-4cd7-9155-c8d6436307df.Date
+
+relationship 3f215c30-e8d6-4c95-98af-ae05aca237d2
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Trips.MonthSort
+	toColumn: LocalDateTable_2502e847-8c36-42ef-a22e-5ec14282315c.Date
+
+relationship 7f668b01-b1f3-420e-8471-ae74bb1a1603
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Drivers.hire_date
+	toColumn: LocalDateTable_4a77866a-0f02-4191-92b2-7c956ab624d0.Date
+
+relationship 81b0c92c-bb36-4b87-ab2d-29214153ad8e
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Drivers.termination_date
+	toColumn: LocalDateTable_506fdcf3-6fb8-4e25-b08d-7d0c7a636be4.Date
+
+relationship f9ade6dc-bdf9-4027-9524-0b8a66c028c9
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Drivers.date_of_birth
+	toColumn: LocalDateTable_d66c5b73-056c-4d75-bc21-80f9d5b3dd71.Date
+
+relationship df3ff48a-778d-4c2e-be83-f231d34d03cd
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Trucks.truck_acquisition_date
+	toColumn: LocalDateTable_ddfa66de-5e18-4c51-b27d-8937540e2ef7.Date
+
+relationship 7b18c098-3670-474b-8227-749d80196f44
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Maintenance.maintenance_date
+	toColumn: LocalDateTable_e03091ca-17de-4375-9927-be24c53536c2.Date
+
+relationship 628ada98-bc7e-4d9a-aedd-59b41ac55f9f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Trailers.trailer_acquisition_date
+	toColumn: LocalDateTable_c4a1312d-bce0-4d9f-a886-978223477acb.Date
+
+relationship 197ddc37-f116-470f-ae89-4f0927882d0e
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Customers.contract_start_date
+	toColumn: LocalDateTable_bd79c2d5-3074-48cf-964c-8ae22b5f95b4.Date
+
+relationship f1fc4e46-ca11-4511-b01b-620c31441c87
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Loads.load_date
+	toColumn: LocalDateTable_1fca96a8-5962-4773-89d2-b84082a349a5.Date
+
+relationship 9f162aba-1dc3-4b23-866c-c6f4539159a8
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DeliveryEvents.scheduled_datetime
+	toColumn: LocalDateTable_67b0c7a2-3f0d-457a-b486-2dc42bddc1cb.Date
+
+relationship 9c6f6750-3976-4875-b8a0-4c090ad5b0e4
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DeliveryEvents.actual_datetime
+	toColumn: LocalDateTable_ec78c3f0-eaf4-44a1-9276-f5a0c3b4f364.Date
+
+relationship 2fb604ab-4a16-4873-b6c5-e86c35c65344
+	joinOnDateBehavior: datePartOnly
+	fromColumn: FuelPurchases.purchase_date
+	toColumn: LocalDateTable_9d015723-21c0-4217-9f86-544929aaf12b.Date
+
+relationship 56e847c4-f743-4c99-be69-fdb2333ca06b
+	joinOnDateBehavior: datePartOnly
+	fromColumn: SafetyIncidents.incident_date
+	toColumn: LocalDateTable_49c4c77e-8adc-4b16-b4d9-c6e3342030c2.Date
+
+relationship e800f241-bc7e-4861-a290-eb95ba477989
+	joinOnDateBehavior: datePartOnly
+	fromColumn: DeliveryByTrip.OnTimeEvents
+	toColumn: LocalDateTable_290950eb-aa9a-4ae5-b16e-d50fca84d261.Date
+
+relationship 2bed51ad-cada-49f2-9245-d4ecd735fb81
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Calendar.DispatchDate
+	toColumn: LocalDateTable_039919ea-c555-43a5-a87f-b43fc4c03f05.Date
+
+relationship eccb27ea-f250-4f3b-b097-50c03becde83
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Calendar.CalendarMonthStart
+	toColumn: LocalDateTable_cd4f0de1-02e1-4131-ab02-0544bf8cc37d.Date
+
+relationship 03316c68-603d-4750-b505-53476d0f0dde
+	joinOnDateBehavior: datePartOnly
+	fromColumn: TempCalendar.MinDate
+	toColumn: LocalDateTable_d2e50f44-9a76-445a-9914-0623a447d95a.Date
+
+relationship a4d57aff-c153-461b-a572-5bde8632033e
+	joinOnDateBehavior: datePartOnly
+	fromColumn: TempCalendar.MaxDate
+	toColumn: LocalDateTable_b59427f5-6b12-40b6-8d0d-2621c2f26522.Date
+

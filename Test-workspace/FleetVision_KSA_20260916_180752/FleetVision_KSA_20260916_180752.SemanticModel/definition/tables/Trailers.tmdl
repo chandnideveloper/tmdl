@@ -27,19 +27,19 @@ table Trailers
 
 	column length_feet
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: aef9fab4-4d68-59fc-adee-ceb211777735
 		summarizeBy: sum
 		sourceColumn: length_feet
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column trailer_model_year
 		dataType: int64
-		lineageTag: b919d6f3-e2c0-59e6-8c9c-a6ca2ecaed93
-		summarizeBy: none
-		sourceColumn: trailer_model_year
 		formatString: #,##0
+		lineageTag: b919d6f3-e2c0-59e6-8c9c-a6ca2ecaed93
+		summarizeBy: sum
+		sourceColumn: trailer_model_year
 
 		annotation SummarizationSetBy = Automatic
 
@@ -53,10 +53,15 @@ table Trailers
 
 	column trailer_acquisition_date
 		dataType: dateTime
+		formatString: General Date
 		lineageTag: 1e9b71af-bd39-561d-84b4-767fcf183f17
 		summarizeBy: none
 		sourceColumn: trailer_acquisition_date
-		formatString: General Date
+
+		variation Variation
+			isDefault
+			relationship: 628ada98-bc7e-4d9a-aedd-59b41ac55f9f
+			defaultHierarchy: LocalDateTable_c4a1312d-bce0-4d9f-a886-978223477acb.'Date Hierarchy'
 
 		annotation SummarizationSetBy = Automatic
 
@@ -96,3 +101,4 @@ table Trailers
 				    Result
 
 	annotation PBI_ResultType = Table
+

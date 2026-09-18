@@ -27,19 +27,29 @@ table Drivers
 
 	column hire_date
 		dataType: dateTime
+		formatString: General Date
 		lineageTag: d3648a12-76b2-52f7-8a41-36102663f4b3
 		summarizeBy: none
 		sourceColumn: hire_date
-		formatString: General Date
+
+		variation Variation
+			isDefault
+			relationship: 7f668b01-b1f3-420e-8471-ae74bb1a1603
+			defaultHierarchy: LocalDateTable_4a77866a-0f02-4191-92b2-7c956ab624d0.'Date Hierarchy'
 
 		annotation SummarizationSetBy = Automatic
 
 	column termination_date
 		dataType: dateTime
+		formatString: General Date
 		lineageTag: 1e242dce-d9ef-5a26-b670-d45337a4331d
 		summarizeBy: none
 		sourceColumn: termination_date
-		formatString: General Date
+
+		variation Variation
+			isDefault
+			relationship: 81b0c92c-bb36-4b87-ab2d-29214153ad8e
+			defaultHierarchy: LocalDateTable_506fdcf3-6fb8-4e25-b08d-7d0c7a636be4.'Date Hierarchy'
 
 		annotation SummarizationSetBy = Automatic
 
@@ -61,10 +71,15 @@ table Drivers
 
 	column date_of_birth
 		dataType: dateTime
+		formatString: General Date
 		lineageTag: 993f311d-1e16-576c-b412-e72821e2feda
 		summarizeBy: none
 		sourceColumn: date_of_birth
-		formatString: General Date
+
+		variation Variation
+			isDefault
+			relationship: f9ade6dc-bdf9-4027-9524-0b8a66c028c9
+			defaultHierarchy: LocalDateTable_d66c5b73-056c-4d75-bc21-80f9d5b3dd71.'Date Hierarchy'
 
 		annotation SummarizationSetBy = Automatic
 
@@ -123,3 +138,4 @@ table Drivers
 				    Result
 
 	annotation PBI_ResultType = Table
+

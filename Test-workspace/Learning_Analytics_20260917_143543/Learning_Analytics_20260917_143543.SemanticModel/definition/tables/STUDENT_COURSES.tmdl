@@ -26,3 +26,4 @@ table STUDENT_COURSES
 				    Source
 
 	annotation PBI_ResultType = Table
+

@@ -43,28 +43,28 @@ table Routes
 
 	column typical_distance_miles
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: dabf4cb2-3268-5938-a8c0-ab380f252996
 		summarizeBy: sum
 		sourceColumn: typical_distance_miles
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column base_rate_per_mile
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: 605fcf2e-c734-5400-bd98-d45148bd7781
 		summarizeBy: sum
 		sourceColumn: base_rate_per_mile
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column fuel_surcharge_rate
 		dataType: decimal
+		formatString: #,##0.00
 		lineageTag: 033fed09-6dd1-535b-b5e9-606d0a9fed9f
 		summarizeBy: sum
 		sourceColumn: fuel_surcharge_rate
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
@@ -87,3 +87,4 @@ table Routes
 				    Result
 
 	annotation PBI_ResultType = Table
+

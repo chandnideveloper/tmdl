@@ -19,10 +19,15 @@ table FuelPurchases
 
 	column purchase_date
 		dataType: dateTime
+		formatString: General Date
 		lineageTag: 86b98a74-c808-58e0-b7b2-ea8b715eac1b
 		summarizeBy: none
 		sourceColumn: purchase_date
-		formatString: General Date
+
+		variation Variation
+			isDefault
+			relationship: 2fb604ab-4a16-4873-b6c5-e86c35c65344
+			defaultHierarchy: LocalDateTable_9d015723-21c0-4217-9f86-544929aaf12b.'Date Hierarchy'
 
 		annotation SummarizationSetBy = Automatic
 
@@ -44,28 +49,28 @@ table FuelPurchases
 
 	column gallons
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: 093543c3-cc92-5ed8-9c34-51b52ceb0367
 		summarizeBy: sum
 		sourceColumn: gallons
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column price_per_gallon
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: 44016af0-05fd-56a4-b01b-e9526d6ad4fb
 		summarizeBy: sum
 		sourceColumn: price_per_gallon
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column fuel_total_cost
 		dataType: decimal
+		formatString: #,##0.00
 		lineageTag: b42d4880-553f-5dd1-9ba8-6876d0b1730e
 		summarizeBy: sum
 		sourceColumn: fuel_total_cost
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
@@ -97,3 +102,4 @@ table FuelPurchases
 				    Result
 
 	annotation PBI_ResultType = Table
+

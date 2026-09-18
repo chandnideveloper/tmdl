@@ -27,10 +27,15 @@ table Loads
 
 	column load_date
 		dataType: dateTime
+		formatString: General Date
 		lineageTag: d015f215-d74d-5b4c-b75a-6f60e9adb897
 		summarizeBy: none
 		sourceColumn: load_date
-		formatString: General Date
+
+		variation Variation
+			isDefault
+			relationship: f1fc4e46-ca11-4511-b01b-620c31441c87
+			defaultHierarchy: LocalDateTable_1fca96a8-5962-4773-89d2-b84082a349a5.'Date Hierarchy'
 
 		annotation SummarizationSetBy = Automatic
 
@@ -44,46 +49,46 @@ table Loads
 
 	column weight_lbs
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: d4d0b472-c8a2-5abf-973c-08da760a4765
 		summarizeBy: sum
 		sourceColumn: weight_lbs
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column pieces
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: 115c40fc-1695-5395-b1b3-cdcc5666e45a
 		summarizeBy: sum
 		sourceColumn: pieces
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column revenue
 		dataType: decimal
+		formatString: #,##0.00
 		lineageTag: 1a41650e-0a8c-5cf9-af7f-beec7d3c1c04
 		summarizeBy: sum
 		sourceColumn: revenue
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column fuel_surcharge
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: e2f4d3bd-bea8-5a0e-a66d-66cd37ffbacc
 		summarizeBy: sum
 		sourceColumn: fuel_surcharge
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column accessorial_charges
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: e3933416-af83-51f9-b7e5-298adeabebbe
 		summarizeBy: sum
 		sourceColumn: accessorial_charges
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
@@ -121,3 +126,4 @@ table Loads
 				    Result
 
 	annotation PBI_ResultType = Table
+

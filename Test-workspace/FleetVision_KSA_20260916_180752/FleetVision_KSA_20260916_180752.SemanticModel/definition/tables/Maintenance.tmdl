@@ -19,10 +19,15 @@ table Maintenance
 
 	column maintenance_date
 		dataType: dateTime
+		formatString: General Date
 		lineageTag: 6a4d1d20-7f1f-5992-a2a9-c9769c0a942a
 		summarizeBy: none
 		sourceColumn: maintenance_date
-		formatString: General Date
+
+		variation Variation
+			isDefault
+			relationship: 7b18c098-3670-474b-8227-749d80196f44
+			defaultHierarchy: LocalDateTable_e03091ca-17de-4375-9927-be24c53536c2.'Date Hierarchy'
 
 		annotation SummarizationSetBy = Automatic
 
@@ -36,46 +41,46 @@ table Maintenance
 
 	column odometer_reading
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: 038241d8-57a1-5fe4-8963-c17fba582206
 		summarizeBy: sum
 		sourceColumn: odometer_reading
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column labor_hours
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: 962b58e9-c61c-5310-ab3f-312ac4120d0d
 		summarizeBy: sum
 		sourceColumn: labor_hours
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column labor_cost
 		dataType: decimal
+		formatString: #,##0.00
 		lineageTag: fc70b322-2558-511b-a173-73a365cdf9c6
 		summarizeBy: sum
 		sourceColumn: labor_cost
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column parts_cost
 		dataType: decimal
+		formatString: #,##0.00
 		lineageTag: b6fdd733-557f-56d7-b740-904ce21870a2
 		summarizeBy: sum
 		sourceColumn: parts_cost
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
 	column maintenance_total_cost
 		dataType: decimal
+		formatString: #,##0.00
 		lineageTag: 924a75f8-0942-59ef-8e8f-782e29a6ab05
 		summarizeBy: sum
 		sourceColumn: maintenance_total_cost
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
@@ -89,10 +94,10 @@ table Maintenance
 
 	column downtime_hours
 		dataType: double
+		formatString: #,##0.00
 		lineageTag: a62f3bf5-3362-592f-998e-62deeb89abe1
 		summarizeBy: sum
 		sourceColumn: downtime_hours
-		formatString: #,##0.00
 
 		annotation SummarizationSetBy = Automatic
 
@@ -127,3 +132,4 @@ table Maintenance
 				    Result
 
 	annotation PBI_ResultType = Table
+

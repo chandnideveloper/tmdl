@@ -2,7 +2,7 @@ table STUDENTS
 	lineageTag: d1a3acd2-4342-56b0-b44b-b3185bf3bfbe
 
 	measure 'Total Students' = COUNT('STUDENT_COURSES'[STUDENT_ID])
-		formatString: "#,##0.00"
+		formatString: #,##0.00
 		lineageTag: c19b17d3-ba7e-5a82-ae8a-5c0d746fc86f
 
 	column Age = DATEDIFF('STUDENTS'[DOB], TODAY(), YEAR)
@@ -18,22 +18,6 @@ table STUDENTS
 
 		annotation SummarizationSetBy = Automatic
 
-	column STUDENTS_FIRST_NAME
-		dataType: string
-		lineageTag: a15bf7d0-fe61-50c1-93e4-795dd11e4e01
-		summarizeBy: none
-		sourceColumn: STUDENTS.FIRST_NAME
-
-		annotation SummarizationSetBy = Automatic
-
-	column STUDENTS_LAST_NAME
-		dataType: string
-		lineageTag: 802539dd-a4c4-5b6b-97c7-d3a8ccf26442
-		summarizeBy: none
-		sourceColumn: STUDENTS.LAST_NAME
-
-		annotation SummarizationSetBy = Automatic
-
 	column GENDER
 		dataType: string
 		lineageTag: c94a06a9-75f3-5bec-a8b2-b8e5d8c2d87e
@@ -43,19 +27,34 @@ table STUDENTS
 		annotation SummarizationSetBy = Automatic
 
 	column DOB
-		dataType: dateTime
+		dataType: string
 		lineageTag: dfefa085-5358-5930-9edb-6f23d11cf12d
 		summarizeBy: none
 		sourceColumn: DOB
-		formatString: M/D/YYYY
+
+		annotation SummarizationSetBy = Automatic
+
+	column STUDENTS_FIRST_NAME
+		dataType: string
+		lineageTag: 3d6c9f50-f65e-4a99-8061-ac6d92b682b9
+		summarizeBy: none
+		sourceColumn: STUDENTS_FIRST_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column STUDENTS_LAST_NAME
+		dataType: string
+		lineageTag: e17699e3-0468-4a88-b8e9-c97352312f9c
+		summarizeBy: none
+		sourceColumn: STUDENTS_LAST_NAME
 
 		annotation SummarizationSetBy = Automatic
 
 	column STUDENTS_EMAIL
 		dataType: string
-		lineageTag: 1a1a35c5-d020-5fbc-b10a-865bf6b81a8a
+		lineageTag: c7e0ca26-a572-4531-8b99-72fc826228a9
 		summarizeBy: none
-		sourceColumn: STUDENTS.EMAIL
+		sourceColumn: STUDENTS_EMAIL
 
 		annotation SummarizationSetBy = Automatic
 
@@ -68,3 +67,4 @@ table STUDENTS
 				    Source
 
 	annotation PBI_ResultType = Table
+

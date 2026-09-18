@@ -94,13 +94,13 @@ table _Measures
 	measure 'Total Revenue Trips' = DIVIDE(SUM('Loads'[revenue]), 1000000, 0)
 		lineageTag: f7d01dcf-3507-5017-a4e6-e11c2c850871
 
-	measure 'Avg(idle_time_hours)' = AVERAGE('Trips'[idle_time_hours])
+	measure Avg(idle_time_hours) = AVERAGE('Trips'[idle_time_hours])
 		lineageTag: 006dce75-05d3-57ff-9787-b106c34baf73
 
-	measure 'Avg(actual_distance_miles)' = AVERAGE('Trips'[actual_distance_miles])
+	measure Avg(actual_distance_miles) = AVERAGE('Trips'[actual_distance_miles])
 		lineageTag: 5a97047a-bc4b-53e2-a3ee-96e38586420e
 
-	measure 'Avg(average_mpg)' = AVERAGE('Trips'[average_mpg])
+	measure Avg(average_mpg) = AVERAGE('Trips'[average_mpg])
 		lineageTag: 7441cc14-eea6-5581-9600-a9ba5b5c9101
 
 	column _placeholder
@@ -117,3 +117,4 @@ table _Measures
 				    Source = Table.FromRows({}, {"_placeholder"})
 				in
 				    Source
+
