@@ -1,0 +1,75 @@
+table 'PATIENTS'
+    lineageTag: e9eeb178-649b-40f6-aa95-f3e0250c9154
+
+    column 'Patient Id (Patients)'
+        dataType: string
+        lineageTag: a3b4e84f-6825-4f93-8f99-57221f8d3af7
+        summarizeBy: none
+        sourceColumn: Patient Id (Patients)
+
+    column 'First Name'
+        dataType: string
+        lineageTag: 908ed647-8731-4011-b730-e991481a1282
+        summarizeBy: none
+        sourceColumn: First Name
+
+    column 'Last Name'
+        dataType: string
+        lineageTag: 0ea90af5-4992-4c20-9a5b-955076d0380c
+        summarizeBy: none
+        sourceColumn: Last Name
+
+    column 'Date Of Birth'
+        dataType: string
+        lineageTag: 4e499458-7cc3-4ece-bf6e-a2eecb013ee0
+        summarizeBy: none
+        sourceColumn: Date Of Birth
+
+    column 'Gender'
+        dataType: string
+        lineageTag: 1906453d-9ac0-4320-beba-f9e8a166b6e1
+        summarizeBy: none
+        sourceColumn: Gender
+
+    column 'Contact Number (Patients)'
+        dataType: string
+        lineageTag: 710b3512-ba02-46ce-a4be-2f1940244467
+        summarizeBy: none
+        sourceColumn: Contact Number (Patients)
+
+    column 'Email Address (Patients)'
+        dataType: string
+        lineageTag: 2cfdf890-406a-4ce1-970b-c2075608d56d
+        summarizeBy: none
+        sourceColumn: Email Address (Patients)
+
+    column 'Address'
+        dataType: string
+        lineageTag: c8c5761f-33bb-4999-8749-1f052f10e884
+        summarizeBy: none
+        sourceColumn: Address
+
+    column 'Insurance Provider'
+        dataType: string
+        lineageTag: a481620b-b0ba-4b39-81ab-14dd43f93737
+        summarizeBy: none
+        sourceColumn: Insurance Provider
+
+    column 'Insurance Policy No'
+        dataType: string
+        lineageTag: 48d82928-338a-49c6-a1a6-ce377533dd71
+        summarizeBy: none
+        sourceColumn: Insurance Policy No
+
+    partition 'PATIENTS' = m
+        mode: import
+        source =
+            let
+                Source = Snowflake.Databases("mmcuiwz-kl31490.snowflakecomputing.com", "COMPUTE_WH"),
+                DB = Source{[Name="CITY_HOSPITAL"]}[Data],
+                Schema = DB{[Name="PUBLIC"]}[Data],
+                Table = Schema{[Name="PATIENTS"]}[Data],
+                #"Changed Type" = Table.TransformColumnTypes(Table, {{"PATIENT_ID", type text}, {"FIRST_NAME", type text}, {"LAST_NAME", type text}, {"DATE_OF_BIRTH", type text}, {"GENDER", type text}, {"CONTACT_NUMBER", type text}, {"EMAIL_ADDRESS", type text}, {"ADDRESS", type text}, {"INSURANCE_PROVIDER", type text}, {"INSURANCE_POLICY_NO", type text}}),
+                #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"PATIENT_ID", "Patient Id (Patients)"}, {"FIRST_NAME", "First Name"}, {"LAST_NAME", "Last Name"}, {"DATE_OF_BIRTH", "Date Of Birth"}, {"GENDER", "Gender"}, {"CONTACT_NUMBER", "Contact Number (Patients)"}, {"EMAIL_ADDRESS", "Email Address (Patients)"}, {"ADDRESS", "Address"}, {"INSURANCE_PROVIDER", "Insurance Provider"}, {"INSURANCE_POLICY_NO", "Insurance Policy No"}})
+            in
+                #"Renamed Columns"

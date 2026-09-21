@@ -1,0 +1,36 @@
+table 'APPOINTMENTS_VISIT_STATUS_FACT'
+    lineageTag: 19dd9b04-8987-4f3c-8ac4-b1f3b658fd04
+
+    column 'APPOINTMENT_ID (Custom SQL Query1)'
+        dataType: string
+        lineageTag: 83f4fa42-0d15-4b14-a7d2-17e94f3ea9b5
+        summarizeBy: none
+        sourceColumn: APPOINTMENT_ID (Custom SQL Query1)
+
+    column 'DEPARTMENT (Custom SQL Query1)'
+        dataType: string
+        lineageTag: cc0d588e-c7d6-4e86-b2c0-48e8a68e076a
+        summarizeBy: none
+        sourceColumn: DEPARTMENT (Custom SQL Query1)
+
+    column 'VISIT_STATUS (Custom SQL Query1)'
+        dataType: string
+        lineageTag: 5ffdfa8e-a6f3-45b9-b7a1-9458daec06d8
+        summarizeBy: none
+        sourceColumn: VISIT_STATUS (Custom SQL Query1)
+
+    column 'VISIT_FLAG'
+        dataType: string
+        lineageTag: afbded07-961e-4c3c-a17e-7d4ce57782f9
+        summarizeBy: none
+        sourceColumn: VISIT_FLAG
+
+    partition 'APPOINTMENTS_VISIT_STATUS_FACT' = m
+        mode: import
+        source =
+            let Source = Snowflake.Databases("mmcuiwz-kl31490.snowflakecomputing.com", "COMPUTE_WH"),
+            DB = Source{[Name="CITY_HOSPITAL"]}[Data],
+            APPOINTMENTS_VISIT_STATUS_FACT = Value.NativeQuery(DB, "SELECT APPOINTMENT_ID, DEPARTMENT, VISIT_STATUS, CASE WHEN VISIT_STATUS = 'Completed' THEN 'Completed Visit' ELSE 'Not Completed' END AS visit_flag FROM SNOWFLAKE_LEARNING_DB.RAJANMORYA_LOAD_SAMPLE_DATA_FROM_S3.APPOINTMENTS"),
+                            #"Renamed Columns" = Table.RenameColumns(APPOINTMENTS_VISIT_STATUS_FACT, {{"APPOINTMENT_ID", "APPOINTMENT_ID (Custom SQL Query1)"}, {"DEPARTMENT", "DEPARTMENT (Custom SQL Query1)"}, {"VISIT_STATUS", "VISIT_STATUS (Custom SQL Query1)"}})
+                        in
+                            #"Renamed Columns"

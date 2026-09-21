@@ -1,0 +1,176 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "A6AF7A27302C",
+  "position": {
+    "x": 20,
+    "y": 10,
+    "z": 0,
+    "height": 690,
+    "width": 1240,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "APPOINTMENTS"
+                    }
+                  },
+                  "Property": "Experience Level_Cal"
+                }
+              },
+              "queryRef": "APPOINTMENTS.Experience Level_Cal",
+              "nativeQueryRef": "Experience Level_Cal",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "APPOINTMENTS"
+                    }
+                  },
+                  "Property": "Total Appointments"
+                }
+              },
+              "queryRef": "APPOINTMENTS.Total Appointments",
+              "nativeQueryRef": "Total Appointments"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "APPOINTMENTS"
+                  }
+                },
+                "Property": "Total Appointments"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "general": [
+        {
+          "properties": {}
+        }
+      ],
+      "legend": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "labels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Appointments – Volume by Doctor Experience Leve'"
+                }
+              }
+            },
+            "heading": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Heading2'"
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'center'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "08b9a1bb1b4c4f18a0d9",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "APPOINTMENTS"
+              }
+            },
+            "Property": "Experience Level_Cal"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "704327fb18cc4c7b9cc8",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "APPOINTMENTS"
+              }
+            },
+            "Property": "Total Appointments"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}
