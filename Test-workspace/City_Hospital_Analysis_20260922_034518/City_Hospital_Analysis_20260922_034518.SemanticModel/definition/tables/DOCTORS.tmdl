@@ -1,0 +1,103 @@
+table DOCTORS
+	lineageTag: 146dc36d-f799-5221-84b1-61c0cf22e342
+
+	measure 'Average Consultation Fee' = AVERAGE('DOCTORS'[CONSULTATION_FEE])
+		formatString: "#,##0.00"
+		lineageTag: 3d6e6846-10d1-56ba-8008-fec9a1e9ddcd
+
+	measure 'Average Doctor Experience(Years)' = AVERAGE('DOCTORS'[EXPERIENCE_YEARS])
+		formatString: "#,##0.00"
+		lineageTag: a31580bc-eb93-5588-87cb-6966f3ae95b5
+
+	column ExperienceLevel = 'DOCTORS'[DOCTOR_ID]
+		dataType: double
+		lineageTag: 22115238-b671-506a-b58d-83b3d1595973
+		summarizeBy: none
+
+	column DOCTOR_ID = BLANK()
+		dataType: string
+		lineageTag: d8b5fade-0ad6-5db2-8f51-66ba0d2bfc2c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column FULL_NAME = BLANK()
+		dataType: string
+		lineageTag: 5b0df386-a5d7-5d5f-a31a-3b9e4f5cb114
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column SPECIALIZATION = BLANK()
+		dataType: string
+		lineageTag: 9fff2f5f-8a02-5b25-9196-d8057110ae95
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column DOCTORS_DEPARTMENT = BLANK()
+		dataType: string
+		lineageTag: c61bf0fd-f642-5375-bc97-cac158a7b33a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column CONTACT_NUMBER = BLANK()
+		dataType: int64
+		lineageTag: 661022e6-91ff-5593-8c27-59358d679297
+		summarizeBy: sum
+		formatString: #,##0
+
+		annotation SummarizationSetBy = Automatic
+
+	column DOCTORS_EMAIL_ADDRESS = BLANK()
+		dataType: string
+		lineageTag: aa453316-7f86-5788-9b96-90f888843b77
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column AVAILABILITY_DAYS = BLANK()
+		dataType: int64
+		lineageTag: 71d10116-f11f-5f70-a33d-4c774aa54e9b
+		summarizeBy: sum
+		formatString: #,##0
+
+		annotation SummarizationSetBy = Automatic
+
+	column CONSULTATION_FEE = BLANK()
+		dataType: double
+		lineageTag: bb03d822-d2ce-553b-a3fe-5a16bf61e824
+		summarizeBy: sum
+		formatString: ##############
+
+		annotation SummarizationSetBy = Automatic
+
+	column EXPERIENCE_YEARS = BLANK()
+		dataType: int64
+		lineageTag: f95c7394-aaa8-5b8b-9925-2dc4019c1da0
+		summarizeBy: sum
+		formatString: #,##0
+
+		annotation SummarizationSetBy = Automatic
+
+	column REGISTRATION_NUMBER = BLANK()
+		dataType: int64
+		lineageTag: 0eaf5bb1-e7de-5441-8fa8-61c027f36dd8
+		summarizeBy: sum
+		formatString: #,##0
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DOCTORS = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("Medisphere", "MEDISPHERE"),
+				    Result = Value.NativeQuery(Source, "SELECT ""DOCTOR_ID"", ""FULL_NAME"", ""SPECIALIZATION"", ""DEPARTMENT"", ""CONTACT_NUMBER"", ""EMAIL_ADDRESS"", ""AVAILABILITY_DAYS"", ""CONSULTATION_FEE"", ""EXPERIENCE_YEARS"", ""REGISTRATION_NUMBER"" FROM ""MEDISPHERE"".""PUBLIC"".""DOCTORS""", null, [EnableFolding=false]),
+				    #"Renamed Columns" = Table.RenameColumns(Result, {{"DEPARTMENT", "DEPARTMENT"}, {"EMAIL_ADDRESS", "EMAIL_ADDRESS"}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"DOCTOR_ID", type text}, {"FULL_NAME", type text}, {"SPECIALIZATION", type text}, {"DOCTORS_DEPARTMENT", type text}, {"CONTACT_NUMBER", Int64.Type}, {"DOCTORS_EMAIL_ADDRESS", type text}, {"AVAILABILITY_DAYS", Int64.Type}, {"CONSULTATION_FEE", type number}, {"EXPERIENCE_YEARS", Int64.Type}, {"REGISTRATION_NUMBER", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
