@@ -1,0 +1,44 @@
+table COURSE_INSTRUCTORS
+	lineageTag: 041af670-a044-52d1-aa5e-3a7c03d2a5e5
+
+	measure 'Total Instructors' = COUNT('COURSE_INSTRUCTORS'[INSTRUCTOR_ID])
+		formatString: "#,##0.00"
+		lineageTag: fd5ad14c-45fe-5d40-ae55-0cd2a7163579
+
+	measure 'Assignment Duration' = AVERAGE(Today() - [ASSIGNED_DATE])
+		formatString: "#,##0.00"
+		lineageTag: 22a4b98e-6311-5d9e-9001-8ee5cb903705
+
+	column COURSE_ID = BLANK()
+		dataType: string
+		lineageTag: 134eb7c3-a7c4-55ce-9612-c8ba2e0196e2
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column INSTRUCTOR_ID = BLANK()
+		dataType: string
+		lineageTag: 52c3a779-396a-585e-acad-f852d49465a3
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column ASSIGNED_DATE = BLANK()
+		dataType: dateTime
+		lineageTag: f23691ee-c9a4-5c26-bea2-8c1fbf3a0e98
+		summarizeBy: none
+		formatString: M/D/YYYY
+
+		annotation SummarizationSetBy = Automatic
+
+	partition COURSE_INSTRUCTORS = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("Learning_Analytics", "<DATABASE>"),
+				    Result = Value.NativeQuery(Source, "SELECT ""COURSE_ID"", ""INSTRUCTOR_ID"", ""ASSIGNED_DATE"" FROM ""LEARNING_ANALYTICS"".""PUBLIC"".""COURSE_INSTRUCTORS""", null, [EnableFolding=false]),
+				    #"Changed Type" = Table.TransformColumnTypes(Result, {{"COURSE_ID", type text}, {"INSTRUCTOR_ID", type text}, {"ASSIGNED_DATE", type datetime}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
