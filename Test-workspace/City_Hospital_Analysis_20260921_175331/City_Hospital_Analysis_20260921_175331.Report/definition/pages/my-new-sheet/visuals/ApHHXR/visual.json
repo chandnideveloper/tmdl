@@ -1,0 +1,119 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "ApHHXR",
+  "position": {
+    "x": 267,
+    "y": 0,
+    "width": 320,
+    "height": 127,
+    "z": 2,
+    "tabOrder": 2
+  },
+  "visual": {
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DOCTORS"
+                    }
+                  },
+                  "Property": "Average Doctor Experience(Years)"
+                }
+              },
+              "queryRef": "DOCTORS.Average Doctor Experience(Years)",
+              "nativeQueryRef": "Average Doctor Experience(Years)"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "general": [
+        {
+          "properties": {}
+        }
+      ],
+      "labels": [
+        {
+          "properties": {
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Average Doctor Experience(Years)'"
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "valueLabel": [
+        {
+          "properties": {
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryLabel": [
+        {
+          "properties": {
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": []
+  }
+}
