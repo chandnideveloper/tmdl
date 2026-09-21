@@ -1,0 +1,31 @@
+table 'Top N Departments_Table'
+
+    column 'Department'
+        formatString: 0
+        summarizeBy: sum
+        isNameInferred
+        sourceColumn: APPOINTMENTS[Department]
+        annotation SummarizationSetBy = Automatic
+
+    partition 'Top N Departments_Table' = calculated
+        mode: import
+        source = DISTINCT('APPOINTMENTS'[Department])
+
+    measure 'SelectedTopNDepartments_Table'
+        expression: SELECTEDVALUE('Top N Departments_Table'[Department], 2)
+        formatString: 0
+        isHidden: true
+
+    measure 'Top N Department Filter' =
+        VAR _TopN = SELECTEDVALUE('Top N Departments_Table'[Department])
+        VAR _RankVal = RANKX(
+            ALLSELECTED('custom table'[DEPARTMENT (Custom SQL Query)]),
+            CALCULATE([Department Revenue (LOD)]),
+            ,
+            DESC,
+            DENSE
+        )
+        RETURN IF(_RankVal <= INT(_TopN), 1, 0)
+
+    annotation PBI_Id = 3a23b545c9d94016a8d3c4283614e43b
+    

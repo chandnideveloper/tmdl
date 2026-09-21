@@ -1,0 +1,113 @@
+table 'TREATMENTS'
+    lineageTag: a1151e9a-d424-4280-91a6-544b37d42dbb
+
+    column 'Treatment Id (Treatments)'
+        dataType: string
+        lineageTag: 39fc8e22-e2b9-45b8-a481-706103ff53a2
+        summarizeBy: none
+        sourceColumn: Treatment Id (Treatments)
+
+    column 'Appointment Id (Treatments)'
+        dataType: string
+        lineageTag: b66dbcf7-0694-423f-a95d-97bc6d73abbf
+        summarizeBy: none
+        sourceColumn: Appointment Id (Treatments)
+
+    column 'Treatment Type'
+        dataType: string
+        lineageTag: 5a8188de-3b23-4ba5-97b4-0ba9980c1fd6
+        summarizeBy: none
+        sourceColumn: Treatment Type
+
+    column 'Treatment Description'
+        dataType: string
+        lineageTag: e55919a8-b515-4a08-8036-83461977e1e2
+        summarizeBy: none
+        sourceColumn: Treatment Description
+
+    column 'Prescribed Medication'
+        dataType: string
+        lineageTag: ebf8241d-6439-4f60-9b78-d04dc12f8466
+        summarizeBy: none
+        sourceColumn: Prescribed Medication
+
+    column 'Start Date'
+        sourceColumn: Start Date
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: 17e88db7-b124-4582-a92d-7adaedbaa351
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: 62961a1b-24b1-459a-9779-16f68f363c1e
+            defaultHierarchy: LocalDateTable_3ff96537-fe98-4fcf-8af2-8fed1314c49a.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    column 'End Date'
+        sourceColumn: End Date
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: 16421876-37b0-4107-901b-8f949656972c
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: c1ab7621-6c2f-4f9b-9fdc-9368d71f4f20
+            defaultHierarchy: LocalDateTable_263bb956-dec6-43a2-93ca-6abe96053b14.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    column 'Outcome Status'
+        dataType: string
+        lineageTag: 6cae75c8-f74c-41aa-b823-c3590dc0a0c2
+        summarizeBy: none
+        sourceColumn: Outcome Status
+
+    column 'Follow Up Date'
+        sourceColumn: Follow Up Date
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: 5f82be1a-52f8-4aee-a726-4c032e0df9dc
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: c7319893-6ad0-46f7-bcc7-2561e427b5f1
+            defaultHierarchy: LocalDateTable_d4d34c24-aa30-4234-beb1-0b595b7b5cb9.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    column 'Treatment Cost'
+        dataType: double
+        lineageTag: 92c2f335-2c7b-4096-914a-a723f35b5b8f
+        summarizeBy: none
+        sourceColumn: Treatment Cost
+
+    measure 'Appointment to Treatment Ratio' =
+        DIVIDE(COUNT('TREATMENTS'[Treatment Id (Treatments)]), COUNT('APPOINTMENTS'[Appointment Id]), 0)
+
+
+    measure 'Avg. Treatment Cost' =
+        AVERAGE('TREATMENTS'[Treatment Cost])
+
+
+    partition 'TREATMENTS' = m
+        mode: import
+        source =
+            let
+                Source = Snowflake.Databases("mmcuiwz-kl31490.snowflakecomputing.com", "COMPUTE_WH"),
+                DB = Source{[Name="CITY_HOSPITAL"]}[Data],
+                Schema = DB{[Name="PUBLIC"]}[Data],
+                Table = Schema{[Name="TREATMENTS"]}[Data],
+                #"Changed Type" = Table.TransformColumnTypes(Table, {{"TREATMENT_ID", type text}, {"APPOINTMENT_ID", type text}, {"TREATMENT_TYPE", type text}, {"TREATMENT_DESCRIPTION", type text}, {"PRESCRIBED_MEDICATION", type text}, {"START_DATE", type date}, {"END_DATE", type date}, {"OUTCOME_STATUS", type text}, {"FOLLOW_UP_DATE", type date}, {"TREATMENT_COST", type number}}),
+                #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"TREATMENT_ID", "Treatment Id (Treatments)"}, {"APPOINTMENT_ID", "Appointment Id (Treatments)"}, {"TREATMENT_TYPE", "Treatment Type"}, {"TREATMENT_DESCRIPTION", "Treatment Description"}, {"PRESCRIBED_MEDICATION", "Prescribed Medication"}, {"START_DATE", "Start Date"}, {"END_DATE", "End Date"}, {"OUTCOME_STATUS", "Outcome Status"}, {"FOLLOW_UP_DATE", "Follow Up Date"}, {"TREATMENT_COST", "Treatment Cost"}})
+            in
+                #"Renamed Columns"

@@ -1,0 +1,24 @@
+table 'Select Visit Status'
+
+    column 'Value'
+        formatString: General
+        summarizeBy: none
+        isNameInferred
+        sourceColumn: 'Select Visit Status'[Value]
+        annotation SummarizationSetBy = Automatic
+
+    partition 'Select Visit Status' = calculated
+        mode: import
+        source = DATATABLE("Value", STRING, {{"completed"}, {"no show"}, {"Cancelled"}, {"all"}})
+
+    measure 'SelectedSelectVisitStatus'
+        expression: SELECTEDVALUE('Select Visit Status'[Value], "all")
+        formatString: General
+        isHidden: true
+
+    measure 'Visit Status Filter' =
+        VAR _VisitStatusParam = SELECTEDVALUE('Select Visit Status'[Value])
+        RETURN IF(_VisitStatusParam & "" = "All", TRUE(), SELECTEDVALUE('APPOINTMENTS'[Visit Status]) & "" = _VisitStatusParam & "")
+
+    annotation PBI_Id = 6a4f67429c3a4fb0b7546cc6b489c69c
+    
