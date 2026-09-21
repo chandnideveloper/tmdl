@@ -1,0 +1,104 @@
+table 'DOCTORS'
+    lineageTag: 220acd0a-54f3-4606-b900-343eb7149cf1
+
+    column 'Doctor Id (Doctors)'
+        dataType: string
+        lineageTag: e3ad09de-2651-4068-9197-c1197c994021
+        summarizeBy: none
+        sourceColumn: Doctor Id (Doctors)
+
+    column 'Full Name'
+        dataType: string
+        lineageTag: 81964a52-8e88-448f-811a-8ee4a20d9457
+        summarizeBy: none
+        sourceColumn: Full Name
+
+    column 'Specialization'
+        dataType: string
+        lineageTag: 5c30c5a7-5ff8-470a-8bee-ed9870bc55fc
+        summarizeBy: none
+        sourceColumn: Specialization
+
+    column 'Department (Doctors)'
+        dataType: string
+        lineageTag: a96b4ca1-de26-49e3-a710-2cda8fb4e3b2
+        summarizeBy: none
+        sourceColumn: Department (Doctors)
+
+    column 'Contact Number'
+        dataType: string
+        lineageTag: f5634327-6a75-4dcb-88d5-d4e46c01c82c
+        summarizeBy: none
+        sourceColumn: Contact Number
+
+    column 'Email Address'
+        dataType: string
+        lineageTag: df4be42c-0cce-4098-9581-573df89258a7
+        summarizeBy: none
+        sourceColumn: Email Address
+
+    column 'Availability Days'
+        dataType: string
+        lineageTag: 6c62ff03-0156-4e39-9a96-f233363c5cf3
+        summarizeBy: none
+        sourceColumn: Availability Days
+
+    column 'Consultation Fee'
+        dataType: double
+        lineageTag: b4e05b2d-398a-49b3-90d7-d628490c04a0
+        summarizeBy: none
+        sourceColumn: Consultation Fee
+
+    column 'Experience Years'
+        dataType: double
+        lineageTag: d466e40f-0c18-4c33-817c-92d55fc9787a
+        summarizeBy: none
+        sourceColumn: Experience Years
+
+    column 'Registration Number'
+        dataType: string
+        lineageTag: 18551bb7-e5d5-4ec7-a71f-03c82f3c3632
+        summarizeBy: none
+        sourceColumn: Registration Number
+
+    column 'Experience Level_Cal' = SWITCH( TRUE(), 'DOCTORS'[Experience Years] < 5, "Junior", 'DOCTORS'[Experience Years] <= 10, "Mid-Level", "Senior" )
+        dataType: string
+
+        summarizeBy: none
+
+    measure 'Average Consultation Fee' =
+        AVERAGE('DOCTORS'[Consultation Fee])
+
+
+    measure 'Average Doctor Experience (Years)1' =
+        AVERAGE('DOCTORS'[Experience Years])
+
+
+    measure 'Average by Specialization (NESTED)' =
+        AVERAGEX(
+            VALUES('DOCTORS'[Specialization]),
+            AVERAGEX(
+                VALUES('BILLS'[Appointment Id (Bills)]),
+                CALCULATE(
+                    SUM('BILLS'[Total Amount]) - SUM('BILLS'[Insurance Covered])
+                )
+            )
+        )
+
+
+    measure 'Doctor RLS Filter' =
+        SELECTEDVALUE('DOCTORS'[Email Address]) = USERNAME()
+
+
+    partition 'DOCTORS' = m
+        mode: import
+        source =
+            let
+                Source = Snowflake.Databases("mmcuiwz-kl31490.snowflakecomputing.com", "COMPUTE_WH"),
+                DB = Source{[Name="CITY_HOSPITAL"]}[Data],
+                Schema = DB{[Name="PUBLIC"]}[Data],
+                Table = Schema{[Name="DOCTORS"]}[Data],
+                #"Changed Type" = Table.TransformColumnTypes(Table, {{"DOCTOR_ID", type text}, {"FULL_NAME", type text}, {"SPECIALIZATION", type text}, {"DEPARTMENT", type text}, {"CONTACT_NUMBER", type text}, {"EMAIL_ADDRESS", type text}, {"AVAILABILITY_DAYS", type text}, {"CONSULTATION_FEE", type number}, {"EXPERIENCE_YEARS", type number}, {"REGISTRATION_NUMBER", type text}}),
+                #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"DOCTOR_ID", "Doctor Id (Doctors)"}, {"FULL_NAME", "Full Name"}, {"SPECIALIZATION", "Specialization"}, {"DEPARTMENT", "Department (Doctors)"}, {"CONTACT_NUMBER", "Contact Number"}, {"EMAIL_ADDRESS", "Email Address"}, {"AVAILABILITY_DAYS", "Availability Days"}, {"CONSULTATION_FEE", "Consultation Fee"}, {"EXPERIENCE_YEARS", "Experience Years"}, {"REGISTRATION_NUMBER", "Registration Number"}})
+            in
+                #"Renamed Columns"
