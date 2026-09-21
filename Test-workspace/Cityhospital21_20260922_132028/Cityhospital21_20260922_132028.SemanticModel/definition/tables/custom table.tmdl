@@ -1,0 +1,164 @@
+table 'custom table'
+    lineageTag: caa91142-48ed-4063-8225-5b529c5151da
+
+    column 'APPOINTMENT_ID (Custom SQL Query)'
+        dataType: string
+        lineageTag: a7d2c3e8-9616-4daf-8ff7-b4c0fe318c06
+        summarizeBy: none
+        sourceColumn: APPOINTMENT_ID (Custom SQL Query)
+
+    column 'PATIENT_ID (Custom SQL Query)'
+        dataType: string
+        lineageTag: ff240fd5-2d35-4f45-aee9-0f2dfaf5bcad
+        summarizeBy: none
+        sourceColumn: PATIENT_ID (Custom SQL Query)
+
+    column 'DOCTOR_ID (Custom SQL Query)'
+        dataType: string
+        lineageTag: 0130e769-2ed3-48de-a48b-171df6a2e043
+        summarizeBy: none
+        sourceColumn: DOCTOR_ID (Custom SQL Query)
+
+    column 'DEPARTMENT (Custom SQL Query)'
+        dataType: string
+        lineageTag: 5c070d2d-5ba1-4a7b-9eb5-d6cf7b86b0f7
+        summarizeBy: none
+        sourceColumn: DEPARTMENT (Custom SQL Query)
+
+    column 'APPOINTMENT_DATE (Custom SQL Query)'
+        sourceColumn: APPOINTMENT_DATE (Custom SQL Query)
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: e7556434-5dba-46ad-95aa-fc552b076a59
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: 2d26cc9e-310b-41c9-b147-0ac9cbe6cc26
+            defaultHierarchy: LocalDateTable_72bc54e7-a6b4-4961-b045-937e52937613.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    column 'APPOINTMENT_TIME (Custom SQL Query)'
+        sourceColumn: APPOINTMENT_TIME (Custom SQL Query)
+        dataType: dateTime
+        formatString: General Date
+        lineageTag: 4bb1e6e6-ec6c-4d2c-9b8a-88a6ac06f83a
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: f6616017-8b5c-4ca0-ae2c-53c2f9808c36
+            defaultHierarchy: LocalDateTable_21127c6b-7d6a-4504-8923-27a7f800139a.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    column 'VISIT_STATUS_CLEAN'
+        dataType: string
+        lineageTag: 71c07798-28ee-4286-be6f-b99304b75a5b
+        summarizeBy: none
+        sourceColumn: VISIT_STATUS_CLEAN
+
+    column 'REASON_FOR_VISIT (Custom SQL Query)'
+        dataType: string
+        lineageTag: 8d514ed4-4d01-4dbd-aa81-9cd1265a4b10
+        summarizeBy: none
+        sourceColumn: REASON_FOR_VISIT (Custom SQL Query)
+
+    column 'DIAGNOSIS_CODE (Custom SQL Query)'
+        dataType: string
+        lineageTag: 13c6d600-3f4b-447b-84b9-26d75ea1b370
+        summarizeBy: none
+        sourceColumn: DIAGNOSIS_CODE (Custom SQL Query)
+
+    column 'FOLLOW_UP_REQUIRED (Custom SQL Query)'
+        dataType: boolean
+        lineageTag: 9d982b50-5434-412c-bb65-6e4cc47cd2ec
+        summarizeBy: none
+        sourceColumn: FOLLOW_UP_REQUIRED (Custom SQL Query)
+
+    column 'SPECIALIZATION (Custom SQL Query)'
+        dataType: string
+        lineageTag: f4cbe194-ebef-4ed7-b8fc-76b77180ea0b
+        summarizeBy: none
+        sourceColumn: SPECIALIZATION (Custom SQL Query)
+
+    column 'CONSULTATION_FEE (Custom SQL Query)'
+        dataType: double
+        lineageTag: 497cf366-c9f9-4941-8de0-e9be7ace24c1
+        summarizeBy: none
+        sourceColumn: CONSULTATION_FEE (Custom SQL Query)
+
+    column 'TREATMENT_TYPE (Custom SQL Query)'
+        dataType: string
+        lineageTag: 27968d09-23e1-4712-af29-07a832018d21
+        summarizeBy: none
+        sourceColumn: TREATMENT_TYPE (Custom SQL Query)
+
+    column 'OUTCOME_STATUS (Custom SQL Query)'
+        dataType: string
+        lineageTag: 00548613-493f-472b-b47e-7fc520181a68
+        summarizeBy: none
+        sourceColumn: OUTCOME_STATUS (Custom SQL Query)
+
+    column 'TREATMENT_COST (Custom SQL Query)'
+        dataType: double
+        lineageTag: 951b0c62-bdb7-41e5-a664-1ba639fae530
+        summarizeBy: none
+        sourceColumn: TREATMENT_COST (Custom SQL Query)
+
+    column 'TOTAL_AMOUNT (Custom SQL Query)'
+        dataType: double
+        lineageTag: 76511911-3cc6-4efe-bb83-a12f5f448fca
+        summarizeBy: none
+        sourceColumn: TOTAL_AMOUNT (Custom SQL Query)
+
+    column 'PAYMENT_STATUS (Custom SQL Query)'
+        dataType: string
+        lineageTag: 2b9a3bcd-eb89-426c-ad82-b8395061d421
+        summarizeBy: none
+        sourceColumn: PAYMENT_STATUS (Custom SQL Query)
+
+    column 'COLLECTED_REVENUE'
+        dataType: double
+        lineageTag: 9606b730-7d02-4e59-84c7-ed0e455730d8
+        summarizeBy: none
+        sourceColumn: COLLECTED_REVENUE
+
+    measure 'Revenue Filter' =
+        SUMX('custom table', [COLLECTED_REVENUE]) >= SELECTEDVALUE('Revenue Threshold'[Value])
+
+
+    measure 'SUM of COLLECTED_REVENUE (custom table)' =
+        SUM('custom table'[COLLECTED_REVENUE])
+
+
+    measure 'SUM of Completed Appointments per Department (custom table)' =
+        SUM('custom table'[Completed Appointments per Department])
+
+
+    measure 'Department Total Revenue (LOD)' =
+        CALCULATE(SUM([COLLECTED_REVENUE]), ALLEXCEPT('custom table', 'custom table'[DEPARTMENT (Custom SQL Query)]))
+
+
+    measure 'Completed Appointments per Department' =
+        CALCULATE(SUMX('custom table', IF('custom table'[VISIT_STATUS_CLEAN] & "" = "Completed", 1, 0)), ALLEXCEPT('custom table', 'custom table'[DEPARTMENT (Custom SQL Query)]))
+
+
+    measure 'Department Revenue (LOD)' =
+        CALCULATE(SUM([COLLECTED_REVENUE]), ALLEXCEPT('custom table', 'custom table'[DEPARTMENT (Custom SQL Query)]))
+
+
+    partition 'custom table' = m
+        mode: import
+        source =
+            let Source = Snowflake.Databases("mmcuiwz-kl31490.snowflakecomputing.com", "COMPUTE_WH"),
+            DB = Source{[Name="CITY_HOSPITAL"]}[Data],
+            custom_table = Value.NativeQuery(DB, "SELECT a.APPOINTMENT_ID, a.PATIENT_ID, a.DOCTOR_ID, a.DEPARTMENT, a.APPOINTMENT_DATE, a.APPOINTMENT_TIME, CASE WHEN a.VISIT_STATUS IN ('No-Show', 'No Show') THEN 'No Show' WHEN a.VISIT_STATUS IN ('Cancelled', 'Canceled') THEN 'Cancelled' WHEN a.VISIT_STATUS = 'Completed' THEN 'Completed' ELSE 'Other' END AS VISIT_STATUS_CLEAN, a.REASON_FOR_VISIT, a.DIAGNOSIS_CODE, a.FOLLOW_UP_REQUIRED, d.SPECIALIZATION, d.CONSULTATION_FEE, t.TREATMENT_TYPE, t.OUTCOME_STATUS, t.TREATMENT_COST, b.TOTAL_AMOUNT, b.PAYMENT_STATUS, CASE WHEN b.PAYMENT_STATUS = 'Paid' THEN b.TOTAL_AMOUNT ELSE 0 END AS COLLECTED_REVENUE FROM SNOWFLAKE_LEARNING_DB.RAJANMORYA_LOAD_SAMPLE_DATA_FROM_S3.APPOINTMENTS a LEFT JOIN SNOWFLAKE_LEARNING_DB.RAJANMORYA_LOAD_SAMPLE_DATA_FROM_S3.DOCTORS d ON a.DOCTOR_ID = d.DOCTOR_ID LEFT JOIN SNOWFLAKE_LEARNING_DB.RAJANMORYA_LOAD_SAMPLE_DATA_FROM_S3.TREATMENTS t ON a.APPOINTMENT_ID = t.APPOINTMENT_ID LEFT JOIN SNOWFLAKE_LEARNING_DB.RAJANMORYA_LOAD_SAMPLE_DATA_FROM_S3.BILLS b ON a.APPOINTMENT_ID = b.APPOINTMENT_ID"),
+                            #"Renamed Columns" = Table.RenameColumns(custom_table, {{"APPOINTMENT_ID", "APPOINTMENT_ID (Custom SQL Query)"}, {"PATIENT_ID", "PATIENT_ID (Custom SQL Query)"}, {"DOCTOR_ID", "DOCTOR_ID (Custom SQL Query)"}, {"DEPARTMENT", "DEPARTMENT (Custom SQL Query)"}, {"APPOINTMENT_DATE", "APPOINTMENT_DATE (Custom SQL Query)"}, {"APPOINTMENT_TIME", "APPOINTMENT_TIME (Custom SQL Query)"}, {"REASON_FOR_VISIT", "REASON_FOR_VISIT (Custom SQL Query)"}, {"DIAGNOSIS_CODE", "DIAGNOSIS_CODE (Custom SQL Query)"}, {"FOLLOW_UP_REQUIRED", "FOLLOW_UP_REQUIRED (Custom SQL Query)"}, {"SPECIALIZATION", "SPECIALIZATION (Custom SQL Query)"}, {"CONSULTATION_FEE", "CONSULTATION_FEE (Custom SQL Query)"}, {"TREATMENT_TYPE", "TREATMENT_TYPE (Custom SQL Query)"}, {"OUTCOME_STATUS", "OUTCOME_STATUS (Custom SQL Query)"}, {"TREATMENT_COST", "TREATMENT_COST (Custom SQL Query)"}, {"TOTAL_AMOUNT", "TOTAL_AMOUNT (Custom SQL Query)"}, {"PAYMENT_STATUS", "PAYMENT_STATUS (Custom SQL Query)"}})
+                        in
+                            #"Renamed Columns"
