@@ -1,0 +1,121 @@
+table 'BILLS'
+    lineageTag: 75fd7eeb-1b5d-480f-a70e-a3b0030567b2
+
+    column 'Bill Id'
+        dataType: string
+        lineageTag: 1efaacd6-ed03-4eca-8808-2a8cc860c0df
+        summarizeBy: none
+        sourceColumn: Bill Id
+
+    column 'Patient Id (Bills)'
+        dataType: string
+        lineageTag: 6b04fc84-1ac4-4423-9701-6a8968083987
+        summarizeBy: none
+        sourceColumn: Patient Id (Bills)
+
+    column 'Appointment Id (Bills)'
+        dataType: string
+        lineageTag: 0629e1e0-dc23-47b1-9a34-179895606cbd
+        summarizeBy: none
+        sourceColumn: Appointment Id (Bills)
+
+    column 'Treatment Id'
+        dataType: string
+        lineageTag: dc566b93-c9d5-4c70-a680-cdd85a7d8652
+        summarizeBy: none
+        sourceColumn: Treatment Id
+
+    column 'Billing Date'
+        sourceColumn: Billing Date
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: 2761d1a7-4428-48db-a05f-00ccb82736c3
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: 1e2b8ff7-874b-477f-841a-b06b1ab85bbc
+            defaultHierarchy: LocalDateTable_97146cf1-4fb5-48a5-9aa3-a4c4a8127a46.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    column 'Total Amount'
+        dataType: double
+        lineageTag: dd72e7b0-07e3-4801-8e3f-f2d5c880d286
+        summarizeBy: none
+        sourceColumn: Total Amount
+
+    column 'Insurance Covered'
+        dataType: double
+        lineageTag: 587ec0ea-c2d3-4407-af14-9ae983b2ac3d
+        summarizeBy: none
+        sourceColumn: Insurance Covered
+
+    column 'Patient Payable'
+        dataType: double
+        lineageTag: d35d8581-950d-4eac-aa33-aee6a42cc4ad
+        summarizeBy: none
+        sourceColumn: Patient Payable
+
+    column 'Payment Method'
+        dataType: string
+        lineageTag: 2e89073c-2ab0-4978-b6c1-1994459acf6a
+        summarizeBy: none
+        sourceColumn: Payment Method
+
+    column 'Payment Status'
+        dataType: string
+        lineageTag: 7b4b7d93-7a4b-43a3-82cc-944208fd68d2
+        summarizeBy: none
+        sourceColumn: Payment Status
+
+    measure 'Insurance Coverage %' =
+        DIVIDE(SUM('BILLS'[Insurance Covered]), SUM('BILLS'[Total Amount]), 0)
+
+
+    measure 'Total Bill' =
+        COUNT('BILLS'[Bill Id])
+
+
+    measure 'Total billing Amount' =
+        SUM('BILLS'[Total Amount])
+
+
+    measure 'Total Revenue' =
+        SUM('BILLS'[Total Amount])
+
+
+    measure 'Unpaid Balance' =
+        SUM('BILLS'[Total Amount]) - SUM('BILLS'[Insurance Covered])
+
+
+    measure 'COLLECTED_REVENUE' =
+        CALCULATE(SUM('BILLS'[Total Amount]), KEEPFILTERS('BILLS'[Payment Status] & "" = "Paid"))
+
+
+    measure 'SUM of Total Amount (BILLS)' =
+        SUM('BILLS'[Total Amount])
+
+
+    measure 'Unpaid Balance per Specialization (Fixed)' =
+        CALCULATE(SUM('BILLS'[Total Amount]) - SUM('BILLS'[Insurance Covered]), ALLEXCEPT('DOCTORS', 'DOCTORS'[Specialization]))
+
+
+    measure 'Doctor Bill Count (LOD)' =
+        CALCULATE(COUNT('BILLS'[Bill Id]), REMOVEFILTERS('BILLS'), ALLEXCEPT('DOCTORS', 'DOCTORS'[Doctor Id (Doctors)]))
+
+
+    partition 'BILLS' = m
+        mode: import
+        source =
+            let
+                Source = Snowflake.Databases("mmcuiwz-kl31490.snowflakecomputing.com", "COMPUTE_WH"),
+                DB = Source{[Name="CITY_HOSPITAL"]}[Data],
+                Schema = DB{[Name="PUBLIC"]}[Data],
+                Table = Schema{[Name="BILLS"]}[Data],
+                #"Changed Type" = Table.TransformColumnTypes(Table, {{"BILL_ID", type text}, {"PATIENT_ID", type text}, {"APPOINTMENT_ID", type text}, {"TREATMENT_ID", type text}, {"BILLING_DATE", type date}, {"TOTAL_AMOUNT", type number}, {"INSURANCE_COVERED", type number}, {"PATIENT_PAYABLE", type number}, {"PAYMENT_METHOD", type text}, {"PAYMENT_STATUS", type text}}),
+                #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"BILL_ID", "Bill Id"}, {"PATIENT_ID", "Patient Id (Bills)"}, {"APPOINTMENT_ID", "Appointment Id (Bills)"}, {"TREATMENT_ID", "Treatment Id"}, {"BILLING_DATE", "Billing Date"}, {"TOTAL_AMOUNT", "Total Amount"}, {"INSURANCE_COVERED", "Insurance Covered"}, {"PATIENT_PAYABLE", "Patient Payable"}, {"PAYMENT_METHOD", "Payment Method"}, {"PAYMENT_STATUS", "Payment Status"}})
+            in
+                #"Renamed Columns"

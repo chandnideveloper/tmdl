@@ -1,0 +1,20 @@
+table 'Select Top N Departments'
+
+    column 'Value'
+        formatString: 0
+        summarizeBy: sum
+        isNameInferred
+        sourceColumn: 'Select Top N Departments'[Value]
+        annotation SummarizationSetBy = Automatic
+
+    partition 'Select Top N Departments' = calculated
+        mode: import
+        source = GENERATESERIES(1, 10, 1)
+
+    measure 'SelectedSelectTopNDepartments'
+        expression: SELECTEDVALUE('Select Top N Departments'[Value], 5)
+        formatString: 0
+        isHidden: true
+
+    annotation PBI_Id = b9a073ec57fd473bbc654024eb13195f
+    
