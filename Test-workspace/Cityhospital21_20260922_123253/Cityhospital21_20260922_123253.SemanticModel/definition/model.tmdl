@@ -1,0 +1,119 @@
+model Model
+    culture: en-US
+    defaultPowerBIDataSourceVersion: powerBI_V3
+    sourceQueryCulture: en-US
+    dataAccessOptions
+        legacyRedirects
+        returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+annotation PBIDesktopVersion = 2.138.1004.0 (24.11)
+
+ref table 'APPOINTMENTS'
+ref table 'BILLS'
+ref table 'DOCTORS'
+ref table 'PATIENTS'
+ref table 'TREATMENTS'
+ref table 'APPOINTMENTS_VISIT_STATUS_FACT'
+ref table 'custom table'
+ref table 'Select Visit Status'
+ref table 'Revenue Threshold'
+ref table 'Top N Departments_Table'
+ref table 'Select Top N Departments'
+ref table 'LocalDateTable_fecb389b-0e3f-4947-bc12-63ab471c9da3'
+ref table 'LocalDateTable_35c2adbe-2e70-468e-bce1-fdf2f0a1540f'
+ref table 'LocalDateTable_6174f0bc-374d-48d7-a43f-0f3f4096cf48'
+ref table 'LocalDateTable_948ccd45-33d2-4e02-b320-78120027e887'
+ref table 'LocalDateTable_d33bd0eb-6c3b-49a6-98f8-8b5010c4b906'
+ref table 'LocalDateTable_9ce45489-7df6-449b-b54c-33173d6c2715'
+ref table 'LocalDateTable_68343eab-691f-4fe6-81a6-fdaad442b847'
+ref table 'LocalDateTable_6591251c-feb8-4383-a096-5f9cc7c87562'
+
+ref cultureInfo en-US
+
+relationship be392425-6b14-4211-a914-171f6a663fcd
+    fromColumn: 'APPOINTMENTS'.'Appointment Id'
+    toColumn: 'BILLS'.'Appointment Id (Bills)'
+    fromCardinality: many
+    toCardinality: many
+    crossFilteringBehavior: bothDirections
+
+relationship 9275c25d-d450-4df2-b632-94c752cb2788
+    fromColumn: 'APPOINTMENTS'.'Doctor Id'
+    toColumn: 'DOCTORS'.'Doctor Id (Doctors)'
+    fromCardinality: many
+    toCardinality: many
+    crossFilteringBehavior: bothDirections
+
+relationship 66e823d1-ad06-4d19-8775-be21b5d3997d
+    fromColumn: 'APPOINTMENTS'.'Patient Id'
+    toColumn: 'PATIENTS'.'Patient Id (Patients)'
+    fromCardinality: many
+    toCardinality: many
+    crossFilteringBehavior: bothDirections
+
+relationship 4b7aa12c-a9e2-47f4-9ee7-08beffe1572d
+    fromColumn: 'APPOINTMENTS'.'Appointment Id'
+    toColumn: 'TREATMENTS'.'Appointment Id (Treatments)'
+    fromCardinality: many
+    toCardinality: many
+    crossFilteringBehavior: bothDirections
+
+relationship c50b1166-64e1-44a3-82a0-8f970bd57ae4
+    fromColumn: 'APPOINTMENTS'.'Appointment Id'
+    toColumn: 'APPOINTMENTS_VISIT_STATUS_FACT'.'APPOINTMENT_ID (Custom SQL Query1)'
+    fromCardinality: many
+    toCardinality: many
+    crossFilteringBehavior: bothDirections
+
+relationship 521109a0-eb35-443d-9a8d-d852028ebecc
+    fromColumn: 'APPOINTMENTS'.'Appointment Id'
+    toColumn: 'custom table'.'APPOINTMENT_ID (Custom SQL Query)'
+    fromCardinality: many
+    toCardinality: many
+    crossFilteringBehavior: bothDirections
+
+relationship ea285bba-48e2-425b-aecc-59d5e655bb6f
+    fromColumn: 'Top N Departments_Table'.'Department'
+    toColumn: 'APPOINTMENTS'.'Department'
+    crossFilteringBehavior: bothDirections
+
+relationship 55cab355-b2fd-4551-a304-35b70f3e2dc5
+    fromColumn: 'APPOINTMENTS'.'Appointment Date'
+    toColumn: 'LocalDateTable_fecb389b-0e3f-4947-bc12-63ab471c9da3'.'Date'
+    joinOnDateBehavior: datePartOnly
+
+relationship 4c0db279-c01d-4c0d-a0af-ddb8c2b04531
+    fromColumn: 'APPOINTMENTS'.'Appointment Time'
+    toColumn: 'LocalDateTable_35c2adbe-2e70-468e-bce1-fdf2f0a1540f'.'Date'
+    joinOnDateBehavior: datePartOnly
+
+relationship 2870c94c-e9e1-42dd-8518-e7217c42c5ee
+    fromColumn: 'BILLS'.'Billing Date'
+    toColumn: 'LocalDateTable_6174f0bc-374d-48d7-a43f-0f3f4096cf48'.'Date'
+    joinOnDateBehavior: datePartOnly
+
+relationship 0648f245-9c13-461b-815c-a50b88239016
+    fromColumn: 'TREATMENTS'.'Start Date'
+    toColumn: 'LocalDateTable_948ccd45-33d2-4e02-b320-78120027e887'.'Date'
+    joinOnDateBehavior: datePartOnly
+
+relationship cffd3fcd-cf5d-40f2-8db5-525500b6fdbf
+    fromColumn: 'TREATMENTS'.'End Date'
+    toColumn: 'LocalDateTable_d33bd0eb-6c3b-49a6-98f8-8b5010c4b906'.'Date'
+    joinOnDateBehavior: datePartOnly
+
+relationship 41c76b98-1ab9-4115-b109-ef93bb0917ba
+    fromColumn: 'TREATMENTS'.'Follow Up Date'
+    toColumn: 'LocalDateTable_9ce45489-7df6-449b-b54c-33173d6c2715'.'Date'
+    joinOnDateBehavior: datePartOnly
+
+relationship 8bbd0a80-4501-4406-806d-76c5d4eb0b9d
+    fromColumn: 'custom table'.'APPOINTMENT_DATE (Custom SQL Query)'
+    toColumn: 'LocalDateTable_68343eab-691f-4fe6-81a6-fdaad442b847'.'Date'
+    joinOnDateBehavior: datePartOnly
+
+relationship 9482a1ae-21af-423d-a0d4-3da8813f1b31
+    fromColumn: 'custom table'.'APPOINTMENT_TIME (Custom SQL Query)'
+    toColumn: 'LocalDateTable_6591251c-feb8-4383-a096-5f9cc7c87562'.'Date'
+    joinOnDateBehavior: datePartOnly

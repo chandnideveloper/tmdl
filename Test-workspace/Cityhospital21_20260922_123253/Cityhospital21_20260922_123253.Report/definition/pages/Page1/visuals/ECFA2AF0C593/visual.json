@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "ECFA2AF0C593",
+  "position": {
+    "x": 20,
+    "y": 10,
+    "z": 0,
+    "height": 60,
+    "width": 960,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "City Hospital  Billing & Revenue Overview",
+                    "textStyle": {
+                      "fontFamily": "Arial",
+                      "fontSize": "20px",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}
