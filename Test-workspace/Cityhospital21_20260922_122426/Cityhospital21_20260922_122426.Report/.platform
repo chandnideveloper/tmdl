@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Cityhospital21_20260922_122426"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "648afb83-d870-485a-a2a0-db501b125125"
+  }
+}
