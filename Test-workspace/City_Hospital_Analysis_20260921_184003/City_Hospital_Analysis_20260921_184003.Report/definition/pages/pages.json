@@ -1,0 +1,20 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/pagesMetadata/1.0.0/schema.json",
+  "pageOrder": [
+    "my-new-sheet",
+    "patient-visit-and-demographic-analysis",
+    "doctor-performance-and-efficiency-dashboard",
+    "treatment-cost-billing-insights",
+    "my-new-sheet-1",
+    "my-new-sheet-1-1",
+    "my-new-sheet-1-2",
+    "my-new-sheet-1-3",
+    "my-new-sheet-1-4",
+    "patient-visit-and-demographic-analysis-1",
+    "my-new-sheet-1-5",
+    "my-new-sheet-1-6",
+    "patient-visit-and-demographic-analysis-2",
+    "my-new-sheet-1-7"
+  ],
+  "activePageName": "my-new-sheet"
+}
