@@ -1,0 +1,10 @@
+expression Learning_Analytics =
+		let
+		    Source = // REVIEW_REQUIRED: Unresolved connector for driver "database"
+		in
+		    Source
+	lineageTag: 68d129f5-113f-5a06-b975-186bc7417693
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
