@@ -1,0 +1,103 @@
+table TREATMENTS
+	lineageTag: bd05b695-887f-5aa2-9e75-7247eeff339e
+
+	measure 'Avg. Treatment Cost' = AVERAGE('TREATMENTS'[TREATMENT_COST])
+		formatString: "#,##0.00"
+		lineageTag: 86bedc76-c0c3-52e1-8b7e-293660a49c11
+
+	column APPOINTMENT_ID
+		dataType: string
+		lineageTag: 653c1d71-11c4-5bf6-bc18-764bea9ed818
+		summarizeBy: none
+		sourceColumn: APPOINTMENT_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column TREATMENTS_TREATMENT_ID
+		dataType: string
+		lineageTag: f86eaa1b-e340-5706-98f8-a5005a17175f
+		summarizeBy: none
+		sourceColumn: TREATMENTS.TREATMENT_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column TREATMENT_TYPE
+		dataType: string
+		lineageTag: 624163f1-bedc-53ea-b49c-3d94d6d735f6
+		summarizeBy: none
+		sourceColumn: TREATMENT_TYPE
+
+		annotation SummarizationSetBy = Automatic
+
+	column TREATMENT_DESCRIPTION
+		dataType: string
+		lineageTag: c34a20ff-e01f-5f29-9d96-7f8a791e3cbb
+		summarizeBy: none
+		sourceColumn: TREATMENT_DESCRIPTION
+
+		annotation SummarizationSetBy = Automatic
+
+	column PRESCRIBED_MEDICATION
+		dataType: string
+		lineageTag: 3442e818-8359-5c47-82e3-2a104beceb1f
+		summarizeBy: none
+		sourceColumn: PRESCRIBED_MEDICATION
+
+		annotation SummarizationSetBy = Automatic
+
+	column START_DATE
+		dataType: dateTime
+		lineageTag: e91a2582-ae2c-5fe5-9fb5-3e5fcd97bc91
+		summarizeBy: none
+		sourceColumn: START_DATE
+		formatString: General Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column END_DATE
+		dataType: dateTime
+		lineageTag: 7b92b279-66dd-5d8b-bd4f-8695d7b35628
+		summarizeBy: none
+		sourceColumn: END_DATE
+		formatString: General Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column OUTCOME_STATUS
+		dataType: string
+		lineageTag: c83ffd54-c787-527f-aea3-c697432a4f37
+		summarizeBy: none
+		sourceColumn: OUTCOME_STATUS
+
+		annotation SummarizationSetBy = Automatic
+
+	column FOLLOW_UP_DATE
+		dataType: dateTime
+		lineageTag: 77bdf390-9be4-5e3b-ae1b-ec6ff8e72048
+		summarizeBy: none
+		sourceColumn: FOLLOW_UP_DATE
+		formatString: General Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column TREATMENT_COST
+		dataType: double
+		lineageTag: 0e1f379b-b147-59eb-b817-bf47deb98b4e
+		summarizeBy: sum
+		sourceColumn: TREATMENT_COST
+		formatString: ##############
+
+		annotation SummarizationSetBy = Automatic
+
+	partition TREATMENTS = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("Medisphere", "MEDISPHERE"),
+				    Result = Value.NativeQuery(Source, "SELECT ""TREATMENT_ID"", ""APPOINTMENT_ID"", ""TREATMENT_TYPE"", ""TREATMENT_DESCRIPTION"", ""PRESCRIBED_MEDICATION"", ""START_DATE"", ""END_DATE"", ""OUTCOME_STATUS"", ""FOLLOW_UP_DATE"", ""TREATMENT_COST"" FROM ""MEDISPHERE"".""PUBLIC"".""TREATMENTS""", null, [EnableFolding=false]),
+				    #"Renamed Columns" = Table.RenameColumns(Result, {{"TREATMENT_ID", "TREATMENT_ID"}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"APPOINTMENT_ID", type text}, {"TREATMENTS_TREATMENT_ID", type text}, {"TREATMENT_TYPE", type text}, {"TREATMENT_DESCRIPTION", type text}, {"PRESCRIBED_MEDICATION", type text}, {"START_DATE", type text}, {"END_DATE", type text}, {"OUTCOME_STATUS", type text}, {"FOLLOW_UP_DATE", type text}, {"TREATMENT_COST", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
