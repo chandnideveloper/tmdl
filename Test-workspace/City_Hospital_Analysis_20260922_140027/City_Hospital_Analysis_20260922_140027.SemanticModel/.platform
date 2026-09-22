@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "City_Hospital_Analysis_20260922_140027"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "dba32bc2-bdc9-5d48-bf66-5f25360741cc"
+  }
+}
