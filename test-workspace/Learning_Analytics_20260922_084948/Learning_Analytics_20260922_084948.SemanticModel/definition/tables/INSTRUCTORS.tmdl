@@ -1,0 +1,59 @@
+table INSTRUCTORS
+	lineageTag: b5853f67-9bf0-5f10-bd36-80f188b2e2d5
+
+	column INSTRUCTOR_ID = BLANK()
+		dataType: string
+		lineageTag: 5e6e1627-e5a6-55d8-9a48-58e899b8e110
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column INSTRUCTORS_FIRST_NAME = BLANK()
+		dataType: string
+		lineageTag: aed8170c-dc5d-53c6-b080-f83bf5d7944b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column INSTRUCTORS_LAST_NAME = BLANK()
+		dataType: string
+		lineageTag: 087d4711-3ff5-5a2b-a9ed-d10f6de4ad41
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column INSTRUCTORS_EMAIL = BLANK()
+		dataType: string
+		lineageTag: 0cc5a89e-8771-5afe-860f-df6c6146e4ea
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column HIRE_DATE = BLANK()
+		dataType: dateTime
+		lineageTag: a80abd68-2c6d-51bf-8b86-7726e667db93
+		summarizeBy: none
+		formatString: General Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Instructor Name' = [INSTRUCTORS.FIRST_NAME] & "-" & [INSTRUCTORS.LAST_NAME]
+		dataType: string
+		lineageTag: ccbf37a9-b3ec-5cef-984b-47ea393d084c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition INSTRUCTORS = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("gq37595.ap-southeast-7.aws.snowflakecomputing.com", "COMPUTE_WH"),
+				    Db = Source{[Name="LEARNING_ANALYTICS",Kind="Database"]}[Data],
+				    Result = Value.NativeQuery(Db, "SELECT ""INSTRUCTOR_ID"", ""FIRST_NAME"", ""LAST_NAME"", ""EMAIL"", ""HIRE_DATE"" FROM ""LEARNING_ANALYTICS"".""PUBLIC"".""INSTRUCTORS""", null, [EnableFolding=false]),
+				    #"Renamed Columns" = Table.RenameColumns(Result, {{"FIRST_NAME", "FIRST_NAME"}, {"LAST_NAME", "LAST_NAME"}, {"EMAIL", "EMAIL"}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"INSTRUCTOR_ID", type text}, {"INSTRUCTORS_FIRST_NAME", type text}, {"INSTRUCTORS_LAST_NAME", type text}, {"INSTRUCTORS_EMAIL", type text}, {"HIRE_DATE", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
