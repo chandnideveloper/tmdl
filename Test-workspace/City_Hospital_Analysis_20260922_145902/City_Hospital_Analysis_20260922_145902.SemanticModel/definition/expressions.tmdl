@@ -1,0 +1,11 @@
+expression Medisphere =
+		let
+		    // REVIEW_REQUIRED: Unresolved connector for driver "database"
+		    Source = ""
+		in
+		    Source
+	lineageTag: d911d866-e82c-5e7b-926e-6409b163729c
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
