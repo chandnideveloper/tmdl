@@ -1,0 +1,10 @@
+expression Snowflake =
+		let
+		    Source = Snowflake.Databases("Snowflake", "COMPUTE_WH")
+		in
+		    Source
+	lineageTag: 0ce9c86b-1c60-5b12-8d17-d077dd80254c
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
