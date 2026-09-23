@@ -1,0 +1,72 @@
+table STUDENTS
+	lineageTag: d1a3acd2-4342-56b0-b44b-b3185bf3bfbe
+
+	column STUDENT_ID
+		dataType: string
+		lineageTag: e6072bd5-a33f-5ce6-9f08-8e52fd1a0c8d
+		summarizeBy: none
+		sourceColumn: STUDENT_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column STUDENTS_FIRST_NAME
+		dataType: string
+		lineageTag: a15bf7d0-fe61-50c1-93e4-795dd11e4e01
+		summarizeBy: none
+		sourceColumn: STUDENTS_FIRST_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column STUDENTS_LAST_NAME
+		dataType: string
+		lineageTag: 802539dd-a4c4-5b6b-97c7-d3a8ccf26442
+		summarizeBy: none
+		sourceColumn: STUDENTS_LAST_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column GENDER
+		dataType: string
+		lineageTag: c94a06a9-75f3-5bec-a8b2-b8e5d8c2d87e
+		summarizeBy: none
+		sourceColumn: GENDER
+
+		annotation SummarizationSetBy = Automatic
+
+	column DOB
+		dataType: dateTime
+		lineageTag: dfefa085-5358-5930-9edb-6f23d11cf12d
+		summarizeBy: none
+		sourceColumn: DOB
+		formatString: M/D/YYYY
+
+		annotation SummarizationSetBy = Automatic
+
+	column STUDENTS_EMAIL
+		dataType: string
+		lineageTag: 1a1a35c5-d020-5fbc-b10a-865bf6b81a8a
+		summarizeBy: none
+		sourceColumn: STUDENTS_EMAIL
+
+		annotation SummarizationSetBy = Automatic
+
+	column Age = FLOOR((Today() - [DOB]) / 365.25, 1)
+		dataType: double
+		lineageTag: 6f5e3991-b855-559b-b091-7fb1b9e73031
+		summarizeBy: sum
+		formatString: #,##0.00
+
+		annotation SummarizationSetBy = Automatic
+
+	partition STUDENTS = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("gq37595.ap-southeast-7.aws.snowflakecomputing.com", "COMPUTE_WH"),
+				    Db = Source{[Name="LEARNING_ANALYTICS",Kind="Database"]}[Data],
+				    Result = Value.NativeQuery(Db, "SELECT ""STUDENT_ID"", ""FIRST_NAME"", ""LAST_NAME"", ""GENDER"", ""DOB"", ""EMAIL"" FROM ""LEARNING_ANALYTICS"".""PUBLIC"".""STUDENTS""", null, [EnableFolding=false]),
+				    #"Changed Type" = Table.TransformColumnTypes(Result, {{"STUDENT_ID", type text}, {"FIRST_NAME", type text}, {"LAST_NAME", type text}, {"GENDER", type text}, {"DOB", type date}, {"EMAIL", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
