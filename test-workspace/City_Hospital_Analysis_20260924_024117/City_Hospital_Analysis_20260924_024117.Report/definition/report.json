@@ -1,0 +1,233 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.2.0/schema.json",
+  "themeCollection": {
+    "baseTheme": {
+      "name": "CY24SU10",
+      "reportVersionAtImport": {
+        "visual": "2.4.0",
+        "report": "3.0.0",
+        "page": "2.3.0"
+      },
+      "type": "SharedResources"
+    },
+    "customTheme": {
+      "name": "QlikAppTheme",
+      "reportVersionAtImport": {
+        "visual": "2.4.0",
+        "report": "3.0.0",
+        "page": "2.3.0"
+      },
+      "type": "SharedResources"
+    }
+  },
+  "objects": {
+    "section": [
+      {
+        "properties": {
+          "verticalAlignment": {
+            "expr": {
+              "Literal": {
+                "Value": "'Top'"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "resourcePackages": [
+    {
+      "name": "SharedResources",
+      "type": "SharedResources",
+      "items": [
+        {
+          "name": "QlikAppTheme",
+          "path": "BaseThemes/QlikAppTheme.json",
+          "type": "BaseTheme"
+        },
+        {
+          "name": "CY24SU10",
+          "path": "BaseThemes/CY24SU10.json",
+          "type": "BaseTheme"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "useStylableVisualContainerHeader": true,
+    "exportDataMode": "AllowSummarized",
+    "defaultDrillFilterOtherVisuals": true,
+    "allowChangeFilterTypes": true,
+    "useEnhancedTooltips": true,
+    "useDefaultAggregateDisplayName": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "889851b0-57ec-581a-8",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "PATIENTS"
+              }
+            },
+            "Property": "GENDER"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "Auto"
+      },
+      {
+        "name": "e36fe931-57a7-513e-b",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "DOCTORS"
+              }
+            },
+            "Property": "DOCTORS_DEPARTMENT"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "Auto"
+      },
+      {
+        "name": "d4b6aa1b-65ca-51c0-8",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "DOCTORS"
+              }
+            },
+            "Property": "SPECIALIZATION"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "Auto"
+      },
+      {
+        "name": "b0366f1a-b2dc-5e69-8",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "APPOINTMENTS"
+              }
+            },
+            "Property": "APPOINTMENTS_DEPARTMENT"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "Auto"
+      },
+      {
+        "name": "fc5db5b4-4e1e-5e65-a",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "DOCTORS"
+              }
+            },
+            "Property": "EXPERIENCE_YEARS"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "Auto"
+      },
+      {
+        "name": "f3685b2a-324a-54df-8",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "APPOINTMENTS"
+              }
+            },
+            "Property": "VISIT_STATUS"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "Auto"
+      },
+      {
+        "name": "cbf69d87-81fd-508e-b",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "TREATMENTS"
+              }
+            },
+            "Property": "TREATMENT_TYPE"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "Auto"
+      },
+      {
+        "name": "a384271a-4f17-5f40-b",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "TREATMENTS"
+              }
+            },
+            "Property": "OUTCOME_STATUS"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "Auto"
+      },
+      {
+        "name": "ebc252bf-86d1-5f00-b",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BILLS"
+              }
+            },
+            "Property": "BILLING_DATE"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "Auto"
+      },
+      {
+        "name": "6f1065ec-548b-526d-b",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BILLS"
+              }
+            },
+            "Property": "PAYMENT_METHOD"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "Auto"
+      },
+      {
+        "name": "c3e5a37d-7351-5dc1-8",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "BILLS"
+              }
+            },
+            "Property": "INSURANCE_COVERED"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "Auto"
+      }
+    ]
+  }
+}

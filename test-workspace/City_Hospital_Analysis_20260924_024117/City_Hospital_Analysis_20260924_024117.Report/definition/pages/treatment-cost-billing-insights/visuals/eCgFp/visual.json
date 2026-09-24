@@ -1,0 +1,145 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "eCgFp",
+  "position": {
+    "x": 0,
+    "y": 443,
+    "width": 640,
+    "height": 317,
+    "z": 2,
+    "tabOrder": 2
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Columns": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "TREATMENTS"
+                    }
+                  },
+                  "Property": "TREATMENT_TYPE"
+                }
+              },
+              "queryRef": "TREATMENTS.TREATMENT_TYPE",
+              "nativeQueryRef": "TREATMENT_TYPE",
+              "active": true
+            }
+          ]
+        },
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "TREATMENTS"
+                    }
+                  },
+                  "Property": "TREATMENT_COST"
+                }
+              },
+              "queryRef": "TREATMENTS.TREATMENT_COST",
+              "nativeQueryRef": "TREATMENT_COST",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "TREATMENTS"
+                    }
+                  },
+                  "Property": "OUTCOME_STATUS"
+                }
+              },
+              "queryRef": "TREATMENTS.OUTCOME_STATUS",
+              "nativeQueryRef": "OUTCOME_STATUS",
+              "active": false
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "TREATMENTS"
+                    }
+                  },
+                  "Property": "TREATMENT_TYPE"
+                }
+              },
+              "queryRef": "TREATMENTS.TREATMENT_TYPE",
+              "nativeQueryRef": "TREATMENT_TYPE",
+              "active": false
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "general": [
+        {
+          "properties": {}
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Treatment Details Table'"
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "grid": [
+        {
+          "properties": {
+            "gridVertical": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "gridHorizontal": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": []
+  }
+}

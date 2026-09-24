@@ -1,0 +1,120 @@
+table BILLS
+	lineageTag: ad28a9f2-8e4a-5ba5-b044-0c2a2cfca269
+
+	measure 'Total Revenue' = SUM('BILLS'[TOTAL_AMOUNT])
+		formatString: "#,##0.00"
+		lineageTag: 91098b09-6315-5012-8cb4-76e719439999
+
+	measure 'Total Billing Amount' = SUM('BILLS'[TOTAL_AMOUNT])
+		formatString: "#,##0.00"
+		lineageTag: ef30ae6c-07ab-5b7b-b1cc-c1bfe5703b5d
+
+	measure 'Total Bill' = COUNT('BILLS'[BILL_ID])
+		formatString: "#,##0.00"
+		lineageTag: 5d6d6782-8535-5210-ab25-579045cb9989
+
+	measure 'Insurance Coverage %' = DIVIDE(SUM('BILLS'[INSURANCE_COVERED]), SUM('BILLS'[TOTAL_AMOUNT]), 0)
+		formatString: "#,##0.00"
+		lineageTag: 85063eff-ad2b-599a-acca-6b4d0d790cc0
+
+	column 'Unpaid Balance' = 'BILLS'[TOTAL_AMOUNT]
+		dataType: double
+		lineageTag: bc39a686-a6f3-5f57-a8b0-f240451c4c53
+		summarizeBy: none
+
+	column APPOINTMENT_ID
+		dataType: string
+		lineageTag: f464427b-ef30-5feb-858f-a8c4443b8d95
+		summarizeBy: none
+		sourceColumn: APPOINTMENT_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column BILL_ID
+		dataType: string
+		lineageTag: 11b27f9b-96e4-5b27-8583-ae457708e21e
+		summarizeBy: none
+		sourceColumn: BILL_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column BILLS_PATIENT_ID
+		dataType: string
+		lineageTag: 9eeaa691-fbe9-597e-97b7-32a00e0dc205
+		summarizeBy: none
+		sourceColumn: BILLS_PATIENT_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column BILLS_TREATMENT_ID
+		dataType: string
+		lineageTag: e127004a-5283-5e9a-b1d1-40cc1c114058
+		summarizeBy: none
+		sourceColumn: BILLS_TREATMENT_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column BILLING_DATE
+		dataType: dateTime
+		lineageTag: 3231e203-8a0b-5a75-bf8b-4adcf3dfc026
+		summarizeBy: none
+		sourceColumn: BILLING_DATE
+		formatString: General Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column TOTAL_AMOUNT
+		dataType: double
+		lineageTag: e016e631-ea32-598a-b5e3-7d9be3586a2d
+		summarizeBy: sum
+		sourceColumn: TOTAL_AMOUNT
+		formatString: General Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column INSURANCE_COVERED
+		dataType: double
+		lineageTag: a712317d-fbb0-5038-b963-72049b4fe843
+		summarizeBy: sum
+		sourceColumn: INSURANCE_COVERED
+		formatString: General Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column PATIENT_PAYABLE
+		dataType: double
+		lineageTag: 9017bd62-27a1-52e3-8dec-a6633822fea6
+		summarizeBy: sum
+		sourceColumn: PATIENT_PAYABLE
+		formatString: General Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column PAYMENT_METHOD
+		dataType: string
+		lineageTag: 6af9da30-6aaa-55ba-b5ab-7738d1f554d9
+		summarizeBy: none
+		sourceColumn: PAYMENT_METHOD
+
+		annotation SummarizationSetBy = Automatic
+
+	column PAYMENT_STATUS
+		dataType: string
+		lineageTag: 2cb8f43e-a3ac-596d-9bb3-d46bc43ac599
+		summarizeBy: none
+		sourceColumn: PAYMENT_STATUS
+
+		annotation SummarizationSetBy = Automatic
+
+	partition BILLS = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("Medisphere", "MEDISPHERE"),
+				    Result = Value.NativeQuery(Source, "SELECT ""BILL_ID"", ""PATIENT_ID"", ""APPOINTMENT_ID"", ""TREATMENT_ID"", ""BILLING_DATE"", ""TOTAL_AMOUNT"", ""INSURANCE_COVERED"", ""PATIENT_PAYABLE"", ""PAYMENT_METHOD"", ""PAYMENT_STATUS"" FROM ""MEDISPHERE"".""PUBLIC"".""BILLS""", null, [EnableFolding=false]),
+				    #"Renamed Columns" = Table.RenameColumns(Result, {{"PATIENT_ID", "BILLS_PATIENT_ID"}, {"TREATMENT_ID", "BILLS_TREATMENT_ID"}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"APPOINTMENT_ID", type text}, {"BILL_ID", type text}, {"BILLS_PATIENT_ID", type text}, {"BILLS_TREATMENT_ID", type text}, {"BILLING_DATE", type text}, {"TOTAL_AMOUNT", type number}, {"INSURANCE_COVERED", type number}, {"PATIENT_PAYABLE", type number}, {"PAYMENT_METHOD", type text}, {"PAYMENT_STATUS", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
