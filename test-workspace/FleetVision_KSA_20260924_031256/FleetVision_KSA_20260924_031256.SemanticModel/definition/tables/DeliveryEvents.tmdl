@@ -1,0 +1,113 @@
+table DeliveryEvents
+	lineageTag: a31b3de9-e3b3-5759-a0dd-2e97dd0eea8d
+
+	measure 'On-Time Delivery %' = AVERAGE('DeliveryEvents'[on_time_flag])*100
+		formatString: "#,##0.00"
+		lineageTag: fae51d1f-d8f9-5b55-99bd-a56967d5ec3d
+
+	column YearMonth = actual_datetime.autoCalendar.YearMonth
+		dataType: double
+		lineageTag: 19293b65-0703-54af-8c36-cf03ee943ae2
+		summarizeBy: none
+
+	column Year = actual_datetime.autoCalendar.Year
+		dataType: double
+		lineageTag: dbad58e1-a8ae-5a8c-958d-9dac1f4032a9
+		summarizeBy: none
+
+	column facility_id
+		dataType: string
+		lineageTag: 1d72730f-a012-591b-8eb9-423a7a53ec20
+		summarizeBy: none
+		sourceColumn: facility_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column trip_id
+		dataType: string
+		lineageTag: d01822dc-9b8a-5903-8c08-2e3235029ac6
+		summarizeBy: none
+		sourceColumn: trip_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column event_id
+		dataType: string
+		lineageTag: 4bdc4e52-91af-552c-b08b-32bc059e3ad9
+		summarizeBy: none
+		sourceColumn: event_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column event_type
+		dataType: string
+		lineageTag: 13085807-aaca-5f23-81cc-04f6447e7fe9
+		summarizeBy: none
+		sourceColumn: event_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column scheduled_datetime
+		dataType: dateTime
+		lineageTag: 482c832f-a235-54f9-ac1b-009a261720a9
+		summarizeBy: none
+		sourceColumn: scheduled_datetime
+		formatString: General Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column actual_datetime
+		dataType: dateTime
+		lineageTag: 03590705-13b4-5dc6-885d-a1f5ae637966
+		summarizeBy: none
+		sourceColumn: actual_datetime
+		formatString: General Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column detention_minutes
+		dataType: double
+		lineageTag: e0ae6536-e685-504f-a3f5-6e7ae6717b9c
+		summarizeBy: sum
+		sourceColumn: detention_minutes
+		formatString: ###0
+
+		annotation SummarizationSetBy = Automatic
+
+	column on_time_flag
+		dataType: int64
+		lineageTag: d3ca52eb-7d52-53f4-ad16-70b945ca2e19
+		summarizeBy: sum
+		sourceColumn: on_time_flag
+		formatString: #,##0
+
+		annotation SummarizationSetBy = Automatic
+
+	column delivery_city
+		dataType: string
+		lineageTag: 4389c613-2b52-5490-81af-c783dd41d716
+		summarizeBy: none
+		sourceColumn: delivery_city
+
+		annotation SummarizationSetBy = Automatic
+
+	column delivery_state
+		dataType: string
+		lineageTag: ced951d9-a000-5e41-b483-647362840126
+		summarizeBy: none
+		sourceColumn: delivery_state
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DeliveryEvents = m
+		mode: import
+		source =
+				let
+				    Source = AmazonRedshift.Database("fleetvision-wg.881226714470.ap-southeast-2.redshift-serverless.amazonaws.com:5439", "dev"),
+				    Result = Value.NativeQuery(Source, "SELECT event_id, trip_id, event_type, facility_id, scheduled_datetime, actual_datetime, detention_minutes, on_time_flag, location_city AS delivery_city, location_state AS delivery_state FROM fleetvision.delivery_events", null, [EnableFolding=false]),
+				    #"Renamed Columns" = Table.RenameColumns(Result, {{"location_city", "delivery_city"}, {"location_state", "delivery_state"}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"facility_id", type text}, {"trip_id", type text}, {"event_id", type text}, {"event_type", type text}, {"scheduled_datetime", type text}, {"actual_datetime", type text}, {"detention_minutes", type number}, {"on_time_flag", Int64.Type}, {"delivery_city", type text}, {"delivery_state", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,86 @@
+table DriverPerformance
+	lineageTag: 45e4a570-977d-56a3-ba43-7e841ee0690b
+
+	column driver_id
+		dataType: string
+		lineageTag: 423ac404-8093-56ae-a1ae-3fd51b27ce71
+		summarizeBy: none
+		sourceColumn: driver_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column TotalTrips = CALCULATE(DISTINCTCOUNT('Trips'[trip_id]))
+		dataType: double
+		lineageTag: 71074d0a-12be-5155-a402-d5c8f7494d29
+		summarizeBy: sum
+		formatString: ###0
+
+		annotation SummarizationSetBy = Automatic
+
+	column TotalMiles = CALCULATE(SUM('Trips'[actual_distance_miles]))
+		dataType: double
+		lineageTag: ee2aca6e-5705-5d9f-b343-dfaec87438e1
+		summarizeBy: sum
+		formatString: #,##0
+
+		annotation SummarizationSetBy = Automatic
+
+	column TotalTripHours = CALCULATE(SUM('Trips'[actual_duration_hours]))
+		dataType: double
+		lineageTag: d02e9eb5-9a8d-5eb1-9a1f-a41656414bda
+		summarizeBy: sum
+		formatString: #,##0.00
+
+		annotation SummarizationSetBy = Automatic
+
+	column TotalFuelGallons = CALCULATE(SUM('Trips'[fuel_gallons_used]))
+		dataType: double
+		lineageTag: 98b2f4a1-e0d8-5320-a2f7-3c5b586a27fc
+		summarizeBy: sum
+		formatString: #,##0.00
+
+		annotation SummarizationSetBy = Automatic
+
+	column FleetMPG = DIVIDE(CALCULATE(SUM('Trips'[actual_distance_miles])), CALCULATE(SUM('Trips'[fuel_gallons_used])), 0)
+		dataType: double
+		lineageTag: 4f766b95-c033-58ce-8574-cc99405efda3
+		summarizeBy: sum
+		formatString: #,##0.00
+
+		annotation SummarizationSetBy = Automatic
+
+	column AvgMPG = CALCULATE(AVERAGE('Trips'[average_mpg]))
+		dataType: double
+		lineageTag: ca74523b-4db1-58fe-b4d1-6b4c09a65ad2
+		summarizeBy: sum
+		formatString: ########
+
+		annotation SummarizationSetBy = Automatic
+
+	column AvgIdleHours = CALCULATE(AVERAGE('Trips'[idle_time_hours]))
+		dataType: double
+		lineageTag: dcdc5388-82cd-5894-9609-a100115039eb
+		summarizeBy: sum
+		formatString: ########
+
+		annotation SummarizationSetBy = Automatic
+
+	column TotalIdleHours = CALCULATE(SUM('Trips'[idle_time_hours]))
+		dataType: double
+		lineageTag: 1f7a1ac1-fdd6-5452-8b8f-1910ce867802
+		summarizeBy: sum
+		formatString: #,##0.00
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DriverPerformance = m
+		mode: import
+		source =
+				let
+				    Source = #"Trips",
+				    #"Selected Columns" = Table.SelectColumns(Source, {"driver_id"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Selected Columns")
+				in
+				    #"Removed Duplicates"
+
+	annotation PBI_ResultType = Table

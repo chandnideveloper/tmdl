@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "FleetVision_KSA_20260924_031256"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "ef7b3461-c95a-5d2d-b15f-9dcd90a8853d"
+  }
+}
