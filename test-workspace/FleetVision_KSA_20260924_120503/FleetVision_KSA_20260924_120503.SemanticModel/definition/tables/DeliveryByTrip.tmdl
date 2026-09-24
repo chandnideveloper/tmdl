@@ -1,0 +1,82 @@
+table DeliveryByTrip
+	lineageTag: 8467d34e-5c38-5c04-9b84-ada65dd67f05
+
+	column trip_id
+		dataType: string
+		lineageTag: 1e9201d6-2ceb-5873-a19b-afc1d95b073c
+		summarizeBy: none
+		sourceColumn: trip_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column DeliveryEvents
+		dataType: int64
+		lineageTag: 4ebf74f8-5423-54d5-9f39-cf91934e2320
+		summarizeBy: sum
+		sourceColumn: DeliveryEvents
+		formatString: #,##0
+
+		annotation SummarizationSetBy = Automatic
+
+	column OnTimeEvents
+		dataType: dateTime
+		lineageTag: 16d2e960-c7b1-52e4-8527-0f11324b83c8
+		summarizeBy: none
+		sourceColumn: OnTimeEvents
+		formatString: General Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column LateEvents
+		dataType: int64
+		lineageTag: 5937a09b-82a4-54a7-b867-3512f025af6c
+		summarizeBy: sum
+		sourceColumn: LateEvents
+		formatString: #,##0
+
+		annotation SummarizationSetBy = Automatic
+
+	column OnTimeRate
+		dataType: decimal
+		lineageTag: 8d7d28f8-bd6a-5b80-8e42-f59315501f58
+		summarizeBy: sum
+		sourceColumn: OnTimeRate
+		formatString: #,##0.00
+
+		annotation SummarizationSetBy = Automatic
+
+	column TotalDetentionMinutes
+		dataType: double
+		lineageTag: 1b4d5f37-0adc-57cb-9131-bb3ebc44bf13
+		summarizeBy: sum
+		sourceColumn: TotalDetentionMinutes
+		formatString: #,##0.00
+
+		annotation SummarizationSetBy = Automatic
+
+	column AvgDetentionMinutes
+		dataType: double
+		lineageTag: 3d3520f3-6ef4-5a73-9da7-884aa1bf0766
+		summarizeBy: sum
+		sourceColumn: AvgDetentionMinutes
+		formatString: #,##0.00
+
+		annotation SummarizationSetBy = Automatic
+
+	column TruckNumber
+		dataType: string
+		lineageTag: 42b62edb-e307-5171-98f9-32e5dd07e638
+		summarizeBy: none
+		sourceColumn: TruckNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DeliveryByTrip = m
+		mode: import
+		source =
+				let
+				    Source = #table({"trip_id", "DeliveryEvents", "OnTimeEvents", "LateEvents", "OnTimeRate", "TotalDetentionMinutes", "AvgDetentionMinutes", "TruckNumber"}, {})
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
