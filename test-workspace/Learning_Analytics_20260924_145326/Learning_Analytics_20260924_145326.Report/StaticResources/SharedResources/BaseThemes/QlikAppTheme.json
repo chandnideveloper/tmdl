@@ -1,0 +1,282 @@
+{
+  "name": "CY24SU10",
+  "dataColors": [
+    "#52B9E5",
+    "#93D5ED",
+    "#254452",
+    "#477085",
+    "#7CA8BF",
+    "#4477aa",
+    "#117733",
+    "#ddaa33",
+    "#cc6677",
+    "#aa4499",
+    "#88ccee",
+    "#999933"
+  ],
+  "foreground": "#252423",
+  "foregroundNeutralSecondary": "#605E5C",
+  "foregroundNeutralTertiary": "#B3B0AD",
+  "background": "#F8F9FA",
+  "backgroundLight": "#F8F9FA",
+  "backgroundNeutral": "#EDEBE9",
+  "tableAccent": "#52B9E5",
+  "good": "#009845",
+  "neutral": "#FF9900",
+  "bad": "#E60000",
+  "maximum": "#52B9E5",
+  "center": "#FF9900",
+  "minimum": "#C7E0F4",
+  "null": "#FF7F48",
+  "hyperlink": "#52B9E5",
+  "visitedHyperlink": "#52B9E5",
+  "textClasses": {
+    "callout": {
+      "fontSize": 32,
+      "fontFace": "Segoe UI, -apple-system, sans-serif",
+      "color": "#52B9E5"
+    },
+    "title": {
+      "fontSize": 12,
+      "fontFace": "Segoe UI, -apple-system, sans-serif Semibold",
+      "color": "#252423"
+    },
+    "header": {
+      "fontSize": 11,
+      "fontFace": "Segoe UI, -apple-system, sans-serif Semibold",
+      "color": "#252423"
+    },
+    "label": {
+      "fontSize": 10,
+      "fontFace": "Segoe UI, -apple-system, sans-serif",
+      "color": "#605E5C"
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "*": [
+          {
+            "wordWrap": true
+          }
+        ],
+        "title": [
+          {
+            "show": true,
+            "fontColor": {
+              "solid": {
+                "color": "#252423"
+              }
+            },
+            "fontSize": 12,
+            "fontFamily": "Segoe UI, -apple-system, sans-serif Semibold",
+            "titleWrap": true
+          }
+        ],
+        "background": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "border": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#E5E5E5"
+              }
+            },
+            "radius": 4
+          }
+        ],
+        "categoryAxis": [
+          {
+            "showAxisTitle": true,
+            "gridlineStyle": "dotted",
+            "concatenateLabels": false
+          }
+        ],
+        "valueAxis": [
+          {
+            "showAxisTitle": true,
+            "gridlineStyle": "dotted"
+          }
+        ],
+        "legend": [
+          {
+            "show": true,
+            "position": "Top"
+          }
+        ]
+      }
+    },
+    "card": {
+      "*": {
+        "labels": [
+          {
+            "color": {
+              "solid": {
+                "color": "#52B9E5"
+              }
+            },
+            "fontSize": 28,
+            "fontFamily": "Segoe UI, -apple-system, sans-serif Bold"
+          }
+        ],
+        "categoryLabels": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#605E5C"
+              }
+            },
+            "fontSize": 10
+          }
+        ],
+        "card": [
+          {
+            "outlineColor": {
+              "solid": {
+                "color": "#E5E5E5"
+              }
+            },
+            "outlineWeight": 1
+          }
+        ]
+      }
+    },
+    "slicer": {
+      "*": {
+        "header": [
+          {
+            "show": true,
+            "fontColor": {
+              "solid": {
+                "color": "#252423"
+              }
+            },
+            "fontSize": 10,
+            "fontFamily": "Segoe UI, -apple-system, sans-serif Semibold"
+          }
+        ],
+        "items": [
+          {
+            "fontColor": {
+              "solid": {
+                "color": "#252423"
+              }
+            },
+            "fontSize": 10
+          }
+        ]
+      }
+    },
+    "actionButton": {
+      "*": {
+        "text": [
+          {
+            "show": true,
+            "fontColor": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            },
+            "fontSize": 11,
+            "fontFamily": "Segoe UI, -apple-system, sans-serif Semibold",
+            "alignment": "center"
+          }
+        ],
+        "fill": [
+          {
+            "show": true,
+            "fillColor": {
+              "solid": {
+                "color": "#52B9E5"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "outline": [
+          {
+            "show": true,
+            "lineColor": {
+              "solid": {
+                "color": "#52B9E5"
+              }
+            },
+            "weight": 1
+          }
+        ]
+      }
+    },
+    "tableEx": {
+      "*": {
+        "grid": [
+          {
+            "gridVertical": true,
+            "gridHorizontal": true,
+            "gridVerticalColor": {
+              "solid": {
+                "color": "#E5E5E5"
+              }
+            },
+            "gridHorizontalColor": {
+              "solid": {
+                "color": "#E5E5E5"
+              }
+            }
+          }
+        ],
+        "columnHeaders": [
+          {
+            "fontColor": {
+              "solid": {
+                "color": "#252423"
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": "#F8F9FA"
+              }
+            },
+            "fontSize": 10,
+            "fontFamily": "Segoe UI, -apple-system, sans-serif Semibold"
+          }
+        ],
+        "values": [
+          {
+            "fontColorPrimary": {
+              "solid": {
+                "color": "#252423"
+              }
+            },
+            "fontSize": 10,
+            "fontFamily": "Segoe UI, -apple-system, sans-serif"
+          }
+        ]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [
+          {
+            "transparency": 0,
+            "color": {
+              "solid": {
+                "color": "#F8F9FA"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
