@@ -1,0 +1,34 @@
+table STUDENT_COURSES
+	lineageTag: 96c79548-a8d5-57b1-9195-f39b3f903dd9
+
+	measure 'Total Students' = BLANK()
+		lineageTag: c19b17d3-ba7e-5a82-ae8a-5c0d746fc86f
+
+	column COURSE_ID
+		dataType: string
+		lineageTag: 62433727-e85f-5d14-ac8a-25a002689bb0
+		summarizeBy: none
+		sourceColumn: COURSE_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column STUDENT_ID
+		dataType: string
+		lineageTag: 3701eeb4-b6c9-562d-9d47-b586098f492c
+		summarizeBy: none
+		sourceColumn: STUDENT_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition STUDENT_COURSES = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("gq37595.ap-southeast-7.aws.snowflakecomputing.com", null),
+				    Db = Source{[Name="LEARNING_ANALYTICS",Kind="Database"]}[Data],
+				    Sch = Db{[Name="PUBLIC",Kind="Schema"]}[Data],
+				    Navigation = Sch{[Name="LEARNING_ANALYTICS",Kind="Table"]}[Data]
+				in
+				    Navigation
+
+	annotation PBI_ResultType = Table

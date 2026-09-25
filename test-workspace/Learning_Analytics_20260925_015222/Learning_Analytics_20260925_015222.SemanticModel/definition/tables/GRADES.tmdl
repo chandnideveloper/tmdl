@@ -1,0 +1,59 @@
+table GRADES
+	lineageTag: 277a1a66-f2c1-535c-b7c6-27a44fccbe8c
+
+	measure 'Total Enrollments' = BLANK()
+		lineageTag: ec6d7f73-9e34-535e-b331-5ee9fa1808d1
+
+	measure 'Count of Grade' = BLANK()
+		lineageTag: 033ada9b-007a-592a-a0d1-6d67742cc0fd
+
+	column 'Score based Grade' = 'GRADES'[GRADE]
+		dataType: string
+		lineageTag: 89d872ff-084e-5465-bd54-d46f44d552b2
+		summarizeBy: none
+
+	column GRADE_ID
+		dataType: string
+		lineageTag: eb125775-ec8c-580b-9e4e-7866dce1ed07
+		summarizeBy: none
+		sourceColumn: GRADE_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ENROLLMENT_ID
+		dataType: string
+		lineageTag: fa905acc-03cb-526b-984d-7797ee1289dd
+		summarizeBy: none
+		sourceColumn: ENROLLMENT_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column GRADE
+		dataType: string
+		lineageTag: 4dc4d5de-406d-50ce-b1a8-6cea8fe04ef4
+		summarizeBy: none
+		sourceColumn: GRADE
+
+		annotation SummarizationSetBy = Automatic
+
+	column GRADED_DATE
+		dataType: dateTime
+		lineageTag: 2cce7886-b84c-54df-be81-02188581e667
+		summarizeBy: none
+		sourceColumn: GRADED_DATE
+		formatString: General Date
+
+		annotation SummarizationSetBy = Automatic
+
+	partition GRADES = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("gq37595.ap-southeast-7.aws.snowflakecomputing.com", null),
+				    Db = Source{[Name="LEARNING_ANALYTICS",Kind="Database"]}[Data],
+				    Sch = Db{[Name="PUBLIC",Kind="Schema"]}[Data],
+				    Navigation = Sch{[Name="LEARNING_ANALYTICS",Kind="Table"]}[Data]
+				in
+				    Navigation
+
+	annotation PBI_ResultType = Table

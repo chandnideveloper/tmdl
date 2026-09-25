@@ -1,0 +1,74 @@
+table COURSES
+	lineageTag: aef0d33b-71a4-5d33-acdb-9c8f236a6bb5
+
+	measure 'Average Credits' = BLANK()
+		lineageTag: 6423b155-78fd-5c68-816d-d2a029603e99
+
+	measure 'Assignment Duration' = BLANK()
+		lineageTag: 22a4b98e-6311-5d9e-9001-8ee5cb903705
+
+	measure 'Average Grade Point' = BLANK()
+		lineageTag: b9692873-f903-5494-9325-fb3ef7a8ca4c
+
+	measure 'Decayed GPA Quality Index' = BLANK()
+		lineageTag: 01e7dc9d-e669-513e-a53b-4d39466e2a3e
+
+	measure 'Total Courses' = BLANK()
+		lineageTag: c3d88ac9-c95e-50d1-b772-ad5b195a12a3
+
+	measure 'Rolling 12-month assignments' = BLANK()
+		lineageTag: 088d1460-22c9-5ca7-94d3-dffceeafe409
+
+	measure 'GPA (4.0 scale) average' = BLANK()
+		lineageTag: 19110caf-88aa-5293-abb9-0d16883074c8
+
+	column 'Course Category' = 'COURSES'[CREDITS]
+		dataType: string
+		lineageTag: 1c5ce9f4-58e9-5d7c-a1b1-7267dec4e135
+		summarizeBy: none
+
+	column COURSE_ID
+		dataType: string
+		lineageTag: b20ab871-1f63-54a3-968d-512304647cc6
+		summarizeBy: none
+		sourceColumn: COURSE_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column COURSE_NAME
+		dataType: string
+		lineageTag: 2a28884c-6ce7-5d88-bc97-72f8f44c511c
+		summarizeBy: none
+		sourceColumn: COURSE_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column DEPARTMENT
+		dataType: string
+		lineageTag: fec604b5-389c-551e-9b9f-ad4f184d7d93
+		summarizeBy: none
+		sourceColumn: DEPARTMENT
+
+		annotation SummarizationSetBy = Automatic
+
+	column CREDITS
+		dataType: int64
+		lineageTag: 55d744ab-d716-55db-bfe5-175c2d70b20c
+		summarizeBy: sum
+		sourceColumn: CREDITS
+		formatString: #,##0
+
+		annotation SummarizationSetBy = Automatic
+
+	partition COURSES = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("gq37595.ap-southeast-7.aws.snowflakecomputing.com", null),
+				    Db = Source{[Name="LEARNING_ANALYTICS",Kind="Database"]}[Data],
+				    Sch = Db{[Name="PUBLIC",Kind="Schema"]}[Data],
+				    Navigation = Sch{[Name="LEARNING_ANALYTICS",Kind="Table"]}[Data]
+				in
+				    Navigation
+
+	annotation PBI_ResultType = Table
