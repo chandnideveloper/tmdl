@@ -1,0 +1,75 @@
+table GRADES
+	lineageTag: 277a1a66-f2c1-535c-b7c6-27a44fccbe8c
+
+	measure 'Total Enrollments' = COUNT('GRADES'[ENROLLMENT_ID])
+		formatString: "#,##0.00"
+		lineageTag: ec6d7f73-9e34-535e-b331-5ee9fa1808d1
+
+	measure 'Average Grade Point' = AVERAGEX('GRADES', SWITCH(SWITCH(TRUE(), 'GRADES'[GRADE] = "A", 1, 'GRADES'[GRADE] = "B", 2, 'GRADES'[GRADE] = "C", 3, 'GRADES'[GRADE] = "D", 4, 'GRADES'[GRADE] = "F", 5, BLANK()), 1, 5, 2, 4, 3, 3, 4, 2, 5, 0, BLANK()))
+		formatString: "#,##0.00"
+		lineageTag: b9692873-f903-5494-9325-fb3ef7a8ca4c
+
+	/// TODO (Qlik AGGR() has no direct DAX equivalent): Convert the Qlik expression to DAX manually.
+	/// Original Qlik: // Decayed GPA Quality Index, 0–100 // - Uses last 180 days anchored to max 'GRADES'[GRADE] date // - Falls back to all-time GPA if the 180d window is empty 25 * (   // -------- helpers computed via AGGR (legal in Qlik) --------   // window row count   IF(     SUMX(SUMMARIZE("GRADES", 'GRADES'[GRADE_ID], "@value", IF(           FLOOR('GRADES'[GRADED_DATE], 1) >= FLOOR(CALCULATE(MAX('GRADES'[GRADED_DATE]), ALL()), 1) - 179           and FLOOR('GRADES'[GRADED_DATE], 1) <= FLOOR(CALCULATE(MAX('GRADES'[GRADED_DATE]), ALL()), 1),           1, 0         )), [@value]) > 0,     // ---------- WINDOWED, DECAYED GPA (when window has rows) ----------     // numerator     SUMX(SUMMARIZE("GRADES", 'GRADES'[GRADE_ID], "@value", IF(           FLOOR('GRADES'[GRADED_DATE], 1) >= FLOOR(CALCULATE(MAX('GRADES'[GRADED_DATE]), ALL()), 1) - 179           and FLOOR('GRADES'[GRADED_DATE], 1) <= FLOOR(CALCULATE(MAX('GRADES'[GRADED_DATE]), ALL()), 1),           // decay weight (half-life 30 days)           Exp(             -0.6931471805599453 *             ( FLOOR(CALCULATE(MAX('GRADES'[GRADED_DATE]), ALL()), 1) - FLOOR('GRADES'[GRADED_DATE], 1) ) / 30           )           *           // GPA mapping: numeric % OR letters           IF(             NOT ISERROR(VALUE('GRADES'[GRADE])),               MAX(0, MIN(4,                 IF('GRADES'[GRADE]>=90, 4,                 IF('GRADES'[GRADE]>=85, 3.7 + ('GRADES'[GRADE]-85)*0.06,                 IF('GRADES'[GRADE]>=75, 3.0 + ('GRADES'[GRADE]-75)*0.07,                 IF('GRADES'[GRADE]>=65, 2.0 + ('GRADES'[GRADE]-65)*0.10,                 IF('GRADES'[GRADE]>=50, 1.0 + ('GRADES'[GRADE]-50)*0.0667, 0))))))),               SWITCH(SWITCH(TRUE(), Upper(Trim('GRADES'[GRADE])) = "A+", 1, Upper(Trim('GRADES'[GRADE])) = "A", 2, Upper(Trim('GRADES'[GRADE])) = "A-", 3, Upper(Trim('GRADES'[GRADE])) = "B+", 4, Upper(Trim('GRADES'[GRADE])) = "B", 5, Upper(Trim('GRADES'[GRADE])) = "B-", 6, Upper(Trim('GRADES'[GRADE])) = "C+", 7, Upper(Trim('GRADES'[GRADE])) = "C", 8, Upper(Trim('GRADES'[GRADE])) = "C-", 9, Upper(Trim('GRADES'[GRADE])) = "D+", 10, Upper(Trim('GRADES'[GRADE])) = "D", 11, Upper(Trim('GRADES'[GRADE])) = "D-", 12, Upper(Trim('GRADES'[GRADE])) = "F", 13, Upper(Trim('GRADES'[GRADE])) = "HD", 14, Upper(Trim('GRADES'[GRADE])) = "DI", 15, Upper(Trim('GRADES'[GRADE])) = "CR", 16, Upper(Trim('GRADES'[GRADE])) = "P", 17, Upper(Trim('GRADES'[GRADE])) = "N", 18, Upper(Trim('GRADES'[GRADE])) = "PASS", 19, Upper(Trim('GRADES'[GRADE])) = "FAIL", 20, BLANK()), 1, 4.0, 2, 4.0, 3, 3.7, 4, 3.3, 5, 3.0, 6, 2.7, 7, 2.3, 8, 2.0, 9, 1.7, 10, 1.3, 11, 1.0, 12, 0.7, 13, 0.0, 14, 4.0, 15, 3.7, 16, 2.5, 17, 1.0, 18, 0.0, 19, 1.0, 20, 0.0, BLANK())           ),           0         )), [@value])     /     // denominator (guarded)     MAX(       1e-9,       SUMX(SUMMARIZE("GRADES", 'GRADES'[GRADE_ID], "@value", IF(             FLOOR('GRADES'[GRADED_DATE], 1) >= FLOOR(CALCULATE(MAX('GRADES'[GRADED_DATE]), ALL()), 1) - 179             and FLOOR('GRADES'[GRADED_DATE], 1) <= FLOOR(CALCULATE(MAX('GRADES'[GRADED_DATE]), ALL()), 1),             Exp(               -0.6931471805599453 *               ( FLOOR(CALCULATE(MAX('GRADES'[GRADED_DATE]), ALL()), 1) - FLOOR('GRADES'[GRADED_DATE], 1) ) / 30             ),             0           )), [@value])     ),     // ---------- FALLBACK: ALL-TIME GPA (no window rows) ----------     (       SUMX(SUMMARIZE("GRADES", 'GRADES'[GRADE_ID], "@value", IF(           NOT ISERROR(VALUE('GRADES'[GRADE])),             MAX(0, MIN(4,               IF('GRADES'[GRADE]>=90, 4,               IF('GRADES'[GRADE]>=85, 3.7 + ('GRADES'[GRADE]-85)*0.06,               IF('GRADES'[GRADE]>=75, 3.0 + ('GRADES'[GRADE]-75)*0.07,               IF('GRADES'[GRADE]>=65, 2.0 + ('GRADES'[GRADE]-65)*0.10,               IF('GRADES'[GRADE]>=50, 1.0 + ('GRADES'[GRADE]-50)*0.0667, 0))))))),             SWITCH(SWITCH(TRUE(), Upper(Trim('GRADES'[GRADE])) = "A+", 1, Upper(Trim('GRADES'[GRADE])) = "A", 2, Upper(Trim('GRADES'[GRADE])) = "A-", 3, Upper(Trim('GRADES'[GRADE])) = "B+", 4, Upper(Trim('GRADES'[GRADE])) = "B", 5, Upper(Trim('GRADES'[GRADE])) = "B-", 6, Upper(Trim('GRADES'[GRADE])) = "C+", 7, Upper(Trim('GRADES'[GRADE])) = "C", 8, Upper(Trim('GRADES'[GRADE])) = "C-", 9, Upper(Trim('GRADES'[GRADE])) = "D+", 10, Upper(Trim('GRADES'[GRADE])) = "D", 11, Upper(Trim('GRADES'[GRADE])) = "D-", 12, Upper(Trim('GRADES'[GRADE])) = "F", 13, Upper(Trim('GRADES'[GRADE])) = "HD", 14, Upper(Trim('GRADES'[GRADE])) = "DI", 15, Upper(Trim('GRADES'[GRADE])) = "CR", 16, Upper(Trim('GRADES'[GRADE])) = "P", 17, Upper(Trim('GRADES'[GRADE])) = "N", 18, Upper(Trim('GRADES'[GRADE])) = "PASS", 19, Upper(Trim('GRADES'[GRADE])) = "FAIL", 20, BLANK()), 1, 4.0, 2, 4.0, 3, 3.7, 4, 3.3, 5, 3.0, 6, 2.7, 7, 2.3, 8, 2.0, 9, 1.7, 10, 1.3, 11, 1.0, 12, 0.7, 13, 0.0, 14, 4.0, 15, 3.7, 16, 2.5, 17, 1.0, 18, 0.0, 19, 1.0, 20, 0.0, BLANK())         )), [@value])        /       MAX(1, SUMX(SUMMARIZE("GRADES", 'GRADES'[GRADE_ID], "@value", 1), [@value]))     )   ) )
+	measure 'Decayed GPA Quality Index' = BLANK()
+		formatString: "#,##0.00"
+		lineageTag: 01e7dc9d-e669-513e-a53b-4d39466e2a3e
+
+	measure 'GPA (4.0 scale) average' = AVERAGEX('GRADES', SWITCH(SWITCH(TRUE(), Upper(Trim('GRADES'[GRADE])) = "A+", 1, Upper(Trim('GRADES'[GRADE])) = "A", 2, Upper(Trim('GRADES'[GRADE])) = "A-", 3, Upper(Trim('GRADES'[GRADE])) = "B+", 4, Upper(Trim('GRADES'[GRADE])) = "B", 5, Upper(Trim('GRADES'[GRADE])) = "B-", 6, Upper(Trim('GRADES'[GRADE])) = "C+", 7, Upper(Trim('GRADES'[GRADE])) = "C", 8, Upper(Trim('GRADES'[GRADE])) = "C-", 9, Upper(Trim('GRADES'[GRADE])) = "D+", 10, Upper(Trim('GRADES'[GRADE])) = "D", 11, Upper(Trim('GRADES'[GRADE])) = "D-", 12, Upper(Trim('GRADES'[GRADE])) = "F", 13, BLANK()), 1, 4.0, 2, 4.0, 3, 3.7, 4, 3.3, 5, 3.0, 6, 2.7, 7, 2.3, 8, 2.0, 9, 1.7, 10, 1.3, 11, 1.0, 12, 0.7, 13, 0.0, BLANK()))
+		formatString: "#,##0.00"
+		lineageTag: 19110caf-88aa-5293-abb9-0d16883074c8
+
+	measure 'Count of Grade' = COUNT('GRADES'[GRADE])
+		formatString: "#,##0.00"
+		lineageTag: 033ada9b-007a-592a-a0d1-6d67742cc0fd
+
+	column 'Score based Grade' = 'GRADES'[GRADE]
+		dataType: string
+		lineageTag: 89d872ff-084e-5465-bd54-d46f44d552b2
+		summarizeBy: none
+
+	column GRADE_ID
+		dataType: string
+		lineageTag: eb125775-ec8c-580b-9e4e-7866dce1ed07
+		summarizeBy: none
+		sourceColumn: GRADE_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ENROLLMENT_ID
+		dataType: string
+		lineageTag: fa905acc-03cb-526b-984d-7797ee1289dd
+		summarizeBy: none
+		sourceColumn: ENROLLMENT_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column GRADE
+		dataType: string
+		lineageTag: 4dc4d5de-406d-50ce-b1a8-6cea8fe04ef4
+		summarizeBy: none
+		sourceColumn: GRADE
+
+		annotation SummarizationSetBy = Automatic
+
+	column GRADED_DATE
+		dataType: dateTime
+		lineageTag: 2cce7886-b84c-54df-be81-02188581e667
+		summarizeBy: none
+		sourceColumn: GRADED_DATE
+		formatString: M/D/YYYY
+
+		annotation SummarizationSetBy = Automatic
+
+	partition GRADES = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("gq37595.ap-southeast-7.aws.snowflakecomputing.com", "COMPUTE_WH"),
+				    Db = Source{[Name="LEARNING_ANALYTICS",Kind="Database"]}[Data],
+				    Result = Value.NativeQuery(Db, "SELECT ""GRADE_ID"", ""ENROLLMENT_ID"", ""GRADE"", ""GRADED_DATE"" FROM ""LEARNING_ANALYTICS"".""PUBLIC"".""GRADES""", null, [EnableFolding=false]),
+				    #"Changed Type" = Table.TransformColumnTypes(Result, {{"GRADE_ID", type text}, {"ENROLLMENT_ID", type text}, {"GRADE", type text}, {"GRADED_DATE", type date}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
