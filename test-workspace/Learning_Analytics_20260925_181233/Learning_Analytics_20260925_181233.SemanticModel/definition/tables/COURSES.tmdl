@@ -1,0 +1,84 @@
+table COURSES
+	lineageTag: aef0d33b-71a4-5d33-acdb-9c8f236a6bb5
+
+	measure 'Average Credits' = AVERAGE('COURSES'[CREDITS])
+		lineageTag: 6423b155-78fd-5c68-816d-d2a029603e99
+
+	measure 'Assignment Duration' = Avg(Today() - 'COURSE_INSTRUCTORS'[ASSIGNED_DATE])
+		lineageTag: 22a4b98e-6311-5d9e-9001-8ee5cb903705
+
+	measure 'Average Grade Point' = Avg(SWITCH('GRADES'[GRADE], "A", 5, "B", 4, "C", 3, "D", 2, "F", 0))
+		lineageTag: b9692873-f903-5494-9325-fb3ef7a8ca4c
+
+	/// TODO (Qlik AGGR() has no direct DAX equivalent): Convert the Qlik expression to DAX manually.
+	/// Original Qlik: // Decayed GPA Quality Index, 0–100 // - Uses last 180 days anchored to max 'GRADES'[GRADE] date // - Falls back to all-time GPA if the 180d window is empty 25 * (   // -------- helpers computed via AGGR (legal in Qlik) --------   // window row count   If(     Sum(       Aggr(         If(           FLOOR('GRADES'[GRADED_DATE], 1) >= FLOOR(Max({1} TOTAL 'GRADES'[GRADED_DATE]), 1) - 179           and FLOOR('GRADES'[GRADED_DATE], 1) <= FLOOR(Max({1} TOTAL 'GRADES'[GRADED_DATE]), 1),           1, 0         ),         'GRADES'[GRADE_ID]       )     ) > 0,     // ---------- WINDOWED, DECAYED GPA (when window has rows) ----------     // numerator     Sum(       Aggr(         If(           FLOOR('GRADES'[GRADED_DATE], 1) >= FLOOR(Max({1} TOTAL 'GRADES'[GRADED_DATE]), 1) - 179           and FLOOR('GRADES'[GRADED_DATE], 1) <= FLOOR(Max({1} TOTAL 'GRADES'[GRADED_DATE]), 1),           // decay weight (half-life 30 days)           Exp(             -0.6931471805599453 *             ( FLOOR(Max({1} TOTAL 'GRADES'[GRADED_DATE]), 1) - FLOOR('GRADES'[GRADED_DATE], 1) ) / 30           )           *           // GPA mapping: numeric % OR letters           If(             IsNum('GRADES'[GRADE]),               RangeMax(0, RangeMin(4,                 If('GRADES'[GRADE]>=90, 4,                 If('GRADES'[GRADE]>=85, 3.7 + ('GRADES'[GRADE]-85)*0.06,                 If('GRADES'[GRADE]>=75, 3.0 + ('GRADES'[GRADE]-75)*0.07,                 If('GRADES'[GRADE]>=65, 2.0 + ('GRADES'[GRADE]-65)*0.10,                 If('GRADES'[GRADE]>=50, 1.0 + ('GRADES'[GRADE]-50)*0.0667, 0))))))),               Pick(                 Match(Upper(Trim('GRADES'[GRADE])),                   "A+","A","A-","B+","B","B-","C+","C","C-","D+","D","D-","F",                   "HD","DI","CR","P","N","PASS","FAIL"                 ),                 4.0,4.0,3.7,3.3,3.0,2.7,2.3,2.0,1.7,1.3,1.0,0.7,0.0,                 4.0,3.7,2.5,1.0,0.0,1.0,0.0               )           ),           0         ),         'GRADES'[GRADE_ID]       )     )     /     // denominator (guarded)     Max(       1e-9,       Sum(         Aggr(           If(             FLOOR('GRADES'[GRADED_DATE], 1) >= FLOOR(Max({1} TOTAL 'GRADES'[GRADED_DATE]), 1) - 179             and FLOOR('GRADES'[GRADED_DATE], 1) <= FLOOR(Max({1} TOTAL 'GRADES'[GRADED_DATE]), 1),             Exp(               -0.6931471805599453 *               ( FLOOR(Max({1} TOTAL 'GRADES'[GRADED_DATE]), 1) - FLOOR('GRADES'[GRADED_DATE], 1) ) / 30             ),             0           ),           'GRADES'[GRADE_ID]         )       )     ),     // ---------- FALLBACK: ALL-TIME GPA (no window rows) ----------     (       Sum( Aggr(         If(           IsNum('GRADES'[GRADE]),             RangeMax(0, RangeMin(4,               If('GRADES'[GRADE]>=90, 4,               If('GRADES'[GRADE]>=85, 3.7 + ('GRADES'[GRADE]-85)*0.06,               If('GRADES'[GRADE]>=75, 3.0 + ('GRADES'[GRADE]-75)*0.07,               If('GRADES'[GRADE]>=65, 2.0 + ('GRADES'[GRADE]-65)*0.10,               If('GRADES'[GRADE]>=50, 1.0 + ('GRADES'[GRADE]-50)*0.0667, 0))))))),             Pick(               Match(Upper(Trim('GRADES'[GRADE])),                 "A+","A","A-","B+","B","B-","C+","C","C-","D+","D","D-","F",                 "HD","DI","CR","P","N","PASS","FAIL"               ),               4.0,4.0,3.7,3.3,3.0,2.7,2.3,2.0,1.7,1.3,1.0,0.7,0.0,               4.0,3.7,2.5,1.0,0.0,1.0,0.0             )         ),         'GRADES'[GRADE_ID]       ))        /       Max(1, Sum( Aggr(1, 'GRADES'[GRADE_ID]) ))     )   ) )
+	measure 'Decayed GPA Quality Index' = BLANK()
+		lineageTag: 01e7dc9d-e669-513e-a53b-4d39466e2a3e
+
+	measure 'Total Courses' = DISTINCTCOUNT('COURSES'[COURSE_ID])
+		lineageTag: c3d88ac9-c95e-50d1-b772-ad5b195a12a3
+
+	/// TODO (Qlik set analysis {<...>} has no direct DAX equivalent): Convert the Qlik expression to DAX manually.
+	/// Original Qlik: Sum({   <Date = {">=$(=AddMonths(MonthStart($(vMaxLoaded)),-11))<=$(=MonthEnd($(vMaxLoaded)))"},    Date = {"=Date=ASSIGNED_DATE"}> } 1)
+	measure 'Rolling 12-month assignments' = BLANK()
+		lineageTag: 088d1460-22c9-5ca7-94d3-dffceeafe409
+
+	measure 'GPA (4.0 scale) average' =
+			Avg(
+			SWITCH(Upper(Trim('GRADES'[GRADE])), "A+", 4.0, "A", 4.0, "A-", 3.7, "B+", 3.3, "B", 3.0, "B-", 2.7, "C+", 2.3, "C", 2.0, "C-", 1.7, "D+", 1.3, "D", 1.0, "D-", 0.7, "F", 0.0)
+			)
+		lineageTag: 19110caf-88aa-5293-abb9-0d16883074c8
+
+	column COURSE_ID
+		dataType: string
+		lineageTag: b20ab871-1f63-54a3-968d-512304647cc6
+		summarizeBy: none
+		sourceColumn: COURSE_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column COURSE_NAME
+		dataType: string
+		lineageTag: 2a28884c-6ce7-5d88-bc97-72f8f44c511c
+		summarizeBy: none
+		sourceColumn: COURSE_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column DEPARTMENT
+		dataType: string
+		lineageTag: fec604b5-389c-551e-9b9f-ad4f184d7d93
+		summarizeBy: none
+		sourceColumn: DEPARTMENT
+
+		annotation SummarizationSetBy = Automatic
+
+	column CREDITS
+		dataType: int64
+		lineageTag: 55d744ab-d716-55db-bfe5-175c2d70b20c
+		summarizeBy: sum
+		sourceColumn: CREDITS
+		formatString: #,##0
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Course Category'
+		dataType: string
+		lineageTag: b830ee2d-7c40-55ad-9b0e-791e1614a339
+		summarizeBy: none
+		sourceColumn: Course Category
+
+		annotation SummarizationSetBy = Automatic
+
+	partition COURSES = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("gq37595.ap-southeast-7.aws.snowflakecomputing.com", null),
+				    Db = Source{[Name="LEARNING_ANALYTICS",Kind="Database"]}[Data],
+				    Sch = Db{[Name="PUBLIC",Kind="Schema"]}[Data],
+				    Navigation = Sch{[Name="COURSES",Kind="Table"]}[Data]
+				in
+				    Navigation
+
+	annotation PBI_ResultType = Table
