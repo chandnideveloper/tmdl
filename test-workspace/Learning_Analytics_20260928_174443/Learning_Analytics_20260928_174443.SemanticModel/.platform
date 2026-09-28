@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Learning_Analytics_20260928_174443"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "c4307dd1-07c2-5c60-b10b-d8d05c363d44"
+  }
+}
