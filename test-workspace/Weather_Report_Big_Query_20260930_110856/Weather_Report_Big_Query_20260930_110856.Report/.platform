@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Weather_Report_Big_Query_20260930_110856"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "91503ca9-9732-48b9-87be-66f8301d93c5"
+  }
+}
