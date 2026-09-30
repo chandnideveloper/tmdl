@@ -1,0 +1,136 @@
+table 'Weather_Data'
+    lineageTag: 21e94e43-a16f-4123-91cf-6aa4a84b06a7
+
+    column 'City'
+        dataType: string
+        lineageTag: 5cd6e54d-7a56-45e8-a5dd-c132eed57081
+        summarizeBy: none
+        sourceColumn: City
+
+    column 'Date'
+        sourceColumn: Date
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: fe44160f-26f7-4631-b6a9-dd906220c963
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: 13101e92-69c7-45a4-908f-9959a15a2889
+            defaultHierarchy: LocalDateTable_0fd78ca3-7b31-4a03-a468-584249f4ef73.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    column 'Record_Type'
+        dataType: string
+        lineageTag: 392ea201-4ff1-4154-a0dc-93e27b05079f
+        summarizeBy: none
+        sourceColumn: Record_Type
+
+    column 'Temperature'
+        dataType: double
+        lineageTag: 1148642e-cc49-4d15-b3be-fd6ad713e06b
+        summarizeBy: none
+        sourceColumn: Temperature
+
+    column 'Temp_Min'
+        dataType: double
+        lineageTag: 6dd288f3-e890-40a7-86a0-856b7e8aeb36
+        summarizeBy: none
+        sourceColumn: Temp_Min
+
+    column 'Temp_Max'
+        dataType: double
+        lineageTag: 03049be1-c629-4bf8-a687-7ef1ab771136
+        summarizeBy: none
+        sourceColumn: Temp_Max
+
+    column 'Precipitation'
+        dataType: double
+        lineageTag: 32e292a5-6711-43e9-95cc-2590e5e072a9
+        summarizeBy: none
+        sourceColumn: Precipitation
+
+    column 'Weather_Code'
+        dataType: double
+        lineageTag: 5c589af3-a864-46c1-991f-dfa9d98eb29d
+        summarizeBy: none
+        sourceColumn: Weather_Code
+
+    column 'Latitude'
+        dataType: double
+        lineageTag: cec33d13-2d04-4862-9dab-fc18d135e7a0
+        summarizeBy: none
+        sourceColumn: Latitude
+
+    column 'Longitude'
+        dataType: double
+        lineageTag: bd109e93-6e32-442c-a8e5-b21dd0af376d
+        summarizeBy: none
+        sourceColumn: Longitude
+
+    column 'Observation_Time'
+        sourceColumn: Observation_Time
+        dataType: dateTime
+        formatString: General Date
+        lineageTag: fe21c68a-db5e-47fd-9531-6a8f9693dd11
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: d3c8b57a-f75c-4447-880a-2379d30c6b2a
+            defaultHierarchy: LocalDateTable_20ae49cf-75a4-4a72-a520-a12e4b23443c.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    measure '30-Day High' =
+        -- ERROR: LLM call failed after 6 retries. Last error: Circuit breaker OPEN for t2f-ai-dev.openai.azure.com. Request rejected to prevent cascade failure.
+
+
+    measure '30-Day Low' =
+        -- ERROR: LLM call failed after 6 retries. Last error: Circuit breaker OPEN for t2f-ai-dev.openai.azure.com. Request rejected to prevent cascade failure.
+
+
+    measure '30-Day Avg' =
+        -- ERROR: LLM call failed after 6 retries. Last error: Circuit breaker OPEN for t2f-ai-dev.openai.azure.com. Request rejected to prevent cascade failure.
+
+
+    measure 'Change Percentage' =
+        -- ERROR: LLM call failed after 6 retries. Last error: Circuit breaker OPEN for t2f-ai-dev.openai.azure.com. Request rejected to prevent cascade failure.
+
+
+    measure 'AVG of Temperature' =
+        AVERAGE('Weather_Data'[Temperature])
+
+
+    measure 'SUM of Precipitation' =
+        SUM('Weather_Data'[Precipitation])
+
+
+    measure 'SUM of Highest Avg Temp' =
+        SUM('Weather_Data'[Highest Avg Temp])
+
+
+    measure 'Highest Avg Temp' =
+        -- ERROR CONVERTING: LLM call failed after 6 retries. Last error: Circuit breaker OPEN for t2f-ai-dev.openai.azure.com. Request rejected to prevent cascade failure.
+
+
+    measure 'Lowest Avg Temp' =
+        -- ERROR CONVERTING: LLM call failed after 6 retries. Last error: Circuit breaker OPEN for t2f-ai-dev.openai.azure.com. Request rejected to prevent cascade failure.
+
+
+    partition 'Weather_Data' = m
+        mode: import
+        source =
+            let
+                Source = GoogleBigQuery.Database([BillingProject = null, UseStorageApi = null, ConnectionTimeout = null, CommandTimeout = null, ProjectId = null]),
+                #"Navigation 1" = Source{[Name = "ordinal-avatar-497006-v6"]}[Data],
+                #"Navigation 2" = #"Navigation 1"{[Name = "Weather_001", Kind = "Schema"]}[Data],
+                #"Navigation 3" = #"Navigation 2"{[Name = "Weather_Data", Kind = "Table"]}[Data],
+                #"Changed Type" = Table.TransformColumnTypes(#"Navigation 3", {{"City", type text}, {"Date", type date}, {"Record_Type", type text}, {"Temperature", type number}, {"Temp_Min", type number}, {"Temp_Max", type number}, {"Precipitation", type number}, {"Weather_Code", type number}, {"Latitude", type number}, {"Longitude", type number}, {"Observation_Time", type datetime}})
+            in
+                #"Changed Type"
