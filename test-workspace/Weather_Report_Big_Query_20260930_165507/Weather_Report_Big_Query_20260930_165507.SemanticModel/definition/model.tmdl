@@ -1,0 +1,26 @@
+model Model
+    culture: en-US
+    defaultPowerBIDataSourceVersion: powerBI_V3
+    sourceQueryCulture: en-US
+    dataAccessOptions
+        legacyRedirects
+        returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+annotation PBIDesktopVersion = 2.138.1004.0 (24.11)
+
+ref table 'Weather_Data'
+ref table 'LocalDateTable_6f066bd8-6746-4786-99f2-75e5f80b23e0'
+ref table 'LocalDateTable_2fbf06ba-24d3-43c4-903b-94e1441c0f35'
+
+ref cultureInfo en-US
+
+relationship cf7cc1fe-b9c3-40b6-91f5-1b5e1a685049
+    fromColumn: 'Weather_Data'.'Date'
+    toColumn: 'LocalDateTable_6f066bd8-6746-4786-99f2-75e5f80b23e0'.'Date'
+    joinOnDateBehavior: datePartOnly
+
+relationship df21353e-f21b-4e07-aa66-cd17ccc1fc52
+    fromColumn: 'Weather_Data'.'Observation_Time'
+    toColumn: 'LocalDateTable_2fbf06ba-24d3-43c4-903b-94e1441c0f35'.'Date'
+    joinOnDateBehavior: datePartOnly
