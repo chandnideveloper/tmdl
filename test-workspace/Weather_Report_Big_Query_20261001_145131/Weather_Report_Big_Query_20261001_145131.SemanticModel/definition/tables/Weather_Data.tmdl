@@ -1,0 +1,136 @@
+table 'Weather_Data'
+    lineageTag: 2440dde0-dbf9-4296-a65b-8a4339548186
+
+    column 'City'
+        dataType: string
+        lineageTag: 865fbe06-869e-465c-bcfc-93242ae1be5c
+        summarizeBy: none
+        sourceColumn: City
+
+    column 'Date'
+        sourceColumn: Date
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: ebeb7f9a-d4a6-43d8-8d16-cd59cc8b374a
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: 9774d58e-f3d7-44c2-9cef-8df9c1aae285
+            defaultHierarchy: LocalDateTable_f36e9bc4-a4b3-411e-a086-8e9ef26342e7.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    column 'Record_Type'
+        dataType: string
+        lineageTag: 1b14d5c4-7b90-4b0c-87a2-439a37a2d73b
+        summarizeBy: none
+        sourceColumn: Record_Type
+
+    column 'Temperature'
+        dataType: double
+        lineageTag: 67eed98a-b7db-4e2f-9d46-640825bd3871
+        summarizeBy: none
+        sourceColumn: Temperature
+
+    column 'Temp_Min'
+        dataType: double
+        lineageTag: 08b378b6-decc-4309-98b1-ed254e66e957
+        summarizeBy: none
+        sourceColumn: Temp_Min
+
+    column 'Temp_Max'
+        dataType: double
+        lineageTag: 76239e99-6068-4c0f-9af9-b3e807d879bd
+        summarizeBy: none
+        sourceColumn: Temp_Max
+
+    column 'Precipitation'
+        dataType: double
+        lineageTag: dfe695a9-9b13-44ed-bb96-3c68b2d0776d
+        summarizeBy: none
+        sourceColumn: Precipitation
+
+    column 'Weather_Code'
+        dataType: double
+        lineageTag: ec68c256-ea52-476d-a24b-569439c74868
+        summarizeBy: none
+        sourceColumn: Weather_Code
+
+    column 'Latitude'
+        dataType: double
+        lineageTag: a7e55fab-7dfe-4496-a0d6-7303cb8c0c4b
+        summarizeBy: none
+        sourceColumn: Latitude
+
+    column 'Longitude'
+        dataType: double
+        lineageTag: bfe952e7-78e3-4d5e-873f-dd990edc73b8
+        summarizeBy: none
+        sourceColumn: Longitude
+
+    column 'Observation_Time'
+        sourceColumn: Observation_Time
+        dataType: dateTime
+        formatString: General Date
+        lineageTag: d99d9c98-1aa6-4398-a791-7dbc1bdd3a5c
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: 9b8b5ed1-2ab1-4bb7-843c-5f85789fb6ef
+            defaultHierarchy: LocalDateTable_4442caeb-9f80-43de-b5fd-4668207318b8.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    measure '30-Day High' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 401 Client Error: Unauthorized for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure '30-Day Low' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 401 Client Error: Unauthorized for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure '30-Day Avg' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 401 Client Error: Unauthorized for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure 'Change Percentage' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 401 Client Error: Unauthorized for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure 'AVG of Temperature' =
+        AVERAGE('Weather_Data'[Temperature])
+
+
+    measure 'SUM of Precipitation' =
+        SUM('Weather_Data'[Precipitation])
+
+
+    measure 'SUM of Highest Avg Temp' =
+        SUM('Weather_Data'[Highest Avg Temp])
+
+
+    measure 'Highest Avg Temp' =
+        -- ERROR CONVERTING: LLM call failed after 6 retries. Last error: 401 Client Error: Unauthorized for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure 'Lowest Avg Temp' =
+        -- ERROR CONVERTING: LLM call failed after 6 retries. Last error: 401 Client Error: Unauthorized for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    partition 'Weather_Data' = m
+        mode: import
+        source =
+            let
+                Source = GoogleBigQuery.Database([BillingProject = null, UseStorageApi = null, ConnectionTimeout = null, CommandTimeout = null, ProjectId = null]),
+                #"Navigation 1" = Source{[Name = "ordinal-avatar-497006-v6"]}[Data],
+                #"Navigation 2" = #"Navigation 1"{[Name = "Weather_001", Kind = "Schema"]}[Data],
+                #"Navigation 3" = #"Navigation 2"{[Name = "Weather_Data", Kind = "Table"]}[Data],
+                #"Changed Type" = Table.TransformColumnTypes(#"Navigation 3", {{"City", type text}, {"Date", type date}, {"Record_Type", type text}, {"Temperature", type number}, {"Temp_Min", type number}, {"Temp_Max", type number}, {"Precipitation", type number}, {"Weather_Code", type number}, {"Latitude", type number}, {"Longitude", type number}, {"Observation_Time", type datetime}})
+            in
+                #"Changed Type"
