@@ -1,0 +1,148 @@
+table 'Weather_Data'
+    lineageTag: 7a8f2bdc-d3fc-45f1-8e55-cd86440a6e76
+
+    column 'City'
+        dataType: string
+        lineageTag: 8a7bf51b-4bbc-483f-97d1-7bf7026d8268
+        summarizeBy: none
+        sourceColumn: City
+
+    column 'Date'
+        sourceColumn: Date
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: edcb42ba-d9ba-449f-a3f4-4a48f9957f6e
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: b19127ba-c9b3-4ac4-815d-ce86e21e7bc5
+            defaultHierarchy: LocalDateTable_7fcf47a8-d383-4ad5-98bf-0dc621243621.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    column 'Record_Type'
+        dataType: string
+        lineageTag: 78dcd7ba-7e90-4048-aabc-4856d03b9ad5
+        summarizeBy: none
+        sourceColumn: Record_Type
+
+    column 'Temperature'
+        dataType: double
+        lineageTag: 5acca4a3-c36f-4e60-b976-74891077013b
+        summarizeBy: none
+        sourceColumn: Temperature
+
+    column 'Temp_Min'
+        dataType: double
+        lineageTag: b2ab1554-793c-4bb9-b99f-486e2cf1b1c9
+        summarizeBy: none
+        sourceColumn: Temp_Min
+
+    column 'Temp_Max'
+        dataType: double
+        lineageTag: b5b3affc-248d-4467-8568-390474bede3f
+        summarizeBy: none
+        sourceColumn: Temp_Max
+
+    column 'Precipitation'
+        dataType: double
+        lineageTag: 1ce73a80-da89-4c99-970c-9a86132010bd
+        summarizeBy: none
+        sourceColumn: Precipitation
+
+    column 'Weather_Code'
+        dataType: double
+        lineageTag: 0f0ed207-8c6c-42fb-8d9a-0931b84e042e
+        summarizeBy: none
+        sourceColumn: Weather_Code
+
+    column 'Latitude'
+        dataType: double
+        lineageTag: 6e8a2470-4acb-4da9-8140-4d865dec4283
+        summarizeBy: none
+        sourceColumn: Latitude
+
+    column 'Longitude'
+        dataType: double
+        lineageTag: 00b24e0e-6d72-4433-b214-dd9fe053db40
+        summarizeBy: none
+        sourceColumn: Longitude
+
+    column 'Observation_Time'
+        sourceColumn: Observation_Time
+        dataType: dateTime
+        formatString: General Date
+        lineageTag: c773ac04-0c31-4aaf-9f9a-620a365717fc
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: e1d2337d-2137-405d-a654-46a2440f71d7
+            defaultHierarchy: LocalDateTable_32bb7083-14d0-435f-bde4-d0070eb140ad.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    measure '30-Day High' =
+        VAR _MaxDate = TODAY()
+        VAR _MinDate = _MaxDate - 30
+        RETURN CALCULATE(MAX('Weather_Data'[Temp_Max]), KEEPFILTERS('Weather_Data'[Date] >= _MinDate), KEEPFILTERS('Weather_Data'[Date] <= _MaxDate))
+
+
+    measure '30-Day Low' =
+        VAR _MaxDate = TODAY()
+        VAR _MinDate = _MaxDate - 30
+        RETURN CALCULATE(MIN('Weather_Data'[Temp_Min]), KEEPFILTERS('Weather_Data'[Date] >= _MinDate), KEEPFILTERS('Weather_Data'[Date] <= _MaxDate))
+
+
+    measure '30-Day Avg' =
+        VAR _MaxDate = TODAY()
+        VAR _MinDate = _MaxDate - 30
+        RETURN INT(
+            CALCULATE(
+                AVERAGE('Weather_Data'[Temperature]),
+                KEEPFILTERS('Weather_Data'[Date] >= _MinDate),
+                KEEPFILTERS('Weather_Data'[Date] <= _MaxDate)
+            )
+        )
+
+
+    measure 'Change Percentage' =
+        DIVIDE(AVERAGE('Weather_Data'[Temperature]) - AVERAGE('Weather_Data'[Temp_Min]), ABS(AVERAGE('Weather_Data'[Temp_Min])), 0) * 100
+
+
+    measure 'AVG of Temperature' =
+        AVERAGE('Weather_Data'[Temperature])
+
+
+    measure 'SUM of Precipitation' =
+        SUM('Weather_Data'[Precipitation])
+
+
+    measure 'SUM of Highest Avg Temp' =
+        SUM('Weather_Data'[Highest Avg Temp])
+
+
+    measure 'Highest Avg Temp' =
+        CALCULATE(AVERAGE('Weather_Data'[Temp_Max]), ALLEXCEPT('Weather_Data', 'Weather_Data'[City]))
+
+
+    measure 'Lowest Avg Temp' =
+        CALCULATE(AVERAGE('Weather_Data'[Temp_Min]), ALLEXCEPT('Weather_Data', 'Weather_Data'[City]))
+
+
+    partition 'Weather_Data' = m
+        mode: import
+        source =
+            let
+                Source = GoogleBigQuery.Database([BillingProject = null, UseStorageApi = null, ConnectionTimeout = null, CommandTimeout = null, ProjectId = null]),
+                #"Navigation 1" = Source{[Name = "ordinal-avatar-497006-v6"]}[Data],
+                #"Navigation 2" = #"Navigation 1"{[Name = "Weather_001", Kind = "Schema"]}[Data],
+                #"Navigation 3" = #"Navigation 2"{[Name = "Weather_Data", Kind = "Table"]}[Data],
+                #"Changed Type" = Table.TransformColumnTypes(#"Navigation 3", {{"City", type text}, {"Date", type date}, {"Record_Type", type text}, {"Temperature", type number}, {"Temp_Min", type number}, {"Temp_Max", type number}, {"Precipitation", type number}, {"Weather_Code", type number}, {"Latitude", type number}, {"Longitude", type number}, {"Observation_Time", type datetime}})
+            in
+                #"Changed Type"
