@@ -1,0 +1,64 @@
+table INSTRUCTORS
+	lineageTag: b5853f67-9bf0-5f10-bd36-80f188b2e2d5
+
+	column INSTRUCTOR_ID
+		dataType: string
+		lineageTag: 5e6e1627-e5a6-55d8-9a48-58e899b8e110
+		summarizeBy: none
+		sourceColumn: INSTRUCTOR_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column FIRST_NAME
+		dataType: string
+		lineageTag: 91cd7556-23ff-58ea-ab11-416d69b59066
+		summarizeBy: none
+		sourceColumn: FIRST_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column LAST_NAME
+		dataType: string
+		lineageTag: 5c2236cf-e3e6-5bf9-be97-724c07724028
+		summarizeBy: none
+		sourceColumn: LAST_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column EMAIL
+		dataType: string
+		lineageTag: 2fe42a9c-fff2-5533-80cf-b5bf6746bcf1
+		summarizeBy: none
+		sourceColumn: EMAIL
+
+		annotation SummarizationSetBy = Automatic
+
+	column HIRE_DATE
+		dataType: dateTime
+		lineageTag: a80abd68-2c6d-51bf-8b86-7726e667db93
+		summarizeBy: none
+		sourceColumn: HIRE_DATE
+		formatString: General Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Instructor Name'
+		dataType: string
+		lineageTag: ccbf37a9-b3ec-5cef-984b-47ea393d084c
+		summarizeBy: none
+		sourceColumn: Instructor Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition INSTRUCTORS = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("gq37595.ap-southeast-7.aws.snowflakecomputing.com", "COMPUTE_WH", [Role = null, CreateNavigationProperties = null, ConnectionTimeout = null, CommandTimeout = null, Implementation = "2.0"]),
+				    #"Navigation 1" = Source{[Name = "LEARNING_ANALYTICS", Kind = "Database"]}[Data],
+				    #"Navigation 2" = #"Navigation 1"{[Name = "PUBLIC", Kind = "Schema"]}[Data],
+				    #"Navigation 3" = #"Navigation 2"{[Name = "INSTRUCTORS", Kind = "Table"]}[Data]
+				in
+				    #"Navigation 3"
+
+	annotation PBI_ResultType = Table
