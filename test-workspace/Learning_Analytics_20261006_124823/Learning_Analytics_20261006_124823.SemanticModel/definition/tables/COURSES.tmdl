@@ -1,0 +1,61 @@
+table COURSES
+	lineageTag: aef0d33b-71a4-5d33-acdb-9c8f236a6bb5
+
+	measure 'Average Credits' = AVERAGE('COURSES'[CREDITS])
+		formatString: "#,##0.00"
+		lineageTag: 6423b155-78fd-5c68-816d-d2a029603e99
+
+	measure 'Total Courses' = DISTINCTCOUNT('COURSES'[COURSE_ID])
+		formatString: "#,##0.00"
+		lineageTag: c3d88ac9-c95e-50d1-b772-ad5b195a12a3
+
+	column 'Course Category' = 'COURSES'[CREDITS]
+		dataType: double
+		lineageTag: 1c5ce9f4-58e9-5d7c-a1b1-7267dec4e135
+		summarizeBy: none
+
+	column COURSE_ID
+		dataType: string
+		lineageTag: b20ab871-1f63-54a3-968d-512304647cc6
+		summarizeBy: none
+		sourceColumn: COURSE_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column COURSE_NAME
+		dataType: string
+		lineageTag: 2a28884c-6ce7-5d88-bc97-72f8f44c511c
+		summarizeBy: none
+		sourceColumn: COURSE_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column DEPARTMENT
+		dataType: string
+		lineageTag: fec604b5-389c-551e-9b9f-ad4f184d7d93
+		summarizeBy: none
+		sourceColumn: DEPARTMENT
+
+		annotation SummarizationSetBy = Automatic
+
+	column CREDITS
+		dataType: double
+		lineageTag: 55d744ab-d716-55db-bfe5-175c2d70b20c
+		summarizeBy: sum
+		sourceColumn: CREDITS
+		formatString: ##############
+
+		annotation SummarizationSetBy = Automatic
+
+	partition COURSES = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("gq37595.ap-southeast-7.aws.snowflakecomputing.com", "COMPUTE_WH"),
+				    Db = Source{[Name="LEARNING_ANALYTICS",Kind="Database"]}[Data],
+				    Result = Value.NativeQuery(Db, "SELECT ""COURSE_ID"", ""COURSE_NAME"", ""DEPARTMENT"", ""CREDITS"" FROM ""LEARNING_ANALYTICS"".""PUBLIC"".""COURSES""", null, [EnableFolding=false]),
+				    #"Changed Type" = Table.TransformColumnTypes(Result, {{"COURSE_ID", type text}, {"COURSE_NAME", type text}, {"DEPARTMENT", type text}, {"CREDITS", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
