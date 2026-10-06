@@ -1,0 +1,72 @@
+model Model
+    culture: en-US
+    defaultPowerBIDataSourceVersion: powerBI_V3
+    sourceQueryCulture: en-US
+    dataAccessOptions
+        legacyRedirects
+        returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+annotation PBIDesktopVersion = 2.138.1004.0 (24.11)
+
+ref table 'encounters'
+ref table 'organizations'
+ref table 'patients'
+ref table 'payers'
+ref table 'procedures'
+ref table 'patients.csv'
+ref table 'Top N Procedures(Parameter)'
+ref table 'Metric Selector'
+ref table 'Top N Patients'
+ref table 'LocalDateTable_0fe1acdc-7d37-4560-be50-ed9452b66d65'
+ref table 'LocalDateTable_c2b67e2e-e44c-4fc7-b1fe-991e072ffdbd'
+ref table 'LocalDateTable_b1d7262a-1590-46f4-bb61-7a1b1a7ab03a'
+ref table 'LocalDateTable_d56591c0-7951-4202-bab0-22571f476520'
+ref table 'LocalDateTable_1b41a2a7-88ec-4b1b-bdac-f1616367c87e'
+
+ref cultureInfo en-US
+
+relationship 76cdadc0-4eb0-4a7a-8392-051ce8411dc3
+    fromColumn: 'encounters'.'Organization'
+    toColumn: 'organizations'.'Id (organizations)'
+    crossFilteringBehavior: bothDirections
+
+relationship 43f8a4dc-8981-4ebe-b51a-2b1a0309b8a6
+    fromColumn: 'encounters'.'Patient'
+    toColumn: 'patients'.'Id (patients)'
+    crossFilteringBehavior: bothDirections
+
+relationship 4da2473a-d17b-42df-ae3e-ae4a0a3688b7
+    fromColumn: 'encounters'.'Payer'
+    toColumn: 'payers'.'Id (payers)'
+    crossFilteringBehavior: bothDirections
+
+relationship be41fa16-c3fc-4907-9b37-f2abb989abca
+    fromColumn: 'procedures'.'Encounter'
+    toColumn: 'encounters'.'Id'
+    crossFilteringBehavior: bothDirections
+
+relationship 1336b0d1-de1d-4697-afde-d7f8c8e7c54d
+    fromColumn: 'encounters'.'Encounter Start Date'
+    toColumn: 'LocalDateTable_0fe1acdc-7d37-4560-be50-ed9452b66d65'.'Date'
+    joinOnDateBehavior: datePartOnly
+
+relationship d98509ef-216d-44e8-9999-9dc790bc7900
+    fromColumn: 'patients'.'Birthdate'
+    toColumn: 'LocalDateTable_c2b67e2e-e44c-4fc7-b1fe-991e072ffdbd'.'Date'
+    joinOnDateBehavior: datePartOnly
+
+relationship 84a1eb33-1e87-4fae-81b8-f0c1db021022
+    fromColumn: 'patients'.'Deathdate'
+    toColumn: 'LocalDateTable_b1d7262a-1590-46f4-bb61-7a1b1a7ab03a'.'Date'
+    joinOnDateBehavior: datePartOnly
+
+relationship 1f770cd0-00c8-4fc7-90cc-bc1dc0a65fc7
+    fromColumn: 'patients.csv'.'Birthdate'
+    toColumn: 'LocalDateTable_d56591c0-7951-4202-bab0-22571f476520'.'Date'
+    joinOnDateBehavior: datePartOnly
+
+relationship 5cf56c05-e468-4f55-bf43-25d993048977
+    fromColumn: 'patients.csv'.'Deathdate'
+    toColumn: 'LocalDateTable_1b41a2a7-88ec-4b1b-bdac-f1616367c87e'.'Date'
+    joinOnDateBehavior: datePartOnly
