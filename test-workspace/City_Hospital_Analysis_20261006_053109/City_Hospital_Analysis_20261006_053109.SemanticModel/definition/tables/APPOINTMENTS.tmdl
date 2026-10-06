@@ -1,0 +1,101 @@
+table APPOINTMENTS
+	lineageTag: 072a30c8-c8fd-5d1f-8573-9ec77897d4e3
+
+	measure 'Total Appointments' = COUNT('APPOINTMENTS'[APPOINTMENT_ID])
+		lineageTag: ec5f005f-676b-51fb-86b6-7a0b7346ed29
+
+	measure Patients = COUNT('APPOINTMENTS'[PATIENT_ID])
+		lineageTag: 74e2052c-0615-5741-9144-9944da8b760a
+
+	column APPOINTMENT_ID
+		dataType: string
+		lineageTag: 883ef188-7697-5874-b3c8-7e32e1b6eebb
+		summarizeBy: none
+		sourceColumn: APPOINTMENT_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column PATIENT_ID
+		dataType: string
+		lineageTag: 8f5fe386-bdbe-59ca-9725-1b3a9e10675d
+		summarizeBy: none
+		sourceColumn: PATIENT_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column DOCTOR_ID
+		dataType: string
+		lineageTag: f9e7839b-83ec-5ea1-bd3a-470b83e9c4f6
+		summarizeBy: none
+		sourceColumn: DOCTOR_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column DEPARTMENT
+		dataType: string
+		lineageTag: d0c47aa2-2b7c-56e6-ad35-1b9391782d14
+		summarizeBy: none
+		sourceColumn: DEPARTMENT
+
+		annotation SummarizationSetBy = Automatic
+
+	column APPOINTMENT_DATE
+		dataType: dateTime
+		lineageTag: 3a2bb733-03bf-52a0-825c-3c7ca39cd51e
+		summarizeBy: none
+		sourceColumn: APPOINTMENT_DATE
+		formatString: General Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column APPOINTMENT_TIME
+		dataType: string
+		lineageTag: 2fbf8281-af40-530c-88cb-7dfa26feb4dd
+		summarizeBy: none
+		sourceColumn: APPOINTMENT_TIME
+
+		annotation SummarizationSetBy = Automatic
+
+	column VISIT_STATUS
+		dataType: string
+		lineageTag: ef4ab6b8-2461-54cb-afe1-49d6d6410254
+		summarizeBy: none
+		sourceColumn: VISIT_STATUS
+
+		annotation SummarizationSetBy = Automatic
+
+	column REASON_FOR_VISIT
+		dataType: string
+		lineageTag: 64628fe0-b764-5a14-b80c-b056b8f62483
+		summarizeBy: none
+		sourceColumn: REASON_FOR_VISIT
+
+		annotation SummarizationSetBy = Automatic
+
+	column DIAGNOSIS_CODE
+		dataType: string
+		lineageTag: 1e06a5b8-d567-51c0-971b-f12ad979d514
+		summarizeBy: none
+		sourceColumn: DIAGNOSIS_CODE
+
+		annotation SummarizationSetBy = Automatic
+
+	column FOLLOW_UP_REQUIRED
+		dataType: int64
+		lineageTag: a42d4048-9031-59e7-ad43-842b16dca47a
+		summarizeBy: sum
+		sourceColumn: FOLLOW_UP_REQUIRED
+		formatString: #,##0
+
+		annotation SummarizationSetBy = Automatic
+
+	partition APPOINTMENTS = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("server.database.windows.net", "COMPUTE_WH"),
+				    Result = Value.NativeQuery(Source, "SELECT * FROM PUBLIC.appointments", null, [EnableFolding=false])
+				in
+				    Result
+
+	annotation PBI_ResultType = Table

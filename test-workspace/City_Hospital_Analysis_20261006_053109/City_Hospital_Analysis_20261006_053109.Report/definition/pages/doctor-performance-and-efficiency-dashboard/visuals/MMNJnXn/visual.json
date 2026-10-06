@@ -1,0 +1,160 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "MMNJnXn",
+  "position": {
+    "x": 640,
+    "y": 190,
+    "width": 640,
+    "height": 570,
+    "z": 3,
+    "tabOrder": 3
+  },
+  "visual": {
+    "visualType": "treemap",
+    "query": {
+      "queryState": {
+        "Group": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DOCTORS"
+                    }
+                  },
+                  "Property": "SPECIALIZATION"
+                }
+              },
+              "queryRef": "DOCTORS.SPECIALIZATION",
+              "nativeQueryRef": "SPECIALIZATION",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DOCTORS"
+                    }
+                  },
+                  "Property": "SPECIALIZATION"
+                }
+              },
+              "queryRef": "DOCTORS.SPECIALIZATION",
+              "nativeQueryRef": "SPECIALIZATION",
+              "active": false
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "APPOINTMENTS"
+                    }
+                  },
+                  "Property": "DEPARTMENT"
+                }
+              },
+              "queryRef": "APPOINTMENTS.DEPARTMENT",
+              "nativeQueryRef": "DEPARTMENT",
+              "active": false
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DOCTORS"
+                    }
+                  },
+                  "Property": "EXPERIENCE_YEARS"
+                }
+              },
+              "queryRef": "DOCTORS.EXPERIENCE_YEARS",
+              "nativeQueryRef": "EXPERIENCE_YEARS",
+              "active": false
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "APPOINTMENTS"
+                    }
+                  },
+                  "Property": "VISIT_STATUS"
+                }
+              },
+              "queryRef": "APPOINTMENTS.VISIT_STATUS",
+              "nativeQueryRef": "VISIT_STATUS",
+              "active": false
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DOCTORS"
+                    }
+                  },
+                  "Property": "Average Consultation Fee"
+                }
+              },
+              "queryRef": "DOCTORS.Average Consultation Fee",
+              "nativeQueryRef": "Average Consultation Fee"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "general": [
+        {
+          "properties": {}
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Revenue by Specialisation'"
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "legend": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": []
+  }
+}
