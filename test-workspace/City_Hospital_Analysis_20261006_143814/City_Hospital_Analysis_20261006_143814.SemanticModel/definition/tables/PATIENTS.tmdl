@@ -1,0 +1,94 @@
+table PATIENTS
+	lineageTag: 551dc5ee-9930-5af4-9791-199e0584e4e9
+
+	column PATIENT_ID
+		dataType: string
+		lineageTag: 41184e5a-8428-57e1-a10e-4aba26c29c52
+		summarizeBy: none
+		sourceColumn: PATIENT_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column FIRST_NAME
+		dataType: string
+		lineageTag: a2a82c43-b868-5126-8bb1-ce05d7451d2f
+		summarizeBy: none
+		sourceColumn: FIRST_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column LAST_NAME
+		dataType: string
+		lineageTag: b2d80cf4-cd09-5bbe-841b-97b231227c2d
+		summarizeBy: none
+		sourceColumn: LAST_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column DATE_OF_BIRTH
+		dataType: dateTime
+		lineageTag: c7647f82-eb68-5240-a6a0-12dfbcb97b0e
+		summarizeBy: none
+		sourceColumn: DATE_OF_BIRTH
+		formatString: General Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column GENDER
+		dataType: string
+		lineageTag: 3fc8fe67-6d7b-5e6e-81e0-8da129b01a42
+		summarizeBy: none
+		sourceColumn: GENDER
+
+		annotation SummarizationSetBy = Automatic
+
+	column CONTACT_NUMBE
+		dataType: string
+		lineageTag: 291d6d16-c915-5626-9971-6bf9250a4762
+		summarizeBy: none
+		sourceColumn: CONTACT_NUMBE
+
+		annotation SummarizationSetBy = Automatic
+
+	column EMAIL_ADDRESS
+		dataType: string
+		lineageTag: 068ed764-80f6-58d9-bd86-f8ba2bb5928c
+		summarizeBy: none
+		sourceColumn: EMAIL_ADDRESS
+
+		annotation SummarizationSetBy = Automatic
+
+	column ADDRESS
+		dataType: string
+		lineageTag: 5f3517f3-3e75-5829-bf6f-de20706af131
+		summarizeBy: none
+		sourceColumn: ADDRESS
+
+		annotation SummarizationSetBy = Automatic
+
+	column INURANCE_PROVIDER
+		dataType: string
+		lineageTag: e35a3a6d-30c6-5ee7-bb0e-55ce9b362def
+		summarizeBy: none
+		sourceColumn: INURANCE_PROVIDER
+
+		annotation SummarizationSetBy = Automatic
+
+	column INSURANCE_POLICY
+		dataType: string
+		lineageTag: 6f736b18-e2af-5de3-a124-5687e52a2ccf
+		summarizeBy: none
+		sourceColumn: INSURANCE_POLICY
+
+		annotation SummarizationSetBy = Automatic
+
+	partition PATIENTS = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("server.database.windows.net", "COMPUTE_WH"),
+				    Result = Value.NativeQuery(Source, "SELECT * FROM PUBLIC.patients", null, [EnableFolding=false])
+				in
+				    Result
+
+	annotation PBI_ResultType = Table

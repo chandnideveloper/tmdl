@@ -1,0 +1,103 @@
+table TREATMENTS
+	lineageTag: bd05b695-887f-5aa2-9e75-7247eeff339e
+
+	measure 'Avg. Treatment Cost' = AVERAGE('TREATMENTS'[TREATMENT_COST])
+		lineageTag: 86bedc76-c0c3-52e1-8b7e-293660a49c11
+
+	measure 'Appointment to Treatment Ratio' = DIVIDE(COUNT('TREATMENTS'[APPOINTMENT_ID]), CALCULATE(COUNT('TREATMENTS'[APPOINTMENT_ID]), 'TREATMENTS'[APPOINTMENT_ID] = "*"), BLANK())
+		lineageTag: cc966de2-5a28-554c-a578-5be544870613
+
+	column APPOINTMENT_ID
+		dataType: string
+		lineageTag: 653c1d71-11c4-5bf6-bc18-764bea9ed818
+		summarizeBy: none
+		sourceColumn: APPOINTMENT_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column TREATMENT_ID
+		dataType: string
+		lineageTag: 62f3268c-6ae0-5962-b986-c8d9edb85af3
+		summarizeBy: none
+		sourceColumn: TREATMENT_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column TREATMENT_TYPE
+		dataType: string
+		lineageTag: 624163f1-bedc-53ea-b49c-3d94d6d735f6
+		summarizeBy: none
+		sourceColumn: TREATMENT_TYPE
+
+		annotation SummarizationSetBy = Automatic
+
+	column TREATMENT_DESCRIPTION
+		dataType: string
+		lineageTag: c34a20ff-e01f-5f29-9d96-7f8a791e3cbb
+		summarizeBy: none
+		sourceColumn: TREATMENT_DESCRIPTION
+
+		annotation SummarizationSetBy = Automatic
+
+	column PRESCRIBED_MEDICATION
+		dataType: string
+		lineageTag: 3442e818-8359-5c47-82e3-2a104beceb1f
+		summarizeBy: none
+		sourceColumn: PRESCRIBED_MEDICATION
+
+		annotation SummarizationSetBy = Automatic
+
+	column START_DATE
+		dataType: dateTime
+		lineageTag: e91a2582-ae2c-5fe5-9fb5-3e5fcd97bc91
+		summarizeBy: none
+		sourceColumn: START_DATE
+		formatString: General Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column END_DATE
+		dataType: dateTime
+		lineageTag: 7b92b279-66dd-5d8b-bd4f-8695d7b35628
+		summarizeBy: none
+		sourceColumn: END_DATE
+		formatString: General Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column OUTCOME_STATUS
+		dataType: string
+		lineageTag: c83ffd54-c787-527f-aea3-c697432a4f37
+		summarizeBy: none
+		sourceColumn: OUTCOME_STATUS
+
+		annotation SummarizationSetBy = Automatic
+
+	column FOLLOW_UP_DATE
+		dataType: dateTime
+		lineageTag: 77bdf390-9be4-5e3b-ae1b-ec6ff8e72048
+		summarizeBy: none
+		sourceColumn: FOLLOW_UP_DATE
+		formatString: General Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column TREATMENT_COST
+		dataType: double
+		lineageTag: 0e1f379b-b147-59eb-b817-bf47deb98b4e
+		summarizeBy: sum
+		sourceColumn: TREATMENT_COST
+		formatString: #,##0.00
+
+		annotation SummarizationSetBy = Automatic
+
+	partition TREATMENTS = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("server.database.windows.net", "COMPUTE_WH"),
+				    Result = Value.NativeQuery(Source, "SELECT * FROM PUBLIC.treatments", null, [EnableFolding=false])
+				in
+				    Result
+
+	annotation PBI_ResultType = Table
