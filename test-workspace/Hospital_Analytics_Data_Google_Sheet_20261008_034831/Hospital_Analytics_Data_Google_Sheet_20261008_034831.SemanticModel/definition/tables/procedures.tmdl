@@ -1,0 +1,85 @@
+table 'procedures'
+    lineageTag: 5777681b-9675-4b4f-b3a5-ee3f4927425b
+
+    column 'START (procedures)'
+        dataType: string
+        lineageTag: 05bbd5c3-cffa-49bb-a84c-0c34d90d8aac
+        summarizeBy: none
+        sourceColumn: START (procedures)
+
+    column 'STOP (procedures)'
+        dataType: string
+        lineageTag: d0703709-2f70-441c-9c5c-ccc19caeb42e
+        summarizeBy: none
+        sourceColumn: STOP (procedures)
+
+    column 'PATIENT (procedures)'
+        dataType: string
+        lineageTag: 9b55065a-6191-4097-979e-25f79ce7b2ce
+        summarizeBy: none
+        sourceColumn: PATIENT (procedures)
+
+    column 'Encounter'
+        dataType: string
+        lineageTag: b653bc04-cfd1-440a-b68c-71b1fa411702
+        summarizeBy: none
+        sourceColumn: Encounter
+
+    column 'CODE (procedures)'
+        dataType: double
+        lineageTag: 788d5872-6c8b-4759-81e6-c6e613950eef
+        summarizeBy: none
+        sourceColumn: CODE (procedures)
+
+    column 'DESCRIPTION (procedures)'
+        dataType: string
+        lineageTag: f052121f-8fa2-45aa-aef3-c6bdec56e691
+        summarizeBy: none
+        sourceColumn: DESCRIPTION (procedures)
+
+    column 'Base Cost'
+        dataType: double
+        lineageTag: c6899daa-847f-4d1e-8370-62ce3ebb310f
+        summarizeBy: none
+        sourceColumn: Base Cost
+
+    column 'REASONCODE (procedures)'
+        dataType: double
+        lineageTag: 4d7d3835-a150-41ed-b64f-3e7b2ca1f31a
+        summarizeBy: none
+        sourceColumn: REASONCODE (procedures)
+
+    column 'REASONDESCRIPTION (procedures)'
+        dataType: string
+        lineageTag: 4f4c3bd2-3d9a-4646-91be-879a3ccb54bf
+        summarizeBy: none
+        sourceColumn: REASONDESCRIPTION (procedures)
+
+    column 'DESCRIPTION (procedures) Set' = /* LLM conversion failed - manual review needed */ {'name': 'DESCRIPTION__procedures__Set', 'table': 'procedures', 'base_field': 'DESCRIPTION (procedures)', 'members_list': '"Admission to burn unit", "Admission to long stay hospital", "Admission to orthopedic department", "Admission to trauma surgery department", "Ankle X-ray", "Antenatal RhD antibody screening", "Assessment of health and social care needs (procedure)"'}
+        dataType: string
+
+        summarizeBy: none
+
+    measure 'Procedure Rank(Top N Procedure Parameter)' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure 'Top N Procedures Filter' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure 'Selected Metric' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    partition 'procedures' = m
+        mode: import
+        source =
+            let
+                Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo/edit"),
+                #"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data],
+                #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+                #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"START", type text}, {"STOP", type text}, {"PATIENT", type text}, {"ENCOUNTER", type text}, {"CODE", type number}, {"DESCRIPTION", type text}, {"BASE_COST", type number}, {"REASONCODE", type number}, {"REASONDESCRIPTION", type text}}),
+                #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"START", "START (procedures)"}, {"STOP", "STOP (procedures)"}, {"PATIENT", "PATIENT (procedures)"}, {"ENCOUNTER", "Encounter"}, {"CODE", "CODE (procedures)"}, {"DESCRIPTION", "DESCRIPTION (procedures)"}, {"BASE_COST", "Base Cost"}, {"REASONCODE", "REASONCODE (procedures)"}, {"REASONDESCRIPTION", "REASONDESCRIPTION (procedures)"}})
+            in
+                #"Renamed Columns"

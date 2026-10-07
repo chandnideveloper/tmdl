@@ -1,0 +1,71 @@
+table 'organizations'
+    lineageTag: 96392cea-8456-4991-90fe-87fd5723f7e8
+
+    column 'Id (organizations)'
+        dataType: string
+        lineageTag: a03f0085-ec86-4823-b282-7cfca452262b
+        summarizeBy: none
+        sourceColumn: Id (organizations)
+
+    column 'Name'
+        dataType: string
+        lineageTag: 8f708aee-919c-4ff3-9cca-3b5f9ba926f9
+        summarizeBy: none
+        sourceColumn: Name
+
+    column 'ADDRESS (organizations)'
+        dataType: string
+        lineageTag: f23aaa93-9f6c-4e73-9040-2b50ebca797d
+        summarizeBy: none
+        sourceColumn: ADDRESS (organizations)
+
+    column 'CITY (organizations)'
+        dataType: string
+        lineageTag: c99d82ee-3a2f-45c3-91b4-fb151cd7e738
+        summarizeBy: none
+        sourceColumn: CITY (organizations)
+
+    column 'STATE (organizations)'
+        dataType: string
+        lineageTag: 4c4115f2-c57d-4bb9-9258-cbb33ee24d5c
+        summarizeBy: none
+        sourceColumn: STATE (organizations)
+
+    column 'ZIP (organizations)'
+        dataType: double
+        lineageTag: 430629b4-9eb9-442d-9c90-ced348e598d5
+        summarizeBy: none
+        sourceColumn: ZIP (organizations)
+
+    column 'LAT (organizations)'
+        dataType: double
+        lineageTag: a22671dd-1c70-4034-8eaa-12efe7f46f11
+        summarizeBy: none
+        sourceColumn: LAT (organizations)
+
+    column 'LON (organizations)'
+        dataType: double
+        lineageTag: a42778eb-775c-4270-b60f-bd5ec3475e80
+        summarizeBy: none
+        sourceColumn: LON (organizations)
+
+    column 'Username' = -- ERROR: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+        dataType: string
+
+        summarizeBy: none
+
+    measure 'RLS - Organization Access' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    partition 'organizations' = m
+        mode: import
+        source =
+            let
+                Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Gfqr930PI28eveUiJrS8ikSsyzDUbPE4pJy7nG9ZIUc/edit"),
+                #"Navigation 1" = Source{[name = "organizations", ItemKind = "Table"]}[Data],
+                #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+                #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"Id", type text}, {"NAME", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE", type text}, {"ZIP", type number}, {"LAT", type number}, {"LON", type number}}),
+                #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"Id", "Id (organizations)"}, {"NAME", "Name"}, {"ADDRESS", "ADDRESS (organizations)"}, {"CITY", "CITY (organizations)"}, {"STATE", "STATE (organizations)"}, {"ZIP", "ZIP (organizations)"}, {"LAT", "LAT (organizations)"}, {"LON", "LON (organizations)"}})
+            in
+                #"Renamed Columns"

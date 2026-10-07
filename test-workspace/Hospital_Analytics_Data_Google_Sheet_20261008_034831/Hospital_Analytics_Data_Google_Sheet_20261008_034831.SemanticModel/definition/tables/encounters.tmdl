@@ -1,0 +1,145 @@
+table 'encounters'
+    lineageTag: 61bbce07-1ba2-4eba-9af6-eb23458b45f0
+
+    column 'Id'
+        dataType: string
+        lineageTag: ca19977a-20f7-4bbf-89db-36db7457bd17
+        summarizeBy: none
+        sourceColumn: Id
+
+    column 'Start'
+        dataType: string
+        lineageTag: 5596f4ec-cb0a-433a-ae7f-06b6d9558b2f
+        summarizeBy: none
+        sourceColumn: Start
+
+    column 'Stop'
+        dataType: string
+        lineageTag: 869fc90b-f6a6-4641-ab44-c9174f46944d
+        summarizeBy: none
+        sourceColumn: Stop
+
+    column 'Patient'
+        dataType: string
+        lineageTag: 711acfb7-8522-409c-81fe-52e8e76f67cc
+        summarizeBy: none
+        sourceColumn: Patient
+
+    column 'Organization'
+        dataType: string
+        lineageTag: e574e9b1-6fbe-4955-bf9d-eae59dbcb405
+        summarizeBy: none
+        sourceColumn: Organization
+
+    column 'Payer'
+        dataType: string
+        lineageTag: 53bab341-d7c3-4269-89e1-1076dab08b80
+        summarizeBy: none
+        sourceColumn: Payer
+
+    column 'Encounterclass'
+        dataType: string
+        lineageTag: 866596f1-679b-4f33-8876-10b53ca999b9
+        summarizeBy: none
+        sourceColumn: Encounterclass
+
+    column 'Code'
+        dataType: double
+        lineageTag: 8a191d1d-cf7c-4314-8849-ebcad649041b
+        summarizeBy: none
+        sourceColumn: Code
+
+    column 'Description'
+        dataType: string
+        lineageTag: 9a3e265a-09ac-43ff-bf41-c2e9537763d0
+        summarizeBy: none
+        sourceColumn: Description
+
+    column 'Base Encounter Cost'
+        dataType: double
+        lineageTag: e18a8f62-9d57-46e0-8932-a45c6c0dd0ee
+        summarizeBy: none
+        sourceColumn: Base Encounter Cost
+
+    column 'Total Claim Cost'
+        dataType: double
+        lineageTag: 5a492a98-03d0-4cc4-abd6-d641107d077b
+        summarizeBy: none
+        sourceColumn: Total Claim Cost
+
+    column 'Payer Coverage'
+        dataType: double
+        lineageTag: c7367a25-a219-4d89-82b6-0e00d409be2c
+        summarizeBy: none
+        sourceColumn: Payer Coverage
+
+    column 'Reasoncode'
+        dataType: double
+        lineageTag: 139b601e-b939-4e46-a3dd-370aa2c62733
+        summarizeBy: none
+        sourceColumn: Reasoncode
+
+    column 'Reasondescription'
+        dataType: string
+        lineageTag: 60b8a867-4abc-4b51-8348-37d4970c1f67
+        summarizeBy: none
+        sourceColumn: Reasondescription
+
+    column 'Encounter Start Date' = -- ERROR: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: 8c5a1a77-2251-40df-aea1-ace28c4bf1ce
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: 61e64c71-6332-4549-b6ca-ef0516cdfa11
+            defaultHierarchy: LocalDateTable_6f2206bb-fd39-4efa-ac55-171bc32aefd5.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    measure 'Patient Visits Rank (Top N Patients)' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure 'Top N Patients' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure 'Visits % Contribution (LOD)' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure 'CNT of Id' =
+        COUNT('encounters'[Id])
+
+
+    measure 'Total Visits' =
+        COUNT('encounters'[Id])
+
+
+    measure 'SUM of Base Encounter Cost' =
+        SUM('encounters'[Base Encounter Cost])
+
+
+    measure 'Total Procedures (LOD)' =
+        -- ERROR CONVERTING: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure 'Total Visits (LOD)' =
+        -- ERROR CONVERTING: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    partition 'encounters' = m
+        mode: import
+        source =
+            let
+                Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1UFffx5ngb7j1Y2kqRzPCPVA0uvA88GLaftek_fwOjKY/edit"),
+                #"Navigation 1" = Source{[name = "encounters", ItemKind = "Table"]}[Data],
+                #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+                #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"Id", type text}, {"START", type text}, {"STOP", type text}, {"PATIENT", type text}, {"ORGANIZATION", type text}, {"PAYER", type text}, {"ENCOUNTERCLASS", type text}, {"CODE", type number}, {"DESCRIPTION", type text}, {"BASE_ENCOUNTER_COST", type number}, {"TOTAL_CLAIM_COST", type number}, {"PAYER_COVERAGE", type number}, {"REASONCODE", type number}, {"REASONDESCRIPTION", type text}}),
+                #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"START", "Start"}, {"STOP", "Stop"}, {"PATIENT", "Patient"}, {"ORGANIZATION", "Organization"}, {"PAYER", "Payer"}, {"ENCOUNTERCLASS", "Encounterclass"}, {"CODE", "Code"}, {"DESCRIPTION", "Description"}, {"BASE_ENCOUNTER_COST", "Base Encounter Cost"}, {"TOTAL_CLAIM_COST", "Total Claim Cost"}, {"PAYER_COVERAGE", "Payer Coverage"}, {"REASONCODE", "Reasoncode"}, {"REASONDESCRIPTION", "Reasondescription"}})
+            in
+                #"Renamed Columns"

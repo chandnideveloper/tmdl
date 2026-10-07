@@ -1,0 +1,56 @@
+table 'payers'
+    lineageTag: e5f9d087-3464-4431-b263-b6c069ba8570
+
+    column 'Id (payers)'
+        dataType: string
+        lineageTag: 336831e2-85fa-4553-bd58-e579b58a942b
+        summarizeBy: none
+        sourceColumn: Id (payers)
+
+    column 'NAME (payers)'
+        dataType: string
+        lineageTag: 12f11416-83db-41fe-9a72-6f4b6bc4faa1
+        summarizeBy: none
+        sourceColumn: NAME (payers)
+
+    column 'ADDRESS (payers)'
+        dataType: string
+        lineageTag: cec6e906-8013-4596-aaf7-4bba4886c854
+        summarizeBy: none
+        sourceColumn: ADDRESS (payers)
+
+    column 'CITY (payers)'
+        dataType: string
+        lineageTag: f2d41952-e406-4e1b-997a-65201bbc7384
+        summarizeBy: none
+        sourceColumn: CITY (payers)
+
+    column 'State Headquartered'
+        dataType: string
+        lineageTag: c85234a4-9014-4c51-8e45-d8999c46391b
+        summarizeBy: none
+        sourceColumn: State Headquartered
+
+    column 'ZIP (payers)'
+        dataType: double
+        lineageTag: de6847dc-7b4e-4bb9-9774-5ebcd4f977a1
+        summarizeBy: none
+        sourceColumn: ZIP (payers)
+
+    column 'Phone'
+        dataType: string
+        lineageTag: 5cc51371-e3f9-488d-ac56-48eae3d31ec2
+        summarizeBy: none
+        sourceColumn: Phone
+
+    partition 'payers' = m
+        mode: import
+        source =
+            let
+                Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1NB9uAQnBa6RYGfm5addKbcToYUZJY_5OlBkWxVZRrbU/edit"),
+                #"Navigation 1" = Source{[name = "payers", ItemKind = "Table"]}[Data],
+                #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+                #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"Id", type text}, {"NAME", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE_HEADQUARTERED", type text}, {"ZIP", type number}, {"PHONE", type text}}),
+                #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"Id", "Id (payers)"}, {"NAME", "NAME (payers)"}, {"ADDRESS", "ADDRESS (payers)"}, {"CITY", "CITY (payers)"}, {"STATE_HEADQUARTERED", "State Headquartered"}, {"ZIP", "ZIP (payers)"}, {"PHONE", "Phone"}})
+            in
+                #"Renamed Columns"
