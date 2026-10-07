@@ -1,4 +1,4 @@
-table procedures
+table 'procedures'
 	lineageTag: 744b01d7-bdf0-4318-83be-fea60656a30a
 
 	measure 'Procedure Rank(Top N Procedure Parameter)' = RANKX(ALLSELECTED('procedures'[DESCRIPTION (procedures)]), CALCULATE(COUNT('procedures'[CODE (procedures)])), , DESC, DENSE)
@@ -22,7 +22,7 @@ table procedures
 		summarizeBy: none
 		sourceColumn: PATIENT (procedures)
 
-	column Encounter
+	column 'Encounter'
 		dataType: string
 		lineageTag: 5acbaf52-bc23-4ac4-8bf6-98b7fbad8921
 		summarizeBy: none
@@ -58,12 +58,12 @@ table procedures
 		summarizeBy: none
 		sourceColumn: REASONDESCRIPTION (procedures)
 
-	column DESCRIPTION__procedures__Set_Category = IF('procedures'[DESCRIPTION (procedures)] IN { "Admission to burn unit", "Admission to long stay hospital", "Admission to orthopedic department", "Admission to trauma surgery department", "Ankle X-ray", "Antenatal RhD antibody screening", "Assessment of health and social care needs (procedure)" }, "In", "Out")
+	column 'DESCRIPTION__procedures__Set_Category' = IF('procedures'[DESCRIPTION (procedures)] IN { "Admission to burn unit", "Admission to long stay hospital", "Admission to orthopedic department", "Admission to trauma surgery department", "Ankle X-ray", "Antenatal RhD antibody screening", "Assessment of health and social care needs (procedure)" }, "In", "Out")
 		dataType: string
 		lineageTag: 5b249a89-3c5f-4b12-8baf-f550e64e05f4
 		summarizeBy: none
 
-	partition procedures = m
+	partition 'procedures' = m
 		mode: import
 		source =
 				let
