@@ -18,7 +18,7 @@ table 'Metric Selector'
 			)
 		lineageTag: 0b53f8f8-0868-424d-b991-b99e0712fcd1
 
-	column Value
+	column 'Value'
 		lineageTag: b4627d9a-9c92-4697-a743-39d6bafe3946
 		isNameInferred
 		sourceColumn: [Value]
