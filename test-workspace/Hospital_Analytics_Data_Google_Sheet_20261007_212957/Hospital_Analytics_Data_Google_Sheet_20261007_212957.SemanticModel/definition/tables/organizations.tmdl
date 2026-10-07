@@ -1,0 +1,72 @@
+table 'organizations'
+    lineageTag: ef3769eb-360e-49a3-9307-003ee60f7071
+
+    column 'Id (organizations)'
+        dataType: string
+        lineageTag: 0827a1e0-f19c-47ed-8db1-1efa63e144eb
+        summarizeBy: none
+        sourceColumn: Id (organizations)
+
+    column 'Name'
+        dataType: string
+        lineageTag: 6964b8de-31be-464d-8cfc-9758c5d2ac78
+        summarizeBy: none
+        sourceColumn: Name
+
+    column 'ADDRESS (organizations)'
+        dataType: string
+        lineageTag: 4e94abc0-cd39-4528-b30a-97834940e554
+        summarizeBy: none
+        sourceColumn: ADDRESS (organizations)
+
+    column 'CITY (organizations)'
+        dataType: string
+        lineageTag: c6d066be-f862-41d1-9ae6-0ad22e1adad6
+        summarizeBy: none
+        sourceColumn: CITY (organizations)
+
+    column 'STATE (organizations)'
+        dataType: string
+        lineageTag: c3cd9410-dd26-417f-8325-5a683713fc9b
+        summarizeBy: none
+        sourceColumn: STATE (organizations)
+
+    column 'ZIP (organizations)'
+        dataType: double
+        lineageTag: 0f2b0b96-645c-4568-baa5-e21e65c768a8
+        summarizeBy: none
+        sourceColumn: ZIP (organizations)
+
+    column 'LAT (organizations)'
+        dataType: double
+        lineageTag: 7b5d02fa-7d37-4932-87ce-69d6c6d8f66c
+        summarizeBy: none
+        sourceColumn: LAT (organizations)
+
+    column 'LON (organizations)'
+        dataType: double
+        lineageTag: dc50f909-3400-4fae-9590-4d179e5b73e8
+        summarizeBy: none
+        sourceColumn: LON (organizations)
+
+    column 'Username' = 'organizations'[Name]
+        dataType: string
+
+        summarizeBy: none
+
+    measure 'RLS - Organization Access' =
+        VAR _User = USERNAME()
+        RETURN IF(_User = "akash020102@gmail.com", TRUE(), SELECTEDVALUE('organizations'[Name]) = "MASSACHUSETTS GENERAL HOSPITAL")
+
+
+    partition 'organizations' = m
+        mode: import
+        source =
+            let
+                Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Gfqr930PI28eveUiJrS8ikSsyzDUbPE4pJy7nG9ZIUc/edit"),
+                #"Navigation 1" = Source{[name = "organizations", ItemKind = "Table"]}[Data],
+                #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+                #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"Id", type text}, {"NAME", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE", type text}, {"ZIP", type number}, {"LAT", type number}, {"LON", type number}}),
+                #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"Id", "Id (organizations)"}, {"NAME", "Name"}, {"ADDRESS", "ADDRESS (organizations)"}, {"CITY", "CITY (organizations)"}, {"STATE", "STATE (organizations)"}, {"ZIP", "ZIP (organizations)"}, {"LAT", "LAT (organizations)"}, {"LON", "LON (organizations)"}})
+            in
+                #"Renamed Columns"
