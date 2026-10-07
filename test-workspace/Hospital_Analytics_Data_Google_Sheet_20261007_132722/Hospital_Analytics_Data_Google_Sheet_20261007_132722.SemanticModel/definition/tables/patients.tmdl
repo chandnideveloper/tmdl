@@ -1,4 +1,4 @@
-table patients
+table 'patients'
 	lineageTag: 4359dadf-c121-44eb-a443-20d044c63d28
 
 	measure 'Patient Visits Rank (Top N Patients)' = RANKX(ALLSELECTED('patients'[Id (patients)1]), [Visits per Patient], , DESC, DENSE)
@@ -19,7 +19,7 @@ table patients
 		summarizeBy: none
 		sourceColumn: Id (patients)
 
-	column Birthdate
+	column 'Birthdate'
 		dataType: dateTime
 		formatString: Long Date
 		lineageTag: bb2a5ab2-1aff-4bcf-949a-5f671537567f
@@ -35,7 +35,7 @@ table patients
 
 		annotation UnderlyingDateTimeDataType = Date
 
-	column Deathdate
+	column 'Deathdate'
 		dataType: dateTime
 		formatString: Long Date
 		lineageTag: 38e17e3d-24b9-43a3-8878-a439d84e0983
@@ -51,85 +51,85 @@ table patients
 
 		annotation UnderlyingDateTimeDataType = Date
 
-	column Prefix
+	column 'Prefix'
 		dataType: string
 		lineageTag: f4874e66-2301-477e-bcea-22d0e1261b92
 		summarizeBy: none
 		sourceColumn: Prefix
 
-	column First
+	column 'First'
 		dataType: string
 		lineageTag: 6fb5bdfd-1c36-40f5-8c44-79fab16cd6b5
 		summarizeBy: none
 		sourceColumn: First
 
-	column Last
+	column 'Last'
 		dataType: string
 		lineageTag: 1cb5e418-4ecc-4f76-9c3e-34c096cc5c4a
 		summarizeBy: none
 		sourceColumn: Last
 
-	column Suffix
+	column 'Suffix'
 		dataType: string
 		lineageTag: ee4dbd02-497d-46de-b24f-ba231c25ce1d
 		summarizeBy: none
 		sourceColumn: Suffix
 
-	column Maiden
+	column 'Maiden'
 		dataType: string
 		lineageTag: 08b5b7cb-0ada-4891-a090-ccc960c29847
 		summarizeBy: none
 		sourceColumn: Maiden
 
-	column Marital
+	column 'Marital'
 		dataType: string
 		lineageTag: 180ef77d-ef9d-4b8a-9de6-700e8206c40e
 		summarizeBy: none
 		sourceColumn: Marital
 
-	column Race
+	column 'Race'
 		dataType: string
 		lineageTag: 56f0ee5b-9058-4455-ae30-fc9ef04c54e1
 		summarizeBy: none
 		sourceColumn: Race
 
-	column Ethnicity
+	column 'Ethnicity'
 		dataType: string
 		lineageTag: 5dc68929-7e0b-4605-ab08-24303d2d96f6
 		summarizeBy: none
 		sourceColumn: Ethnicity
 
-	column Gender
+	column 'Gender'
 		dataType: string
 		lineageTag: 72fd3a06-9e2f-4db2-be0c-527ef0dcf9ae
 		summarizeBy: none
 		sourceColumn: Gender
 
-	column Birthplace
+	column 'Birthplace'
 		dataType: string
 		lineageTag: f23d655f-ef65-48c4-b3e2-37a36e406166
 		summarizeBy: none
 		sourceColumn: Birthplace
 
-	column Address
+	column 'Address'
 		dataType: string
 		lineageTag: 3ccb387f-15f6-4cab-8d25-c020decdbbc7
 		summarizeBy: none
 		sourceColumn: Address
 
-	column City
+	column 'City'
 		dataType: string
 		lineageTag: 93dd82b7-ea5b-4954-99fb-bb9eba068ff0
 		summarizeBy: none
 		sourceColumn: City
 
-	column State
+	column 'State'
 		dataType: string
 		lineageTag: 84e77de0-75a8-4a12-9831-d07a58b62ee0
 		summarizeBy: none
 		sourceColumn: State
 
-	column County
+	column 'County'
 		dataType: string
 		lineageTag: 7bf013ff-2476-4d63-a8e3-3a2b5d42a485
 		summarizeBy: none
@@ -153,7 +153,7 @@ table patients
 		summarizeBy: none
 		sourceColumn: LON (organizations)
 
-	partition patients = m
+	partition 'patients' = m
 		mode: import
 		source =
 				let
