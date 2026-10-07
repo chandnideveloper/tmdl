@@ -1,4 +1,4 @@
-table organizations
+table 'organizations'
 	lineageTag: cd3bde56-d258-4033-945b-0cb002f4bc55
 
 	measure 'RLS - Organization Access' =
@@ -12,7 +12,7 @@ table organizations
 		summarizeBy: none
 		sourceColumn: Id (organizations)
 
-	column Name
+	column 'Name'
 		dataType: string
 		lineageTag: 366dc532-233c-41e7-9515-a5b3ea3e4e1b
 		summarizeBy: none
@@ -54,12 +54,12 @@ table organizations
 		summarizeBy: none
 		sourceColumn: LON (organizations)
 
-	column Username = 'organizations'[Name]
+	column 'Username' = 'organizations'[Name]
 		dataType: string
 		lineageTag: 8fabda86-e2d0-412c-bfb9-7abea90a8aab
 		summarizeBy: none
 
-	partition organizations = m
+	partition 'organizations' = m
 		mode: import
 		source =
 				let
