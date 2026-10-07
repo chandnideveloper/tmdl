@@ -37,12 +37,19 @@ table COURSE_INSTRUCTORS
 
 	column ASSIGNED_DATE
 		dataType: dateTime
+		formatString: Long Date
 		lineageTag: f23691ee-c9a4-5c26-bea2-8c1fbf3a0e98
 		summarizeBy: none
 		sourceColumn: ASSIGNED_DATE
-		formatString: General Date
+
+		variation Variation
+			isDefault
+			relationship: ab7dc68f-009e-420a-a759-110408e41022
+			defaultHierarchy: LocalDateTable_60eaf536-8e18-40cf-9b70-c9bf67257442.'Date Hierarchy'
 
 		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
 
 	partition COURSE_INSTRUCTORS = m
 		mode: import
@@ -56,3 +63,4 @@ table COURSE_INSTRUCTORS
 				    #"Navigation 3"
 
 	annotation PBI_ResultType = Table
+

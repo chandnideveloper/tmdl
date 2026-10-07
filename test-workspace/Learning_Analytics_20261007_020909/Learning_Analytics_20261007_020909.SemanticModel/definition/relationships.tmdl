@@ -7,11 +7,27 @@ relationship 36c867a5-7eed-521e-aeb6-0f4c7965b3cb
 	toColumn: COURSES.COURSE_ID
 
 relationship b94c4cd7-ac0d-59cc-b74d-98bd4b1198e5
+	crossFilteringBehavior: bothDirections
 	fromColumn: COURSE_INSTRUCTORS.INSTRUCTOR_ID
 	toColumn: INSTRUCTORS.INSTRUCTOR_ID
-	crossFilteringBehavior: bothDirections
 
 relationship 5086e455-7dfe-5327-a957-c4bdb7f5cd5b
+	crossFilteringBehavior: bothDirections
 	fromColumn: STUDENT_COURSES.STUDENT_ID
 	toColumn: STUDENTS.STUDENT_ID
-	crossFilteringBehavior: bothDirections
+
+relationship ab7dc68f-009e-420a-a759-110408e41022
+	joinOnDateBehavior: datePartOnly
+	fromColumn: COURSE_INSTRUCTORS.ASSIGNED_DATE
+	toColumn: LocalDateTable_60eaf536-8e18-40cf-9b70-c9bf67257442.Date
+
+relationship 81961f10-bbe4-416b-a104-c9d9a5234ffb
+	joinOnDateBehavior: datePartOnly
+	fromColumn: INSTRUCTORS.HIRE_DATE
+	toColumn: LocalDateTable_3a9affc8-3e5d-4226-8127-dcb801fc5e0c.Date
+
+relationship 306bff49-9b17-4f7f-b1b7-0e6dbf1801d7
+	joinOnDateBehavior: datePartOnly
+	fromColumn: GRADES.GRADED_DATE
+	toColumn: LocalDateTable_a394c102-ff99-48a4-ab0c-1be1358ffa39.Date
+

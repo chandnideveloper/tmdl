@@ -1,56 +1,57 @@
-table 'payers'
-    lineageTag: 54bf18d7-5680-45db-9f65-7a1011ca6ebd
+table payers
+	lineageTag: 54bf18d7-5680-45db-9f65-7a1011ca6ebd
 
-    column 'Id (payers)'
-        dataType: string
-        lineageTag: fd3ab595-7379-4301-a78d-3d9a5c2060f8
-        summarizeBy: none
-        sourceColumn: Id (payers)
+	column 'Id (payers)'
+		dataType: string
+		lineageTag: fd3ab595-7379-4301-a78d-3d9a5c2060f8
+		summarizeBy: none
+		sourceColumn: Id (payers)
 
-    column 'NAME (payers)'
-        dataType: string
-        lineageTag: 42f58d0c-6d3d-4998-86ce-fb709b6f7da1
-        summarizeBy: none
-        sourceColumn: NAME (payers)
+	column 'NAME (payers)'
+		dataType: string
+		lineageTag: 42f58d0c-6d3d-4998-86ce-fb709b6f7da1
+		summarizeBy: none
+		sourceColumn: NAME (payers)
 
-    column 'ADDRESS (payers)'
-        dataType: string
-        lineageTag: f2f178a3-1840-470e-9cb1-24fe0c05ba9f
-        summarizeBy: none
-        sourceColumn: ADDRESS (payers)
+	column 'ADDRESS (payers)'
+		dataType: string
+		lineageTag: f2f178a3-1840-470e-9cb1-24fe0c05ba9f
+		summarizeBy: none
+		sourceColumn: ADDRESS (payers)
 
-    column 'CITY (payers)'
-        dataType: string
-        lineageTag: 126968bb-ec8c-4c23-b6d2-a3d2d4f9aa9c
-        summarizeBy: none
-        sourceColumn: CITY (payers)
+	column 'CITY (payers)'
+		dataType: string
+		lineageTag: 126968bb-ec8c-4c23-b6d2-a3d2d4f9aa9c
+		summarizeBy: none
+		sourceColumn: CITY (payers)
 
-    column 'State Headquartered'
-        dataType: string
-        lineageTag: 61ad45e6-c400-4536-9ea7-12b7e80bd1cb
-        summarizeBy: none
-        sourceColumn: State Headquartered
+	column 'State Headquartered'
+		dataType: string
+		lineageTag: 61ad45e6-c400-4536-9ea7-12b7e80bd1cb
+		summarizeBy: none
+		sourceColumn: State Headquartered
 
-    column 'ZIP (payers)'
-        dataType: double
-        lineageTag: c8f93d66-62bd-4c0a-b1e7-ce40157d4345
-        summarizeBy: none
-        sourceColumn: ZIP (payers)
+	column 'ZIP (payers)'
+		dataType: double
+		lineageTag: c8f93d66-62bd-4c0a-b1e7-ce40157d4345
+		summarizeBy: none
+		sourceColumn: ZIP (payers)
 
-    column 'Phone'
-        dataType: string
-        lineageTag: cbcf8359-9c5e-4c3f-88cf-90c7b3adf8be
-        summarizeBy: none
-        sourceColumn: Phone
+	column Phone
+		dataType: string
+		lineageTag: cbcf8359-9c5e-4c3f-88cf-90c7b3adf8be
+		summarizeBy: none
+		sourceColumn: Phone
 
-    partition 'payers' = m
-        mode: import
-        source =
-            let
-                Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1NB9uAQnBa6RYGfm5addKbcToYUZJY_5OlBkWxVZRrbU/edit"),
-                #"Navigation 1" = Source{[name = "payers", ItemKind = "Table"]}[Data],
-                #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
-                #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"Id", type text}, {"NAME", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE_HEADQUARTERED", type text}, {"ZIP", type number}, {"PHONE", type text}}),
-                #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"Id", "Id (payers)"}, {"NAME", "NAME (payers)"}, {"ADDRESS", "ADDRESS (payers)"}, {"CITY", "CITY (payers)"}, {"STATE_HEADQUARTERED", "State Headquartered"}, {"ZIP", "ZIP (payers)"}, {"PHONE", "Phone"}})
-            in
-                #"Renamed Columns"
+	partition payers = m
+		mode: import
+		source =
+				let
+				    Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1NB9uAQnBa6RYGfm5addKbcToYUZJY_5OlBkWxVZRrbU/edit"),
+				    #"Navigation 1" = Source{[name = "payers", ItemKind = "Table"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"Id", type text}, {"NAME", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE_HEADQUARTERED", type text}, {"ZIP", type number}, {"PHONE", type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"Id", "Id (payers)"}, {"NAME", "NAME (payers)"}, {"ADDRESS", "ADDRESS (payers)"}, {"CITY", "CITY (payers)"}, {"STATE_HEADQUARTERED", "State Headquartered"}, {"ZIP", "ZIP (payers)"}, {"PHONE", "Phone"}})
+				in
+				    #"Renamed Columns"
+

@@ -29,3 +29,4 @@ table STUDENT_COURSES
 				    #"Navigation 3"
 
 	annotation PBI_ResultType = Table
+

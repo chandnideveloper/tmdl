@@ -1,72 +1,73 @@
-table 'organizations'
-    lineageTag: cd3bde56-d258-4033-945b-0cb002f4bc55
+table organizations
+	lineageTag: cd3bde56-d258-4033-945b-0cb002f4bc55
 
-    column 'Id (organizations)'
-        dataType: string
-        lineageTag: 9229fc15-e44f-49ab-aabe-48569b151c4a
-        summarizeBy: none
-        sourceColumn: Id (organizations)
+	measure 'RLS - Organization Access' =
+			VAR _User = USERNAME()
+			RETURN IF(_User = "akash020102@gmail.com", TRUE(), SELECTEDVALUE('organizations'[Name]) = "MASSACHUSETTS GENERAL HOSPITAL")
+		lineageTag: f61cf216-5325-4d7a-8064-37105d824cc9
 
-    column 'Name'
-        dataType: string
-        lineageTag: 366dc532-233c-41e7-9515-a5b3ea3e4e1b
-        summarizeBy: none
-        sourceColumn: Name
+	column 'Id (organizations)'
+		dataType: string
+		lineageTag: 9229fc15-e44f-49ab-aabe-48569b151c4a
+		summarizeBy: none
+		sourceColumn: Id (organizations)
 
-    column 'ADDRESS (organizations)'
-        dataType: string
-        lineageTag: a3b2b5fe-5a17-4dfe-8f0d-4fd4bdbcb2a5
-        summarizeBy: none
-        sourceColumn: ADDRESS (organizations)
+	column Name
+		dataType: string
+		lineageTag: 366dc532-233c-41e7-9515-a5b3ea3e4e1b
+		summarizeBy: none
+		sourceColumn: Name
 
-    column 'CITY (organizations)'
-        dataType: string
-        lineageTag: d8d3c5b2-74df-472a-a73d-2b5942ebd4c0
-        summarizeBy: none
-        sourceColumn: CITY (organizations)
+	column 'ADDRESS (organizations)'
+		dataType: string
+		lineageTag: a3b2b5fe-5a17-4dfe-8f0d-4fd4bdbcb2a5
+		summarizeBy: none
+		sourceColumn: ADDRESS (organizations)
 
-    column 'STATE (organizations)'
-        dataType: string
-        lineageTag: 0e4cdadf-7767-4417-b6d4-25697261db1c
-        summarizeBy: none
-        sourceColumn: STATE (organizations)
+	column 'CITY (organizations)'
+		dataType: string
+		lineageTag: d8d3c5b2-74df-472a-a73d-2b5942ebd4c0
+		summarizeBy: none
+		sourceColumn: CITY (organizations)
 
-    column 'ZIP (organizations)'
-        dataType: double
-        lineageTag: 2610bdab-ce31-46b4-90c5-55398a40066d
-        summarizeBy: none
-        sourceColumn: ZIP (organizations)
+	column 'STATE (organizations)'
+		dataType: string
+		lineageTag: 0e4cdadf-7767-4417-b6d4-25697261db1c
+		summarizeBy: none
+		sourceColumn: STATE (organizations)
 
-    column 'LAT (organizations)'
-        dataType: double
-        lineageTag: 49ab2a7b-a6c4-40bf-be82-65e2d4dac56d
-        summarizeBy: none
-        sourceColumn: LAT (organizations)
+	column 'ZIP (organizations)'
+		dataType: double
+		lineageTag: 2610bdab-ce31-46b4-90c5-55398a40066d
+		summarizeBy: none
+		sourceColumn: ZIP (organizations)
 
-    column 'LON (organizations)'
-        dataType: double
-        lineageTag: 46255de5-b825-4b2f-b090-2debeba3a631
-        summarizeBy: none
-        sourceColumn: LON (organizations)
+	column 'LAT (organizations)'
+		dataType: double
+		lineageTag: 49ab2a7b-a6c4-40bf-be82-65e2d4dac56d
+		summarizeBy: none
+		sourceColumn: LAT (organizations)
 
-    column 'Username' = 'organizations'[Name]
-        dataType: string
+	column 'LON (organizations)'
+		dataType: double
+		lineageTag: 46255de5-b825-4b2f-b090-2debeba3a631
+		summarizeBy: none
+		sourceColumn: LON (organizations)
 
-        summarizeBy: none
+	column Username = 'organizations'[Name]
+		dataType: string
+		lineageTag: 8fabda86-e2d0-412c-bfb9-7abea90a8aab
+		summarizeBy: none
 
-    measure 'RLS - Organization Access' =
-        VAR _User = USERNAME()
-        RETURN IF(_User = "akash020102@gmail.com", TRUE(), SELECTEDVALUE('organizations'[Name]) = "MASSACHUSETTS GENERAL HOSPITAL")
+	partition organizations = m
+		mode: import
+		source =
+				let
+				    Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Gfqr930PI28eveUiJrS8ikSsyzDUbPE4pJy7nG9ZIUc/edit"),
+				    #"Navigation 1" = Source{[name = "organizations", ItemKind = "Table"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"Id", type text}, {"NAME", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE", type text}, {"ZIP", type number}, {"LAT", type number}, {"LON", type number}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"Id", "Id (organizations)"}, {"NAME", "Name"}, {"ADDRESS", "ADDRESS (organizations)"}, {"CITY", "CITY (organizations)"}, {"STATE", "STATE (organizations)"}, {"ZIP", "ZIP (organizations)"}, {"LAT", "LAT (organizations)"}, {"LON", "LON (organizations)"}})
+				in
+				    #"Renamed Columns"
 
-
-    partition 'organizations' = m
-        mode: import
-        source =
-            let
-                Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Gfqr930PI28eveUiJrS8ikSsyzDUbPE4pJy7nG9ZIUc/edit"),
-                #"Navigation 1" = Source{[name = "organizations", ItemKind = "Table"]}[Data],
-                #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
-                #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"Id", type text}, {"NAME", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE", type text}, {"ZIP", type number}, {"LAT", type number}, {"LON", type number}}),
-                #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"Id", "Id (organizations)"}, {"NAME", "Name"}, {"ADDRESS", "ADDRESS (organizations)"}, {"CITY", "CITY (organizations)"}, {"STATE", "STATE (organizations)"}, {"ZIP", "ZIP (organizations)"}, {"LAT", "LAT (organizations)"}, {"LON", "LON (organizations)"}})
-            in
-                #"Renamed Columns"

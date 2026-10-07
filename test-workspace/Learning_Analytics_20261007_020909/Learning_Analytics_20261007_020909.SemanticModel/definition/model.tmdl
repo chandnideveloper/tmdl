@@ -3,9 +3,15 @@ model Model
 	defaultPowerBIDataSourceVersion: powerBI_V3
 	discourageImplicitMeasures
 	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
 
-	annotation PBI_QueryOrder = ["COURSES", "COURSE_INSTRUCTORS", "STUDENT_COURSES", "INSTRUCTORS", "GRADES", "STUDENTS"]
-	annotation PBI_ProTooling = ["DevMode"]
+annotation PBI_QueryOrder = ["COURSES", "COURSE_INSTRUCTORS", "STUDENT_COURSES", "INSTRUCTORS", "GRADES", "STUDENTS"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
 
 ref table COURSES
 ref table COURSE_INSTRUCTORS
@@ -17,5 +23,10 @@ ref table LocalDateTable_c083b71d17d4f57ca58d7dafbf15dfe0
 ref table LocalDateTable_fde244e8532d86f9086e3b0b6d787aa4
 ref table LocalDateTable_414aadb95d520541952cc6acb50d1ec5
 ref table LocalDateTable_384958272bffa5afc074624f5be4cd1d
+ref table DateTableTemplate_c5808cee-e9e7-495d-8415-984eac35d1c9
+ref table LocalDateTable_60eaf536-8e18-40cf-9b70-c9bf67257442
+ref table LocalDateTable_3a9affc8-3e5d-4226-8127-dcb801fc5e0c
+ref table LocalDateTable_a394c102-ff99-48a4-ab0c-1be1358ffa39
 
 ref cultureInfo en-US
+

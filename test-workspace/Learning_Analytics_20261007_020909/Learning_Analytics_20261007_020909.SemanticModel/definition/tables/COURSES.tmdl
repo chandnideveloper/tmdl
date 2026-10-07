@@ -37,11 +37,11 @@ table COURSES
 		annotation SummarizationSetBy = Automatic
 
 	column CREDITS
-		dataType: int64
+		dataType: double
+		formatString: #,##0
 		lineageTag: 55d744ab-d716-55db-bfe5-175c2d70b20c
 		summarizeBy: sum
 		sourceColumn: CREDITS
-		formatString: #,##0
 
 		annotation SummarizationSetBy = Automatic
 
@@ -57,3 +57,4 @@ table COURSES
 				    #"Navigation 3"
 
 	annotation PBI_ResultType = Table
+

@@ -1,59 +1,26 @@
 model Model
-    culture: en-US
-    defaultPowerBIDataSourceVersion: powerBI_V3
-    sourceQueryCulture: en-US
-    dataAccessOptions
-        legacyRedirects
-        returnErrorValuesAsNull
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
 
 annotation __PBI_TimeIntelligenceEnabled = 1
-annotation PBIDesktopVersion = 2.138.1004.0 (24.11)
 
-ref table 'encounters'
-ref table 'organizations'
-ref table 'patients'
-ref table 'payers'
-ref table 'procedures'
+annotation PBI_ProTooling = ["WebModelingEdit"]
+
+ref table encounters
+ref table organizations
+ref table patients
+ref table payers
+ref table procedures
 ref table 'Top N Procedures(Parameter)'
 ref table 'Metric Selector'
 ref table 'Top N Patients'
-ref table 'LocalDateTable_e771c990-56d0-478b-8b70-a51406f3ae61'
-ref table 'LocalDateTable_71767278-4baf-4cbb-8230-b3b4553d363a'
-ref table 'LocalDateTable_4c4106ae-57b2-44df-82e5-cbf776503b34'
+ref table LocalDateTable_e771c990-56d0-478b-8b70-a51406f3ae61
+ref table LocalDateTable_71767278-4baf-4cbb-8230-b3b4553d363a
+ref table LocalDateTable_4c4106ae-57b2-44df-82e5-cbf776503b34
 
 ref cultureInfo en-US
 
-relationship e5f98f15-70ee-4baf-a8bc-94c37349a72d
-    fromColumn: 'encounters'.'Organization'
-    toColumn: 'organizations'.'Id (organizations)'
-    crossFilteringBehavior: bothDirections
-
-relationship 518b6c88-6c7e-403c-bb50-5f1bac3d6a5c
-    fromColumn: 'encounters'.'Patient'
-    toColumn: 'patients'.'Id (patients)'
-    crossFilteringBehavior: bothDirections
-
-relationship 61374ab9-411e-4ab7-86c5-e4dc4111392e
-    fromColumn: 'encounters'.'Payer'
-    toColumn: 'payers'.'Id (payers)'
-    crossFilteringBehavior: bothDirections
-
-relationship 8e2ecb1b-0170-460c-9762-069896106a89
-    fromColumn: 'procedures'.'Encounter'
-    toColumn: 'encounters'.'Id'
-    crossFilteringBehavior: bothDirections
-
-relationship fa7cffd3-06b7-41de-b891-e6be6e06580e
-    fromColumn: 'encounters'.'Encounter Start Date'
-    toColumn: 'LocalDateTable_e771c990-56d0-478b-8b70-a51406f3ae61'.'Date'
-    joinOnDateBehavior: datePartOnly
-
-relationship b4054635-7aac-4530-8660-2ff21018c83c
-    fromColumn: 'patients'.'Birthdate'
-    toColumn: 'LocalDateTable_71767278-4baf-4cbb-8230-b3b4553d363a'.'Date'
-    joinOnDateBehavior: datePartOnly
-
-relationship 53631e9e-35c0-45e4-9c65-7ad2d3eee9fa
-    fromColumn: 'patients'.'Deathdate'
-    toColumn: 'LocalDateTable_4c4106ae-57b2-44df-82e5-cbf776503b34'.'Date'
-    joinOnDateBehavior: datePartOnly

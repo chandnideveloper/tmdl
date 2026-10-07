@@ -35,20 +35,19 @@ table INSTRUCTORS
 
 	column HIRE_DATE
 		dataType: dateTime
+		formatString: Long Date
 		lineageTag: a80abd68-2c6d-51bf-8b86-7726e667db93
 		summarizeBy: none
 		sourceColumn: HIRE_DATE
-		formatString: General Date
+
+		variation Variation
+			isDefault
+			relationship: 81961f10-bbe4-416b-a104-c9d9a5234ffb
+			defaultHierarchy: LocalDateTable_3a9affc8-3e5d-4226-8127-dcb801fc5e0c.'Date Hierarchy'
 
 		annotation SummarizationSetBy = Automatic
 
-	column 'Instructor Name'
-		dataType: string
-		lineageTag: ccbf37a9-b3ec-5cef-984b-47ea393d084c
-		summarizeBy: none
-		sourceColumn: Instructor Name
-
-		annotation SummarizationSetBy = Automatic
+		annotation UnderlyingDateTimeDataType = Date
 
 	partition INSTRUCTORS = m
 		mode: import
@@ -62,3 +61,4 @@ table INSTRUCTORS
 				    #"Navigation 3"
 
 	annotation PBI_ResultType = Table
+

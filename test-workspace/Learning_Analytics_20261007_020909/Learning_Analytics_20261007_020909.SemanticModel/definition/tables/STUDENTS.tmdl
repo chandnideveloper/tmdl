@@ -37,11 +37,10 @@ table STUDENTS
 		annotation SummarizationSetBy = Automatic
 
 	column DOB
-		dataType: dateTime
+		dataType: string
 		lineageTag: dfefa085-5358-5930-9edb-6f23d11cf12d
 		summarizeBy: none
 		sourceColumn: DOB
-		formatString: General Date
 
 		annotation SummarizationSetBy = Automatic
 
@@ -50,14 +49,6 @@ table STUDENTS
 		lineageTag: ae609570-f4af-5c72-bdc7-14c691ef96ea
 		summarizeBy: none
 		sourceColumn: EMAIL
-
-		annotation SummarizationSetBy = Automatic
-
-	column Age
-		dataType: string
-		lineageTag: 6f5e3991-b855-559b-b091-7fb1b9e73031
-		summarizeBy: none
-		sourceColumn: Age
 
 		annotation SummarizationSetBy = Automatic
 
@@ -73,3 +64,4 @@ table STUDENTS
 				    #"Navigation 3"
 
 	annotation PBI_ResultType = Table
+

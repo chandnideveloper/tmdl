@@ -132,12 +132,19 @@ table GRADES
 
 	column GRADED_DATE
 		dataType: dateTime
+		formatString: Long Date
 		lineageTag: 2cce7886-b84c-54df-be81-02188581e667
 		summarizeBy: none
 		sourceColumn: GRADED_DATE
-		formatString: General Date
+
+		variation Variation
+			isDefault
+			relationship: 306bff49-9b17-4f7f-b1b7-0e6dbf1801d7
+			defaultHierarchy: LocalDateTable_a394c102-ff99-48a4-ab0c-1be1358ffa39.'Date Hierarchy'
 
 		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
 
 	partition GRADES = m
 		mode: import
@@ -151,3 +158,4 @@ table GRADES
 				    #"Navigation 3"
 
 	annotation PBI_ResultType = Table
+
