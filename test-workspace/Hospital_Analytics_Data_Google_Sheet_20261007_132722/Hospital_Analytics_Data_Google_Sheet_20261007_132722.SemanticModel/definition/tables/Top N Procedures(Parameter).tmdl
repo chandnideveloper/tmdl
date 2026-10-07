@@ -9,7 +9,7 @@ table 'Top N Procedures(Parameter)'
 	measure 'Top N Procedures Filter' = IF([Procedure Rank(Top N Procedure Parameter)] <= INT(SELECTEDVALUE('Top N Procedures(Parameter)'[Value])), 1, 0)
 		lineageTag: 94140e63-a764-48fc-aafb-adf9591d876e
 
-	column Value
+	column 'Value'
 		lineageTag: f13f6051-359d-4146-8bc3-0cb4a2edd0d9
 		isNameInferred
 		sourceColumn: [Value]
