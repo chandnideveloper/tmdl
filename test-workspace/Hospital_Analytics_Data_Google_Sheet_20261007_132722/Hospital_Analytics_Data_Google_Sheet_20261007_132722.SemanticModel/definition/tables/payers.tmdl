@@ -1,4 +1,4 @@
-table payers
+table 'payers'
 	lineageTag: 54bf18d7-5680-45db-9f65-7a1011ca6ebd
 
 	column 'Id (payers)'
@@ -37,13 +37,13 @@ table payers
 		summarizeBy: none
 		sourceColumn: ZIP (payers)
 
-	column Phone
+	column 'Phone'
 		dataType: string
 		lineageTag: cbcf8359-9c5e-4c3f-88cf-90c7b3adf8be
 		summarizeBy: none
 		sourceColumn: Phone
 
-	partition payers = m
+	partition 'payers' = m
 		mode: import
 		source =
 				let
