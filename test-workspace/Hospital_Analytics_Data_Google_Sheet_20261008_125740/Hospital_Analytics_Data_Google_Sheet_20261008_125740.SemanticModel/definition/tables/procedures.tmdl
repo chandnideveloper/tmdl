@@ -1,0 +1,82 @@
+table 'procedures'
+    lineageTag: 389fe33b-67ac-4cfe-96f9-fc0999dd8a70
+
+    column 'START (procedures)'
+        dataType: string
+        lineageTag: e82952c8-8dea-4204-b6d8-f67eb7705f7c
+        summarizeBy: none
+        sourceColumn: START (procedures)
+
+    column 'STOP (procedures)'
+        dataType: string
+        lineageTag: 5b254ef6-a38b-4927-9117-69bed6e17000
+        summarizeBy: none
+        sourceColumn: STOP (procedures)
+
+    column 'PATIENT (procedures)'
+        dataType: string
+        lineageTag: 5258978e-39d2-4d55-8f7f-82fb743d86f0
+        summarizeBy: none
+        sourceColumn: PATIENT (procedures)
+
+    column 'Encounter'
+        dataType: string
+        lineageTag: cfc95d29-7ed4-4306-8cd1-d1c5db8de164
+        summarizeBy: none
+        sourceColumn: Encounter
+
+    column 'CODE (procedures)'
+        dataType: double
+        lineageTag: 8a94b5f2-fbf8-49de-ab60-005bc553bcc2
+        summarizeBy: none
+        sourceColumn: CODE (procedures)
+
+    column 'DESCRIPTION (procedures)'
+        dataType: string
+        lineageTag: a1a67a1a-77ec-4dc9-8267-c59cd341f580
+        summarizeBy: none
+        sourceColumn: DESCRIPTION (procedures)
+
+    column 'Base Cost'
+        dataType: double
+        lineageTag: 6830c835-8663-4b7f-b46d-7e128fc0610b
+        summarizeBy: none
+        sourceColumn: Base Cost
+
+    column 'REASONCODE (procedures)'
+        dataType: double
+        lineageTag: 560ddb10-6141-493d-bbaf-8fee5a2d3afb
+        summarizeBy: none
+        sourceColumn: REASONCODE (procedures)
+
+    column 'REASONDESCRIPTION (procedures)'
+        dataType: string
+        lineageTag: 894cbb49-d891-4403-8d8f-493786e2a8e4
+        summarizeBy: none
+        sourceColumn: REASONDESCRIPTION (procedures)
+
+    column 'DESCRIPTION (procedures) Set' = /* LLM conversion failed - manual review needed */ {'name': 'DESCRIPTION__procedures__Set', 'table': 'procedures', 'base_field': 'DESCRIPTION (procedures)', 'members_list': '"Admission to burn unit", "Admission to long stay hospital", "Admission to orthopedic department", "Admission to trauma surgery department", "Ankle X-ray", "Antenatal RhD antibody screening", "Assessment of health and social care needs (procedure)"'}
+        dataType: string
+
+        summarizeBy: none
+
+    measure 'Procedure Rank(Top N Procedure Parameter)' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure 'Top N Procedures Filter' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure 'Selected Metric' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    partition 'procedures' = m
+        mode: import
+        source =
+            let Source = Sql.Database("", "Patients.xlsx"),
+            #"Navigation 1" = Source{[Schema="[procedures$]",Item="procedures"]}[Data],
+                            #"Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"START", "START (procedures)"}, {"STOP", "STOP (procedures)"}, {"PATIENT", "PATIENT (procedures)"}, {"ENCOUNTER", "Encounter"}, {"CODE", "CODE (procedures)"}, {"DESCRIPTION", "DESCRIPTION (procedures)"}, {"BASE_COST", "Base Cost"}, {"REASONCODE", "REASONCODE (procedures)"}, {"REASONDESCRIPTION", "REASONDESCRIPTION (procedures)"}})
+                        in
+                            #"Renamed Columns"

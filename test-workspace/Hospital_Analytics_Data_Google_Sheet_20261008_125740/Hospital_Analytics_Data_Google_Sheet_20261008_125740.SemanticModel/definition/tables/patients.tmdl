@@ -1,0 +1,171 @@
+table 'patients'
+    lineageTag: 2b5a3b10-9495-492b-bb48-6883807fb8c2
+
+    column 'Id (patients)'
+        dataType: string
+        lineageTag: 9e257deb-eaf6-4563-89ba-ff014f02585a
+        summarizeBy: none
+        sourceColumn: Id (patients)
+
+    column 'Birthdate'
+        sourceColumn: Birthdate
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: 381a3115-2f7c-4f19-adfc-0387e154553f
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: 1bf84669-f869-4a97-99f9-81cb061c3cbd
+            defaultHierarchy: LocalDateTable_664c9a03-18db-4ba0-a747-f4c7f00f3ecf.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    column 'Deathdate'
+        sourceColumn: Deathdate
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: 90f636b4-f15f-4cc2-a588-1d40ea8876d5
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: 60d5717f-ab1a-4b7e-93fb-313cae5c1653
+            defaultHierarchy: LocalDateTable_2d10d59b-0c66-48d2-991a-820d42832e43.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    column 'Prefix'
+        dataType: string
+        lineageTag: 156dded6-1888-4157-8e60-90677066fabc
+        summarizeBy: none
+        sourceColumn: Prefix
+
+    column 'First'
+        dataType: string
+        lineageTag: 3599f8b4-f363-41e1-b878-24e12378846e
+        summarizeBy: none
+        sourceColumn: First
+
+    column 'Last'
+        dataType: string
+        lineageTag: f3664675-addd-4182-b4bc-d7ac695c2359
+        summarizeBy: none
+        sourceColumn: Last
+
+    column 'Suffix'
+        dataType: string
+        lineageTag: 40218b46-9d5c-4e74-8ef1-93c096badffe
+        summarizeBy: none
+        sourceColumn: Suffix
+
+    column 'Maiden'
+        dataType: string
+        lineageTag: 06d2b33e-6cf0-4e7f-9248-539012ade7e3
+        summarizeBy: none
+        sourceColumn: Maiden
+
+    column 'Marital'
+        dataType: string
+        lineageTag: e2ea6e95-d808-4090-8e55-67965d777e03
+        summarizeBy: none
+        sourceColumn: Marital
+
+    column 'Race'
+        dataType: string
+        lineageTag: c031d788-b5c7-49cb-b6dc-ce22177c6421
+        summarizeBy: none
+        sourceColumn: Race
+
+    column 'Ethnicity'
+        dataType: string
+        lineageTag: 6bf2733a-5b41-427b-86aa-e49a6e698670
+        summarizeBy: none
+        sourceColumn: Ethnicity
+
+    column 'Gender'
+        dataType: string
+        lineageTag: 761ce6d2-dcfd-4bb1-a0d1-10308325a7fd
+        summarizeBy: none
+        sourceColumn: Gender
+
+    column 'Birthplace'
+        dataType: string
+        lineageTag: 1d33fa97-d74a-482d-bf73-dfe35f5578ee
+        summarizeBy: none
+        sourceColumn: Birthplace
+
+    column 'Address'
+        dataType: string
+        lineageTag: cfea801f-b5eb-466c-b1e4-e45726129596
+        summarizeBy: none
+        sourceColumn: Address
+
+    column 'City'
+        dataType: string
+        lineageTag: a61df469-9fa1-4231-9e00-40f57558a261
+        summarizeBy: none
+        sourceColumn: City
+
+    column 'State'
+        dataType: string
+        lineageTag: fe5a6714-44d6-4d92-8c2a-230cbe9cc3f3
+        summarizeBy: none
+        sourceColumn: State
+
+    column 'County'
+        dataType: string
+        lineageTag: 1afdc707-6a12-475f-9143-bb1c4bfc1d72
+        summarizeBy: none
+        sourceColumn: County
+
+    column 'ZIP (organizations)'
+        dataType: double
+        lineageTag: 3d8f37ff-f55d-4239-a806-915f2dd30d93
+        summarizeBy: none
+        sourceColumn: ZIP (organizations)
+
+    column 'LAT (organizations)'
+        dataType: double
+        lineageTag: aa65a94f-80c1-45a5-ac17-18d6ee2d2e46
+        summarizeBy: none
+        sourceColumn: LAT (organizations)
+
+    column 'LON (organizations)'
+        dataType: double
+        lineageTag: ed2c1988-0739-45d6-9127-36897548875c
+        summarizeBy: none
+        sourceColumn: LON (organizations)
+
+    measure 'SUM of Avg Visits per Patient (patients)' =
+        SUM('patients'[Avg Visits per Patient])
+
+
+    measure 'SUM of Visits per Patient (patients)' =
+        SUM('patients'[Visits per Patient])
+
+
+    measure 'Total Patients (LOD)' =
+        -- ERROR CONVERTING: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure 'Visits per Patient' =
+        -- ERROR CONVERTING: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure 'Avg Visits per Patient' =
+        -- ERROR CONVERTING: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    partition 'patients' = m
+        mode: import
+        source =
+            let Source = Sql.Database("", "Patients.xlsx"),
+            #"Navigation 1" = Source{[Schema="[patients$]",Item="patients"]}[Data],
+                            #"Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"Id", "Id (patients)"}, {"BIRTHDATE", "Birthdate"}, {"DEATHDATE", "Deathdate"}, {"PREFIX", "Prefix"}, {"FIRST", "First"}, {"LAST", "Last"}, {"SUFFIX", "Suffix"}, {"MAIDEN", "Maiden"}, {"MARITAL", "Marital"}, {"RACE", "Race"}, {"ETHNICITY", "Ethnicity"}, {"GENDER", "Gender"}, {"BIRTHPLACE", "Birthplace"}, {"ADDRESS", "Address"}, {"CITY", "City"}, {"STATE", "State"}, {"COUNTY", "County"}, {"ZIP", "ZIP (organizations)"}, {"LAT", "LAT (organizations)"}, {"LON", "LON (organizations)"}})
+                        in
+                            #"Renamed Columns"

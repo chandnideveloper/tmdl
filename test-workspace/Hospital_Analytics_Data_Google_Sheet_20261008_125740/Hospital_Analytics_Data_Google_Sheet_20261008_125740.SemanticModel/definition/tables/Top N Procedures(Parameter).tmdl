@@ -1,0 +1,20 @@
+table 'Top N Procedures(Parameter)'
+
+    column 'Value'
+        formatString: 0
+        summarizeBy: sum
+        isNameInferred
+        sourceColumn: 'Top N Procedures(Parameter)'[Value]
+        annotation SummarizationSetBy = Automatic
+
+    partition 'Top N Procedures(Parameter)' = calculated
+        mode: import
+        source = DATATABLE("Value", INTEGER, {{5}, {10}, {20}, {30}, {50}, {9999}})
+
+    measure 'SelectedTopNProcedures(Parameter)'
+        expression: SELECTEDVALUE('Top N Procedures(Parameter)'[Value], 10)
+        formatString: 0
+        isHidden: true
+
+    annotation PBI_Id = 13d550e447ca497ca3cd73f819f19f31
+    

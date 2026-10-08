@@ -1,0 +1,53 @@
+table 'payers'
+    lineageTag: 96a5d095-a3d6-4e34-88f2-b306c373df18
+
+    column 'Id (payers)'
+        dataType: string
+        lineageTag: 718034bc-a0a0-45f5-93e7-a9e39946de03
+        summarizeBy: none
+        sourceColumn: Id (payers)
+
+    column 'NAME (payers)'
+        dataType: string
+        lineageTag: 692d0655-311d-4958-a02b-846afb4e2c80
+        summarizeBy: none
+        sourceColumn: NAME (payers)
+
+    column 'ADDRESS (payers)'
+        dataType: string
+        lineageTag: 8e47d366-8f0b-46af-9947-aa727cfa61ed
+        summarizeBy: none
+        sourceColumn: ADDRESS (payers)
+
+    column 'CITY (payers)'
+        dataType: string
+        lineageTag: f7c9ac38-9469-4907-9e9b-5752e56e147b
+        summarizeBy: none
+        sourceColumn: CITY (payers)
+
+    column 'State Headquartered'
+        dataType: string
+        lineageTag: baaeedb3-d6f4-4e0e-8516-dceaf130bd53
+        summarizeBy: none
+        sourceColumn: State Headquartered
+
+    column 'ZIP (payers)'
+        dataType: double
+        lineageTag: 317ad580-290a-4f0e-8146-444cfbf8c33c
+        summarizeBy: none
+        sourceColumn: ZIP (payers)
+
+    column 'Phone'
+        dataType: string
+        lineageTag: 0ba93443-13cb-4f01-af96-d3710a93e39f
+        summarizeBy: none
+        sourceColumn: Phone
+
+    partition 'payers' = m
+        mode: import
+        source =
+            let Source = Sql.Database("", "Patients.xlsx"),
+            #"Navigation 1" = Source{[Schema="[payers$]",Item="payers"]}[Data],
+                            #"Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"Id", "Id (payers)"}, {"NAME", "NAME (payers)"}, {"ADDRESS", "ADDRESS (payers)"}, {"CITY", "CITY (payers)"}, {"STATE_HEADQUARTERED", "State Headquartered"}, {"ZIP", "ZIP (payers)"}, {"PHONE", "Phone"}})
+                        in
+                            #"Renamed Columns"

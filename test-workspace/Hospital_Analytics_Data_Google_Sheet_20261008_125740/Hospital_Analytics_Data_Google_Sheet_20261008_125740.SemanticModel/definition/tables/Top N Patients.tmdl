@@ -1,0 +1,20 @@
+table 'Top N Patients'
+
+    column 'Value'
+        formatString: 0
+        summarizeBy: sum
+        isNameInferred
+        sourceColumn: 'Top N Patients'[Value]
+        annotation SummarizationSetBy = Automatic
+
+    partition 'Top N Patients' = calculated
+        mode: import
+        source = GENERATESERIES(1, 1381, 1)
+
+    measure 'SelectedTopNPatients'
+        expression: SELECTEDVALUE('Top N Patients'[Value], 29)
+        formatString: 0
+        isHidden: true
+
+    annotation PBI_Id = c518c604987e4d7aa175b4860140b38f
+    
