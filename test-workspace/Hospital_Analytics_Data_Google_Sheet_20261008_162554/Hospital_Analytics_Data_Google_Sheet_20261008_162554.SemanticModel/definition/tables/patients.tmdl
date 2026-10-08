@@ -1,0 +1,174 @@
+table 'patients'
+    lineageTag: c5b0a06f-decf-4cc1-98f6-5882f195e5bc
+
+    column 'Id (patients)'
+        dataType: string
+        lineageTag: ba3cdf43-9b14-4ee1-ab34-12d2d72743d1
+        summarizeBy: none
+        sourceColumn: Id (patients)
+
+    column 'Birthdate'
+        sourceColumn: Birthdate
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: f2d383a5-9c38-401c-a995-20656557bde9
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: 6ca0ff52-c60a-498e-9ed3-d9ef363f107a
+            defaultHierarchy: LocalDateTable_f970cf7a-acda-4ca7-b33c-1145489bacc3.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    column 'Deathdate'
+        sourceColumn: Deathdate
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: a25274b8-ae5f-44fd-b56e-856d25cb4fc1
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: 539b54d2-551f-4b97-b1c8-79b7dd796bfe
+            defaultHierarchy: LocalDateTable_3bfdcfc0-ee13-49cd-9f24-8a1a920cf6a2.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    column 'Prefix'
+        dataType: string
+        lineageTag: 8199a132-00ee-4fd6-8797-c34d56812d86
+        summarizeBy: none
+        sourceColumn: Prefix
+
+    column 'First'
+        dataType: string
+        lineageTag: 823ee0bb-35e6-4cb6-9bb4-4078314db35b
+        summarizeBy: none
+        sourceColumn: First
+
+    column 'Last'
+        dataType: string
+        lineageTag: 36e20f36-ffa3-4bba-9875-b28434470882
+        summarizeBy: none
+        sourceColumn: Last
+
+    column 'Suffix'
+        dataType: string
+        lineageTag: b960221d-6437-4322-8ebb-370abbaa5f2c
+        summarizeBy: none
+        sourceColumn: Suffix
+
+    column 'Maiden'
+        dataType: string
+        lineageTag: b41003f7-5430-4f30-89a5-a0be0e8aa4b3
+        summarizeBy: none
+        sourceColumn: Maiden
+
+    column 'Marital'
+        dataType: string
+        lineageTag: bfb9d551-a206-41f9-95f7-971b93cbbbd3
+        summarizeBy: none
+        sourceColumn: Marital
+
+    column 'Race'
+        dataType: string
+        lineageTag: d0255010-b77b-4436-a10b-a5529781e5c5
+        summarizeBy: none
+        sourceColumn: Race
+
+    column 'Ethnicity'
+        dataType: string
+        lineageTag: 61803013-7190-4f6e-a26b-9cf67000566e
+        summarizeBy: none
+        sourceColumn: Ethnicity
+
+    column 'Gender'
+        dataType: string
+        lineageTag: ff470329-b686-4f76-9e22-7d805fda849b
+        summarizeBy: none
+        sourceColumn: Gender
+
+    column 'Birthplace'
+        dataType: string
+        lineageTag: e094c387-836d-48ec-90e8-27821c339f8b
+        summarizeBy: none
+        sourceColumn: Birthplace
+
+    column 'Address'
+        dataType: string
+        lineageTag: e8ee07b7-d1fb-4dbe-80bd-7461621eee58
+        summarizeBy: none
+        sourceColumn: Address
+
+    column 'City'
+        dataType: string
+        lineageTag: 752d5b07-63a2-4a32-a3fc-40d34189b4d1
+        summarizeBy: none
+        sourceColumn: City
+
+    column 'State'
+        dataType: string
+        lineageTag: 73f7676d-7f47-40ec-8457-03fc47e53f36
+        summarizeBy: none
+        sourceColumn: State
+
+    column 'County'
+        dataType: string
+        lineageTag: 5c470898-4177-432c-b583-4b35554a2c75
+        summarizeBy: none
+        sourceColumn: County
+
+    column 'ZIP (organizations)'
+        dataType: double
+        lineageTag: 37031f5f-625d-4e08-9260-672d7078ff2a
+        summarizeBy: none
+        sourceColumn: ZIP (organizations)
+
+    column 'LAT (organizations)'
+        dataType: double
+        lineageTag: bffe33ea-3ad2-4f9e-8ab5-2ab9d939bd0b
+        summarizeBy: none
+        sourceColumn: LAT (organizations)
+
+    column 'LON (organizations)'
+        dataType: double
+        lineageTag: fcd1d6f0-fea5-42e8-b70b-0203bf96e790
+        summarizeBy: none
+        sourceColumn: LON (organizations)
+
+    measure 'SUM of Avg Visits per Patient (patients)' =
+        SUM('patients'[Avg Visits per Patient])
+
+
+    measure 'SUM of Visits per Patient (patients)' =
+        SUM('patients'[Visits per Patient])
+
+
+    measure 'Total Patients (LOD)' =
+        -- ERROR CONVERTING: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure 'Visits per Patient' =
+        -- ERROR CONVERTING: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure 'Avg Visits per Patient' =
+        -- ERROR CONVERTING: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    partition 'patients' = m
+        mode: import
+        source =
+            let Source = Excel.Workbook(Web.Contents("https://www.googleapis.com/drive/v3/files/1Sd4bEK0Fm9q7yTVOwI4GdtixeeY8hPkKqpvnI4WdixA/export?mimeType=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"), null, true),
+            #"Navigation 1" = Source{[Item="patients",Kind="Sheet"]}[Data],
+            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars=true]),
+            #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"Id", type text}, {"BIRTHDATE", type date}, {"DEATHDATE", type date}, {"PREFIX", type text}, {"FIRST", type text}, {"LAST", type text}, {"SUFFIX", type text}, {"MAIDEN", type text}, {"MARITAL", type text}, {"RACE", type text}, {"ETHNICITY", type text}, {"GENDER", type text}, {"BIRTHPLACE", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE", type text}, {"COUNTY", type text}, {"ZIP", type number}, {"LAT", type number}, {"LON", type number}}),
+            #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"Id", "Id (patients)"}, {"BIRTHDATE", "Birthdate"}, {"DEATHDATE", "Deathdate"}, {"PREFIX", "Prefix"}, {"FIRST", "First"}, {"LAST", "Last"}, {"SUFFIX", "Suffix"}, {"MAIDEN", "Maiden"}, {"MARITAL", "Marital"}, {"RACE", "Race"}, {"ETHNICITY", "Ethnicity"}, {"GENDER", "Gender"}, {"BIRTHPLACE", "Birthplace"}, {"ADDRESS", "Address"}, {"CITY", "City"}, {"STATE", "State"}, {"COUNTY", "County"}, {"ZIP", "ZIP (organizations)"}, {"LAT", "LAT (organizations)"}, {"LON", "LON (organizations)"}}),
+                            #"Renamed Columns" = Table.RenameColumns(#"Renamed Columns", {{"Id", "Id (patients)"}, {"BIRTHDATE", "Birthdate"}, {"DEATHDATE", "Deathdate"}, {"PREFIX", "Prefix"}, {"FIRST", "First"}, {"LAST", "Last"}, {"SUFFIX", "Suffix"}, {"MAIDEN", "Maiden"}, {"MARITAL", "Marital"}, {"RACE", "Race"}, {"ETHNICITY", "Ethnicity"}, {"GENDER", "Gender"}, {"BIRTHPLACE", "Birthplace"}, {"ADDRESS", "Address"}, {"CITY", "City"}, {"STATE", "State"}, {"COUNTY", "County"}, {"ZIP", "ZIP (organizations)"}, {"LAT", "LAT (organizations)"}, {"LON", "LON (organizations)"}})
+                        in
+                            #"Renamed Columns"
