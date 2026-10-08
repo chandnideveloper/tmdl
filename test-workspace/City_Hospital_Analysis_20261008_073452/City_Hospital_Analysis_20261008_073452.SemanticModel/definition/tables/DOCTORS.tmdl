@@ -1,0 +1,106 @@
+table DOCTORS
+	lineageTag: 146dc36d-f799-5221-84b1-61c0cf22e342
+
+	measure 'Average Consultation Fee' = AVERAGE('DOCTORS'[CONSULTATION_FEE])
+		lineageTag: 3d6e6846-10d1-56ba-8008-fec9a1e9ddcd
+
+	measure 'Average Doctor Experience(Years)' = AVERAGE('DOCTORS'[EXPERIENCE_YEARS])
+		lineageTag: a31580bc-eb93-5588-87cb-6966f3ae95b5
+
+	column ExperienceLevel = 'DOCTORS'[CONSULTATION_FEE]
+		dataType: string
+		lineageTag: 22115238-b671-506a-b58d-83b3d1595973
+		summarizeBy: none
+
+	column DOCTOR_ID
+		dataType: string
+		lineageTag: d8b5fade-0ad6-5db2-8f51-66ba0d2bfc2c
+		summarizeBy: none
+		sourceColumn: DOCTOR_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column FULL_NAME
+		dataType: string
+		lineageTag: 5b0df386-a5d7-5d5f-a31a-3b9e4f5cb114
+		summarizeBy: none
+		sourceColumn: FULL_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column SPECIALIZATION
+		dataType: string
+		lineageTag: 9fff2f5f-8a02-5b25-9196-d8057110ae95
+		summarizeBy: none
+		sourceColumn: SPECIALIZATION
+
+		annotation SummarizationSetBy = Automatic
+
+	column DEPARTMENT
+		dataType: string
+		lineageTag: 23b4683f-2cc3-54ab-8799-8bf7341d3d86
+		summarizeBy: none
+		sourceColumn: DEPARTMENT
+
+		annotation SummarizationSetBy = Automatic
+
+	column CONTACT_NUMBER
+		dataType: string
+		lineageTag: 661022e6-91ff-5593-8c27-59358d679297
+		summarizeBy: none
+		sourceColumn: CONTACT_NUMBER
+
+		annotation SummarizationSetBy = Automatic
+
+	column EMAIL_ADDRESS
+		dataType: string
+		lineageTag: c636fe9b-9a4f-5b2d-81f4-7beefae718ff
+		summarizeBy: none
+		sourceColumn: EMAIL_ADDRESS
+
+		annotation SummarizationSetBy = Automatic
+
+	column AVAILABILITY_DAYS
+		dataType: string
+		lineageTag: 71d10116-f11f-5f70-a33d-4c774aa54e9b
+		summarizeBy: none
+		sourceColumn: AVAILABILITY_DAYS
+
+		annotation SummarizationSetBy = Automatic
+
+	column CONSULTATION_FEE
+		dataType: int64
+		lineageTag: bb03d822-d2ce-553b-a3fe-5a16bf61e824
+		summarizeBy: sum
+		sourceColumn: CONSULTATION_FEE
+		formatString: #,##0
+
+		annotation SummarizationSetBy = Automatic
+
+	column EXPERIENCE_YEARS
+		dataType: int64
+		lineageTag: f95c7394-aaa8-5b8b-9925-2dc4019c1da0
+		summarizeBy: sum
+		sourceColumn: EXPERIENCE_YEARS
+		formatString: #,##0
+
+		annotation SummarizationSetBy = Automatic
+
+	column REGISTRATION_NUMBER
+		dataType: string
+		lineageTag: 0eaf5bb1-e7de-5441-8fa8-61c027f36dd8
+		summarizeBy: none
+		sourceColumn: REGISTRATION_NUMBER
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DOCTORS = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("server.database.windows.net", "COMPUTE_WH"),
+				    Result = Value.NativeQuery(Source, "SELECT * FROM PUBLIC.doctors", null, [EnableFolding=false])
+				in
+				    Result
+
+	annotation PBI_ResultType = Table
