@@ -1,0 +1,85 @@
+table 'procedures'
+    lineageTag: a8b2ac1d-3ba4-4fdd-8109-bc4ce36bdbf9
+
+    column 'START (procedures)'
+        dataType: string
+        lineageTag: 955ef5d7-8836-49c1-9ec5-6783c3a559b3
+        summarizeBy: none
+        sourceColumn: START (procedures)
+
+    column 'STOP (procedures)'
+        dataType: string
+        lineageTag: 8907031f-f7c9-44c6-beec-368ab1ff4602
+        summarizeBy: none
+        sourceColumn: STOP (procedures)
+
+    column 'PATIENT (procedures)'
+        dataType: string
+        lineageTag: 22913a8a-00f3-469f-88b6-c4c660ff2e86
+        summarizeBy: none
+        sourceColumn: PATIENT (procedures)
+
+    column 'Encounter'
+        dataType: string
+        lineageTag: a02653be-deba-442c-b98b-f23cd95bb1b0
+        summarizeBy: none
+        sourceColumn: Encounter
+
+    column 'CODE (procedures)'
+        dataType: double
+        lineageTag: 1942b23f-0bb4-46d3-b4dd-c004fd29ea45
+        summarizeBy: none
+        sourceColumn: CODE (procedures)
+
+    column 'DESCRIPTION (procedures)'
+        dataType: string
+        lineageTag: 23e3362a-ff9b-4dd3-a1c0-9a523a8cb96e
+        summarizeBy: none
+        sourceColumn: DESCRIPTION (procedures)
+
+    column 'Base Cost'
+        dataType: double
+        lineageTag: f8ef5277-3a62-4994-8a4f-9be8cb6e91be
+        summarizeBy: none
+        sourceColumn: Base Cost
+
+    column 'REASONCODE (procedures)'
+        dataType: double
+        lineageTag: 1c6c8e33-716f-4d7d-bfc6-584e12736bca
+        summarizeBy: none
+        sourceColumn: REASONCODE (procedures)
+
+    column 'REASONDESCRIPTION (procedures)'
+        dataType: string
+        lineageTag: 390f0ba1-ef99-4fc9-8ee6-d9bba1d15dc0
+        summarizeBy: none
+        sourceColumn: REASONDESCRIPTION (procedures)
+
+    column 'DESCRIPTION (procedures) Set' = /* LLM conversion failed - manual review needed */ {'name': 'DESCRIPTION__procedures__Set', 'table': 'procedures', 'base_field': 'DESCRIPTION (procedures)', 'members_list': '"Admission to burn unit", "Admission to long stay hospital", "Admission to orthopedic department", "Admission to trauma surgery department", "Ankle X-ray", "Antenatal RhD antibody screening", "Assessment of health and social care needs (procedure)"'}
+        dataType: string
+
+        summarizeBy: none
+
+    measure 'Procedure Rank(Top N Procedure Parameter)' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure 'Top N Procedures Filter' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure 'Selected Metric' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    partition 'procedures' = m
+        mode: import
+        source =
+            let Source = Excel.Workbook(Web.Contents("https://www.googleapis.com/drive/v3/files/1Sd4bEK0Fm9q7yTVOwI4GdtixeeY8hPkKqpvnI4WdixA/export?mimeType=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"), null, true),
+            #"Navigation 1" = Source{[Item="procedures",Kind="Sheet"]}[Data],
+            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars=true]),
+            #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"START", type text}, {"STOP", type text}, {"PATIENT", type text}, {"ENCOUNTER", type text}, {"CODE", type number}, {"DESCRIPTION", type text}, {"BASE_COST", type number}, {"REASONCODE", type number}, {"REASONDESCRIPTION", type text}}),
+            #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"START", "START (procedures)"}, {"STOP", "STOP (procedures)"}, {"PATIENT", "PATIENT (procedures)"}, {"ENCOUNTER", "Encounter"}, {"CODE", "CODE (procedures)"}, {"DESCRIPTION", "DESCRIPTION (procedures)"}, {"BASE_COST", "Base Cost"}, {"REASONCODE", "REASONCODE (procedures)"}, {"REASONDESCRIPTION", "REASONDESCRIPTION (procedures)"}}),
+                            #"Renamed Columns" = Table.RenameColumns(#"Renamed Columns", {{"START", "START (procedures)"}, {"STOP", "STOP (procedures)"}, {"PATIENT", "PATIENT (procedures)"}, {"ENCOUNTER", "Encounter"}, {"CODE", "CODE (procedures)"}, {"DESCRIPTION", "DESCRIPTION (procedures)"}, {"BASE_COST", "Base Cost"}, {"REASONCODE", "REASONCODE (procedures)"}, {"REASONDESCRIPTION", "REASONDESCRIPTION (procedures)"}})
+                        in
+                            #"Renamed Columns"

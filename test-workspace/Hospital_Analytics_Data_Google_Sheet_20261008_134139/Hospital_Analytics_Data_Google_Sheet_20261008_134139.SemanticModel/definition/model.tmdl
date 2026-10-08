@@ -1,0 +1,59 @@
+model Model
+    culture: en-US
+    defaultPowerBIDataSourceVersion: powerBI_V3
+    sourceQueryCulture: en-US
+    dataAccessOptions
+        legacyRedirects
+        returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+annotation PBIDesktopVersion = 2.138.1004.0 (24.11)
+
+ref table 'encounters'
+ref table 'organizations'
+ref table 'patients'
+ref table 'payers'
+ref table 'procedures'
+ref table 'Top N Procedures(Parameter)'
+ref table 'Metric Selector'
+ref table 'Top N Patients'
+ref table 'LocalDateTable_c3c89c3b-a603-43d4-89da-a6c5c3072100'
+ref table 'LocalDateTable_e79a9a17-d857-49ff-98c1-43497a990aff'
+ref table 'LocalDateTable_7cd1f450-2f89-4f0b-8ba9-661bc40023c1'
+
+ref cultureInfo en-US
+
+relationship 91facbe5-3819-4685-99ef-9554deaca319
+    fromColumn: 'encounters'.'Organization'
+    toColumn: 'organizations'.'Id (organizations)'
+    crossFilteringBehavior: bothDirections
+
+relationship 1176585c-44ad-4264-af30-a7fe1129140d
+    fromColumn: 'encounters'.'Patient'
+    toColumn: 'patients'.'Id (patients)'
+    crossFilteringBehavior: bothDirections
+
+relationship 7a64d900-0139-4b87-8919-52a047d669fd
+    fromColumn: 'encounters'.'Payer'
+    toColumn: 'payers'.'Id (payers)'
+    crossFilteringBehavior: bothDirections
+
+relationship b61ed742-d8be-4868-8044-7c2691509d9f
+    fromColumn: 'procedures'.'Encounter'
+    toColumn: 'encounters'.'Id'
+    crossFilteringBehavior: bothDirections
+
+relationship 6abdd107-1ab6-40a8-a7cf-a4e2ef5a9ec3
+    fromColumn: 'encounters'.'Encounter Start Date'
+    toColumn: 'LocalDateTable_c3c89c3b-a603-43d4-89da-a6c5c3072100'.'Date'
+    joinOnDateBehavior: datePartOnly
+
+relationship f1c9ec19-f096-4ddc-a8b6-f0fd43ebf1b8
+    fromColumn: 'patients'.'Birthdate'
+    toColumn: 'LocalDateTable_e79a9a17-d857-49ff-98c1-43497a990aff'.'Date'
+    joinOnDateBehavior: datePartOnly
+
+relationship 45042961-4bb4-4488-9d9a-e5f32b847a40
+    fromColumn: 'patients'.'Deathdate'
+    toColumn: 'LocalDateTable_7cd1f450-2f89-4f0b-8ba9-661bc40023c1'.'Date'
+    joinOnDateBehavior: datePartOnly

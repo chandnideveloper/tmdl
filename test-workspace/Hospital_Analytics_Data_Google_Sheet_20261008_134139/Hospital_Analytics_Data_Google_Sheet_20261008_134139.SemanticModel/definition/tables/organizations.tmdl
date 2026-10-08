@@ -1,0 +1,71 @@
+table 'organizations'
+    lineageTag: 9cd14f42-73e4-4330-9980-60a1db1787fe
+
+    column 'Id (organizations)'
+        dataType: string
+        lineageTag: a17d47bf-4ff8-41b8-8161-8e277eba70ef
+        summarizeBy: none
+        sourceColumn: Id (organizations)
+
+    column 'Name'
+        dataType: string
+        lineageTag: aef10a51-3369-49e4-b851-39cebbdead18
+        summarizeBy: none
+        sourceColumn: Name
+
+    column 'ADDRESS (organizations)'
+        dataType: string
+        lineageTag: 3ae6225e-1f77-4a07-9009-42ac564f5d5a
+        summarizeBy: none
+        sourceColumn: ADDRESS (organizations)
+
+    column 'CITY (organizations)'
+        dataType: string
+        lineageTag: 47f1c905-5a6b-4668-9d03-0c8feba78dc1
+        summarizeBy: none
+        sourceColumn: CITY (organizations)
+
+    column 'STATE (organizations)'
+        dataType: string
+        lineageTag: b52e6b44-8b37-4f3a-9f22-ebe25a7ac0de
+        summarizeBy: none
+        sourceColumn: STATE (organizations)
+
+    column 'ZIP (organizations)'
+        dataType: double
+        lineageTag: b07086a0-f03c-4cee-86d1-b34dd88747ec
+        summarizeBy: none
+        sourceColumn: ZIP (organizations)
+
+    column 'LAT (organizations)'
+        dataType: double
+        lineageTag: 46117a4d-6161-4323-9e8f-374aebc84c19
+        summarizeBy: none
+        sourceColumn: LAT (organizations)
+
+    column 'LON (organizations)'
+        dataType: double
+        lineageTag: 03745358-c9eb-4c00-b233-cf347797c9d0
+        summarizeBy: none
+        sourceColumn: LON (organizations)
+
+    column 'Username' = -- ERROR: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+        dataType: string
+
+        summarizeBy: none
+
+    measure 'RLS - Organization Access' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 404 Client Error: Not Found for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    partition 'organizations' = m
+        mode: import
+        source =
+            let Source = Excel.Workbook(Web.Contents("https://www.googleapis.com/drive/v3/files/1Sd4bEK0Fm9q7yTVOwI4GdtixeeY8hPkKqpvnI4WdixA/export?mimeType=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"), null, true),
+            #"Navigation 1" = Source{[Item="organizations",Kind="Sheet"]}[Data],
+            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars=true]),
+            #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"Id", type text}, {"NAME", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE", type text}, {"ZIP", type number}, {"LAT", type number}, {"LON", type number}}),
+            #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"Id", "Id (organizations)"}, {"NAME", "Name"}, {"ADDRESS", "ADDRESS (organizations)"}, {"CITY", "CITY (organizations)"}, {"STATE", "STATE (organizations)"}, {"ZIP", "ZIP (organizations)"}, {"LAT", "LAT (organizations)"}, {"LON", "LON (organizations)"}}),
+                            #"Renamed Columns" = Table.RenameColumns(#"Renamed Columns", {{"Id", "Id (organizations)"}, {"NAME", "Name"}, {"ADDRESS", "ADDRESS (organizations)"}, {"CITY", "CITY (organizations)"}, {"STATE", "STATE (organizations)"}, {"ZIP", "ZIP (organizations)"}, {"LAT", "LAT (organizations)"}, {"LON", "LON (organizations)"}})
+                        in
+                            #"Renamed Columns"
