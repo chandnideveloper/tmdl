@@ -1,0 +1,23 @@
+table Loads_Raw
+	lineageTag: 822933fc-9469-51f9-b665-c1c930cdbf45
+
+	column '*'
+		dataType: double
+		lineageTag: efc9412d-4124-5810-a5bc-35323a62bc46
+		summarizeBy: sum
+		sourceColumn: *
+		formatString: #,##0.00
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Loads_Raw = m
+		mode: import
+		source =
+				let
+				    Source = AmazonRedshift.Database("fleetvision-wg.881226714470.ap-southeast-2.redshift-serverless.amazonaws.com", "dev", [ProviderName = null, BatchSize = null]),
+				    #"Navigation 1" = Source{[Name = "PUBLIC", Kind="Schema""]}[Data],
+				    #"Navigation 2" = #"Navigation 1"{[Name = "loads"]}[Data]
+				in
+				    #"Navigation 2"
+
+	annotation PBI_ResultType = Table
