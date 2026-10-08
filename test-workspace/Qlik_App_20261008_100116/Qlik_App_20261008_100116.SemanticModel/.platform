@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Qlik_App_20261008_100116"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "c7d73494-e39c-5563-ac35-32edfa67ce74"
+  }
+}
