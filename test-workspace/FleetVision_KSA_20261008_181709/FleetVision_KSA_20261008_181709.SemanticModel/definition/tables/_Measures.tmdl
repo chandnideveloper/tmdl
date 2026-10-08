@@ -1,0 +1,26 @@
+table _Measures
+	lineageTag: 7724e053-781a-51b9-b665-e9ad6750f4b4
+
+	measure 'Maximum Trips by Truck' = MAXX(VALUES('Trucks'[truck_id]), CALCULATE(COUNT('Trips'[trip_id]), CROSSFILTER('Trips'[truck_id], 'Trucks'[truck_id], Both)))
+		lineageTag: 8dbb9c27-3953-55a5-b794-ee73660ad1b0
+
+	measure 'Average Fuel Efficiency' = DIVIDE(Sum('Trips'[actual_distance_miles]), Sum('Trips'[fuel_gallons_used]), BLANK())
+		lineageTag: e65eef8f-660c-5c9d-a653-c6f0286b46d3
+
+	measure 'Fleet Operations' = MAXX(VALUES('Trucks'[truck_id]), CALCULATE(COUNT('Trips'[trip_id]), CROSSFILTER('Trips'[truck_id], 'Trucks'[truck_id], Both)))
+		lineageTag: 2ef29338-e4c0-5eed-a44e-0f4e6a6cc9aa
+
+	column _placeholder
+		dataType: string
+		isHidden
+		lineageTag: da4619db-a22e-548c-945a-314c8c5ff5f9
+		summarizeBy: none
+		sourceColumn: _placeholder
+
+	partition _Measures = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows({}, {"_placeholder"})
+				in
+				    Source
