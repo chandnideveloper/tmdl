@@ -1,0 +1,82 @@
+table 'procedures'
+    lineageTag: 3fc4c429-3660-40e8-b5e8-b6898bc99bc4
+
+    column 'START (procedures)'
+        dataType: string
+        lineageTag: 8aa51715-00e2-4303-a10b-b310095c4356
+        summarizeBy: none
+        sourceColumn: START (procedures)
+
+    column 'STOP (procedures)'
+        dataType: string
+        lineageTag: c33c31a1-ea80-4ced-a934-1ff059f840c2
+        summarizeBy: none
+        sourceColumn: STOP (procedures)
+
+    column 'PATIENT (procedures)'
+        dataType: string
+        lineageTag: f353e33a-c20c-4449-96d5-c893f8978478
+        summarizeBy: none
+        sourceColumn: PATIENT (procedures)
+
+    column 'Encounter'
+        dataType: string
+        lineageTag: 3bcbd5d7-3ee9-46ff-bab5-557c592600e9
+        summarizeBy: none
+        sourceColumn: Encounter
+
+    column 'CODE (procedures)'
+        dataType: double
+        lineageTag: 5eefc481-c794-472b-9add-b147dcbc2b3b
+        summarizeBy: none
+        sourceColumn: CODE (procedures)
+
+    column 'DESCRIPTION (procedures)'
+        dataType: string
+        lineageTag: b63d9feb-238c-47fa-b0e6-4e4bf3ec43e4
+        summarizeBy: none
+        sourceColumn: DESCRIPTION (procedures)
+
+    column 'Base Cost'
+        dataType: double
+        lineageTag: 045e85df-54d4-40fc-b369-fc4957bb6bc6
+        summarizeBy: none
+        sourceColumn: Base Cost
+
+    column 'REASONCODE (procedures)'
+        dataType: double
+        lineageTag: c2b013de-104e-401e-91bf-d46f56822aec
+        summarizeBy: none
+        sourceColumn: REASONCODE (procedures)
+
+    column 'REASONDESCRIPTION (procedures)'
+        dataType: string
+        lineageTag: 7c37c08b-15c3-46a5-8720-bbf882827576
+        summarizeBy: none
+        sourceColumn: REASONDESCRIPTION (procedures)
+
+    column 'DESCRIPTION (procedures) Set' = -- SKIPPED
+        dataType: string
+
+        summarizeBy: none
+
+    measure 'Procedure Rank(Top N Procedure Parameter)' =
+        -- SKIPPED BY USER
+
+
+    measure 'Top N Procedures Filter' =
+        -- SKIPPED BY USER
+
+
+    measure 'Selected Metric' =
+        -- SKIPPED BY USER
+
+
+    partition 'procedures' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo"),
+            #"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data],
+                            #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"START", "START (procedures)"}, {"STOP", "STOP (procedures)"}, {"PATIENT", "PATIENT (procedures)"}, {"ENCOUNTER", "Encounter"}, {"CODE", "CODE (procedures)"}, {"DESCRIPTION", "DESCRIPTION (procedures)"}, {"BASE_COST", "Base Cost"}, {"REASONCODE", "REASONCODE (procedures)"}, {"REASONDESCRIPTION", "REASONDESCRIPTION (procedures)"}})
+                        in
+                            #"Final Renamed Columns"

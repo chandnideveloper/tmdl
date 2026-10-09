@@ -1,0 +1,53 @@
+table 'payers'
+    lineageTag: aeda7dea-d358-4921-ad14-5ef3a7507de1
+
+    column 'Id (payers)'
+        dataType: string
+        lineageTag: bdeb1613-4052-4efc-91c1-601f7134a185
+        summarizeBy: none
+        sourceColumn: Id (payers)
+
+    column 'NAME (payers)'
+        dataType: string
+        lineageTag: 76d79e06-0fcc-4d89-bc4e-c77f67f93c7a
+        summarizeBy: none
+        sourceColumn: NAME (payers)
+
+    column 'ADDRESS (payers)'
+        dataType: string
+        lineageTag: 1a58b62e-117a-4cea-b423-1669e94becb3
+        summarizeBy: none
+        sourceColumn: ADDRESS (payers)
+
+    column 'CITY (payers)'
+        dataType: string
+        lineageTag: d9adbb27-7cdd-4909-b7e0-203c67297ddc
+        summarizeBy: none
+        sourceColumn: CITY (payers)
+
+    column 'State Headquartered'
+        dataType: string
+        lineageTag: 516aa7b8-4573-4ccb-a3d4-0ff1a1222a21
+        summarizeBy: none
+        sourceColumn: State Headquartered
+
+    column 'ZIP (payers)'
+        dataType: double
+        lineageTag: bdbb1e54-12ae-407c-9c92-51a7cce9cfb3
+        summarizeBy: none
+        sourceColumn: ZIP (payers)
+
+    column 'Phone'
+        dataType: string
+        lineageTag: 43d59196-a449-455a-964b-4686dcb6de11
+        summarizeBy: none
+        sourceColumn: Phone
+
+    partition 'payers' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1NB9uAQnBa6RYGfm5addKbcToYUZJY_5OlBkWxVZRrbU"),
+            #"Navigation 1" = Source{[name = "payers", ItemKind = "Table"]}[Data],
+                            #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"Id", "Id (payers)"}, {"NAME", "NAME (payers)"}, {"ADDRESS", "ADDRESS (payers)"}, {"CITY", "CITY (payers)"}, {"STATE_HEADQUARTERED", "State Headquartered"}, {"ZIP", "ZIP (payers)"}, {"PHONE", "Phone"}})
+                        in
+                            #"Final Renamed Columns"
