@@ -1,0 +1,118 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "0A0203BCDA68",
+  "position": {
+    "x": 990,
+    "y": 360,
+    "z": 2,
+    "height": 330,
+    "width": 230,
+    "tabOrder": 2
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "procedures"
+                    }
+                  },
+                  "Property": "DESCRIPTION_(procedures)_Set_In_Out"
+                }
+              },
+              "queryRef": "procedures.DESCRIPTION_(procedures)_Set_In_Out",
+              "nativeQueryRef": "DESCRIPTION_(procedures)_Set_In_Out",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "general": [
+        {
+          "properties": {}
+        }
+      ],
+      "data": [
+        {
+          "properties": {
+            "mode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Basic'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "syncGroup": {
+      "groupName": "DESCRIPTION_(procedures)_Set_In_Out",
+      "fieldChanges": true,
+      "filterChanges": true
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "heading": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Heading2'"
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'center'"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'DESCRIPTION_(procedures)_Set_In_Out'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "9629e13def8e42f4b321",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "procedures"
+              }
+            },
+            "Property": "DESCRIPTION_(procedures)_Set_In_Out"
+          }
+        },
+        "type": "Categorical"
+      }
+    ]
+  }
+}
