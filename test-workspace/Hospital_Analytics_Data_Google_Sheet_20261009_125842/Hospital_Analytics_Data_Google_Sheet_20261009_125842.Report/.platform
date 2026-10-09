@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Hospital_Analytics_Data_Google_Sheet_20261009_125842"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "0074b563-ba4b-45b0-8474-b7935981ba8f"
+  }
+}
