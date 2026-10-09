@@ -1,0 +1,85 @@
+table 'procedures'
+    lineageTag: ab211b0d-e927-468f-9a5d-16137e3c894e
+
+    column 'START (procedures)'
+        dataType: string
+        lineageTag: 4d2d720c-1a73-49c3-a070-5e06984193ac
+        summarizeBy: none
+        sourceColumn: START (procedures)
+
+    column 'STOP (procedures)'
+        dataType: string
+        lineageTag: af817bd6-e874-4e9e-a6e4-9f93159d718d
+        summarizeBy: none
+        sourceColumn: STOP (procedures)
+
+    column 'PATIENT (procedures)'
+        dataType: string
+        lineageTag: 8ccf0479-2b8e-49a8-8a9d-57adbaf81423
+        summarizeBy: none
+        sourceColumn: PATIENT (procedures)
+
+    column 'Encounter'
+        dataType: string
+        lineageTag: 167e8449-7b2d-457e-87ea-7b0f82ebbc02
+        summarizeBy: none
+        sourceColumn: Encounter
+
+    column 'CODE (procedures)'
+        dataType: double
+        lineageTag: 07061e79-1ac7-4b78-8085-65ba72bb08bb
+        summarizeBy: none
+        sourceColumn: CODE (procedures)
+
+    column 'DESCRIPTION (procedures)'
+        dataType: string
+        lineageTag: 5fc6c894-dc73-41b9-b04a-f7a40ef319c8
+        summarizeBy: none
+        sourceColumn: DESCRIPTION (procedures)
+
+    column 'Base Cost'
+        dataType: double
+        lineageTag: 81b7edb3-f917-4e28-996f-3de6bac1a88b
+        summarizeBy: none
+        sourceColumn: Base Cost
+
+    column 'REASONCODE (procedures)'
+        dataType: double
+        lineageTag: b71f813d-5864-4dd0-9849-6d8464102357
+        summarizeBy: none
+        sourceColumn: REASONCODE (procedures)
+
+    column 'REASONDESCRIPTION (procedures)'
+        dataType: string
+        lineageTag: e88d7bfa-9ac6-467c-912e-5dafdaf61b1a
+        summarizeBy: none
+        sourceColumn: REASONDESCRIPTION (procedures)
+
+    column 'DESCRIPTION (procedures) Set' = -- SKIPPED
+        dataType: string
+
+        summarizeBy: none
+
+    measure 'Procedure Rank(Top N Procedure Parameter)' =
+        -- SKIPPED BY USER
+
+
+    measure 'Top N Procedures Filter' =
+        -- SKIPPED BY USER
+
+
+    measure 'Selected Metric' =
+        -- SKIPPED BY USER
+
+
+    partition 'procedures' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Sd4bEK0Fm9q7yTVOwI4GdtixeeY8hPkKqpvnI4WdixA"),
+            #"Navigation 1" = Source{[name="procedures", ItemKind="Table"]}[Data],
+            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars=true]),
+            #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"START", type text}, {"STOP", type text}, {"PATIENT", type text}, {"ENCOUNTER", type text}, {"CODE", type number}, {"DESCRIPTION", type text}, {"BASE_COST", type number}, {"REASONCODE", type number}, {"REASONDESCRIPTION", type text}}),
+            #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"START", "START (procedures)"}, {"STOP", "STOP (procedures)"}, {"PATIENT", "PATIENT (procedures)"}, {"ENCOUNTER", "Encounter"}, {"CODE", "CODE (procedures)"}, {"DESCRIPTION", "DESCRIPTION (procedures)"}, {"BASE_COST", "Base Cost"}, {"REASONCODE", "REASONCODE (procedures)"}, {"REASONDESCRIPTION", "REASONDESCRIPTION (procedures)"}}),
+                            #"Renamed Columns" = Table.RenameColumns(#"Renamed Columns", {{"START", "START (procedures)"}, {"STOP", "STOP (procedures)"}, {"PATIENT", "PATIENT (procedures)"}, {"ENCOUNTER", "Encounter"}, {"CODE", "CODE (procedures)"}, {"DESCRIPTION", "DESCRIPTION (procedures)"}, {"BASE_COST", "Base Cost"}, {"REASONCODE", "REASONCODE (procedures)"}, {"REASONDESCRIPTION", "REASONDESCRIPTION (procedures)"}})
+                        in
+                            #"Renamed Columns"

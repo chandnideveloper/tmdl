@@ -1,0 +1,56 @@
+table 'payers'
+    lineageTag: 5ad59e21-a98e-4984-a883-ad2912a28e89
+
+    column 'Id (payers)'
+        dataType: string
+        lineageTag: 4e8a1d74-663e-4ae2-9b0d-2939059a5e13
+        summarizeBy: none
+        sourceColumn: Id (payers)
+
+    column 'NAME (payers)'
+        dataType: string
+        lineageTag: c1b29166-496c-4cc1-85f6-e279de1d47de
+        summarizeBy: none
+        sourceColumn: NAME (payers)
+
+    column 'ADDRESS (payers)'
+        dataType: string
+        lineageTag: 953d6764-c8e8-4586-9e1c-44036d1e70a0
+        summarizeBy: none
+        sourceColumn: ADDRESS (payers)
+
+    column 'CITY (payers)'
+        dataType: string
+        lineageTag: ce4a2437-fc49-4a7d-bcbf-aac7bf5ccfaf
+        summarizeBy: none
+        sourceColumn: CITY (payers)
+
+    column 'State Headquartered'
+        dataType: string
+        lineageTag: 4b286edf-0ca2-46fe-9219-c341143d1336
+        summarizeBy: none
+        sourceColumn: State Headquartered
+
+    column 'ZIP (payers)'
+        dataType: double
+        lineageTag: 248b4ba9-969a-4910-83d0-268108c693f8
+        summarizeBy: none
+        sourceColumn: ZIP (payers)
+
+    column 'Phone'
+        dataType: string
+        lineageTag: 29de14e0-5e94-46af-a714-d9ab42661618
+        summarizeBy: none
+        sourceColumn: Phone
+
+    partition 'payers' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Sd4bEK0Fm9q7yTVOwI4GdtixeeY8hPkKqpvnI4WdixA"),
+            #"Navigation 1" = Source{[name="payers", ItemKind="Table"]}[Data],
+            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars=true]),
+            #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"Id", type text}, {"NAME", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE_HEADQUARTERED", type text}, {"ZIP", type number}, {"PHONE", type text}}),
+            #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"Id", "Id (payers)"}, {"NAME", "NAME (payers)"}, {"ADDRESS", "ADDRESS (payers)"}, {"CITY", "CITY (payers)"}, {"STATE_HEADQUARTERED", "State Headquartered"}, {"ZIP", "ZIP (payers)"}, {"PHONE", "Phone"}}),
+                            #"Renamed Columns" = Table.RenameColumns(#"Renamed Columns", {{"Id", "Id (payers)"}, {"NAME", "NAME (payers)"}, {"ADDRESS", "ADDRESS (payers)"}, {"CITY", "CITY (payers)"}, {"STATE_HEADQUARTERED", "State Headquartered"}, {"ZIP", "ZIP (payers)"}, {"PHONE", "Phone"}})
+                        in
+                            #"Renamed Columns"
