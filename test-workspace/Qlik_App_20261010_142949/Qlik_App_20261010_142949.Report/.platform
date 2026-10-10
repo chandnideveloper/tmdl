@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Qlik_App_20261010_142949"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "bd997242-4c19-551a-944e-0fdbc1b3a649"
+  }
+}

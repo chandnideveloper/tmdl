@@ -1,0 +1,16 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["trips"]
+
+ref table trips
+ref table DateTableTemplate_656ca841-f5ef-4959-a520-c033df4a3bdc
+ref table LocalDateTable_7bb8e36e-b442-421c-935e-3f6a8af966d4
+
