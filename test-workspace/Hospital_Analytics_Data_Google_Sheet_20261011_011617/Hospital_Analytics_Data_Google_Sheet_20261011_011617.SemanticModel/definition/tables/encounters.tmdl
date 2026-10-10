@@ -1,0 +1,132 @@
+table 'encounters'
+    lineageTag: d05a1208-cf0a-4320-8fd3-8a511d502deb
+
+    column 'Id'
+        dataType: string
+        lineageTag: 18ed726a-d164-4718-b6f4-208f64d0d647
+        summarizeBy: none
+        sourceColumn: Id
+
+    column 'Start'
+        dataType: string
+        lineageTag: 4bdd558d-d2e2-4d30-b731-70ae90631a34
+        summarizeBy: none
+        sourceColumn: Start
+
+    column 'Stop'
+        dataType: string
+        lineageTag: c05b0df9-97e8-471f-8413-11ff3fc1c68d
+        summarizeBy: none
+        sourceColumn: Stop
+
+    column 'Patient'
+        dataType: string
+        lineageTag: 0d788ff0-5a05-4e90-9b97-058a7276fde1
+        summarizeBy: none
+        sourceColumn: Patient
+
+    column 'Organization'
+        dataType: string
+        lineageTag: 7a85015f-4be6-4119-9e79-c8fa16825aff
+        summarizeBy: none
+        sourceColumn: Organization
+
+    column 'Payer'
+        dataType: string
+        lineageTag: 83a552bd-8c67-4510-a4d9-b3bcc56dca9b
+        summarizeBy: none
+        sourceColumn: Payer
+
+    column 'Encounterclass'
+        dataType: string
+        lineageTag: 5ef8e3d0-6e99-4020-9f1a-797e6f8aa6fd
+        summarizeBy: none
+        sourceColumn: Encounterclass
+
+    column 'Code'
+        dataType: double
+        lineageTag: a21d903d-5372-4026-a654-2d5d1977a001
+        summarizeBy: none
+        sourceColumn: Code
+
+    column 'Description'
+        dataType: string
+        lineageTag: 9dae82c5-1a07-4338-a8bb-a7331b9a8489
+        summarizeBy: none
+        sourceColumn: Description
+
+    column 'Base Encounter Cost'
+        dataType: double
+        lineageTag: 81ccaecb-a3f9-48a5-8472-036105fd4ad3
+        summarizeBy: none
+        sourceColumn: Base Encounter Cost
+
+    column 'Total Claim Cost'
+        dataType: double
+        lineageTag: 57b472e3-c988-4818-b0a5-216e8c910e52
+        summarizeBy: none
+        sourceColumn: Total Claim Cost
+
+    column 'Payer Coverage'
+        dataType: double
+        lineageTag: 55fb36ac-3ec5-4f19-835d-8ac613ddc3fd
+        summarizeBy: none
+        sourceColumn: Payer Coverage
+
+    column 'Reasoncode'
+        dataType: double
+        lineageTag: 16eca2c2-3828-4f1e-9491-0e46ebe645ed
+        summarizeBy: none
+        sourceColumn: Reasoncode
+
+    column 'Reasondescription'
+        dataType: string
+        lineageTag: 5ba29d27-9947-4fc0-b712-df7bd4028fee
+        summarizeBy: none
+        sourceColumn: Reasondescription
+
+    column 'Encounter Start Date' = -- SKIPPED BY USER
+        dataType: string
+
+        summarizeBy: none
+
+    measure 'Patient Visits Rank (Top N Patients)' =
+        -- SKIPPED BY USER
+
+
+    measure 'Top N Patients' =
+        -- SKIPPED BY USER
+
+
+    measure 'Visits % Contribution (LOD)' =
+        -- SKIPPED BY USER
+
+
+    measure 'CNT of Id' =
+        COUNT('encounters'[Id])
+
+
+    measure 'Total Visits' =
+        COUNT('encounters'[Id])
+
+
+    measure 'SUM of Base Encounter Cost' =
+        SUM('encounters'[Base Encounter Cost])
+
+
+    measure 'Total Procedures (LOD)' =
+        -- SKIPPED BY USER
+
+
+    measure 'Total Visits (LOD)' =
+        -- SKIPPED BY USER
+
+
+    partition 'encounters' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1UFffx5ngb7j1Y2kqRzPCPVA0uvA88GLaftek_fwOjKY"),
+            #"Navigation 1" = Source{[name = "encounters", ItemKind = "Table"]}[Data],
+                            #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"START", "Start"}, {"STOP", "Stop"}, {"PATIENT", "Patient"}, {"ORGANIZATION", "Organization"}, {"PAYER", "Payer"}, {"ENCOUNTERCLASS", "Encounterclass"}, {"CODE", "Code"}, {"DESCRIPTION", "Description"}, {"BASE_ENCOUNTER_COST", "Base Encounter Cost"}, {"TOTAL_CLAIM_COST", "Total Claim Cost"}, {"PAYER_COVERAGE", "Payer Coverage"}, {"REASONCODE", "Reasoncode"}, {"REASONDESCRIPTION", "Reasondescription"}}, MissingField.Ignore)
+                        in
+                            #"Final Renamed Columns"
