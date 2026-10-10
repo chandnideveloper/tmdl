@@ -1,0 +1,171 @@
+table 'patients'
+    lineageTag: 8c82ef33-e8f2-4731-a2e4-4262d62827a8
+
+    column 'Id (patients)'
+        dataType: string
+        lineageTag: 0a303b79-fc88-4846-a8fe-e79073a042e5
+        summarizeBy: none
+        sourceColumn: Id (patients)
+
+    column 'Birthdate'
+        sourceColumn: Birthdate
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: 33cc68a2-ea3e-483a-9918-47506c7f573e
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: cffd60a5-aed0-4c27-95d4-baaf53407513
+            defaultHierarchy: LocalDateTable_bc95dead-4944-4d83-be55-f784b21d81f7.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    column 'Deathdate'
+        sourceColumn: Deathdate
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: 9a64a084-eb95-45f3-be64-c769f3db8be5
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: fcd68628-681e-4bca-b26b-a6f2eab87131
+            defaultHierarchy: LocalDateTable_8dd87138-bed4-4f7a-a15d-e439e0015295.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    column 'Prefix'
+        dataType: string
+        lineageTag: aff0a20c-d7fd-4eaa-8405-78bd08abc61f
+        summarizeBy: none
+        sourceColumn: Prefix
+
+    column 'First'
+        dataType: string
+        lineageTag: 5dd23d2a-2f4c-4a71-b9d4-97109955649c
+        summarizeBy: none
+        sourceColumn: First
+
+    column 'Last'
+        dataType: string
+        lineageTag: 4c28ef70-5937-45b1-8983-3bd4dd9d78d4
+        summarizeBy: none
+        sourceColumn: Last
+
+    column 'Suffix'
+        dataType: string
+        lineageTag: 8f1c5f6c-2e64-4a38-88d7-c16adb5880cc
+        summarizeBy: none
+        sourceColumn: Suffix
+
+    column 'Maiden'
+        dataType: string
+        lineageTag: 88952c80-bda1-4888-9e71-5ca71c0bb796
+        summarizeBy: none
+        sourceColumn: Maiden
+
+    column 'Marital'
+        dataType: string
+        lineageTag: 0ff53d24-9010-4f1c-99a1-0ca8af13ce23
+        summarizeBy: none
+        sourceColumn: Marital
+
+    column 'Race'
+        dataType: string
+        lineageTag: 598b0c80-3d30-4f8f-85d7-19dc91b3606d
+        summarizeBy: none
+        sourceColumn: Race
+
+    column 'Ethnicity'
+        dataType: string
+        lineageTag: ad7ddfcb-e11a-47ae-8a63-f60f6b3f0b64
+        summarizeBy: none
+        sourceColumn: Ethnicity
+
+    column 'Gender'
+        dataType: string
+        lineageTag: a22b37a3-7501-4978-adc2-f763e05e32d6
+        summarizeBy: none
+        sourceColumn: Gender
+
+    column 'Birthplace'
+        dataType: string
+        lineageTag: e2faa00a-9849-49f9-8c38-dce23f9e04b4
+        summarizeBy: none
+        sourceColumn: Birthplace
+
+    column 'Address'
+        dataType: string
+        lineageTag: 85f3545e-3f92-4dc4-aa10-a3c33dd57a7e
+        summarizeBy: none
+        sourceColumn: Address
+
+    column 'City'
+        dataType: string
+        lineageTag: d4a39cc8-7699-471e-b10c-59b2f7785a1c
+        summarizeBy: none
+        sourceColumn: City
+
+    column 'State'
+        dataType: string
+        lineageTag: 58132eba-fdfc-4175-8b90-a8392e41512e
+        summarizeBy: none
+        sourceColumn: State
+
+    column 'County'
+        dataType: string
+        lineageTag: 460cf6de-7221-43c3-9108-305909e365cf
+        summarizeBy: none
+        sourceColumn: County
+
+    column 'ZIP (organizations)'
+        dataType: double
+        lineageTag: 6dc1963f-fbf9-42c7-bfa2-869780ee67df
+        summarizeBy: none
+        sourceColumn: ZIP (organizations)
+
+    column 'LAT (organizations)'
+        dataType: double
+        lineageTag: 0309f6da-3c47-4709-914e-20768003561e
+        summarizeBy: none
+        sourceColumn: LAT (organizations)
+
+    column 'LON (organizations)'
+        dataType: double
+        lineageTag: 5c597cdc-e414-4203-abe5-4166b52b42c1
+        summarizeBy: none
+        sourceColumn: LON (organizations)
+
+    measure 'SUM of Avg Visits per Patient (patients)' =
+        SUM('patients'[Avg Visits per Patient])
+
+
+    measure 'SUM of Visits per Patient (patients)' =
+        SUM('patients'[Visits per Patient])
+
+
+    measure 'Total Patients (LOD)' =
+        -- SKIPPED BY USER
+
+
+    measure 'Visits per Patient' =
+        -- SKIPPED BY USER
+
+
+    measure 'Avg Visits per Patient' =
+        -- SKIPPED BY USER
+
+
+    partition 'patients' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Sd4bEK0Fm9q7yTVOwI4GdtixeeY8hPkKqpvnI4WdixA"),
+            #"Navigation 1" = Source{[name = "patients", ItemKind = "Table"]}[Data],
+                            #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"Id", "Id (patients)"}, {"BIRTHDATE", "Birthdate"}, {"DEATHDATE", "Deathdate"}, {"PREFIX", "Prefix"}, {"FIRST", "First"}, {"LAST", "Last"}, {"SUFFIX", "Suffix"}, {"MAIDEN", "Maiden"}, {"MARITAL", "Marital"}, {"RACE", "Race"}, {"ETHNICITY", "Ethnicity"}, {"GENDER", "Gender"}, {"BIRTHPLACE", "Birthplace"}, {"ADDRESS", "Address"}, {"CITY", "City"}, {"STATE", "State"}, {"COUNTY", "County"}, {"ZIP", "ZIP (organizations)"}, {"LAT", "LAT (organizations)"}, {"LON", "LON (organizations)"}}, MissingField.Ignore)
+                        in
+                            #"Final Renamed Columns"
