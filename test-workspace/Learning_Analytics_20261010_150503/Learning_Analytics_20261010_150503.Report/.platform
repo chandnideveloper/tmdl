@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Learning_Analytics_20261010_150503"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "8e8a6269-7539-5046-ae52-00d291e109b6"
+  }
+}
