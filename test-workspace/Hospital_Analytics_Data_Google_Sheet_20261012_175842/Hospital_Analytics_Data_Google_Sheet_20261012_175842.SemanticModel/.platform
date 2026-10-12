@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Hospital_Analytics_Data_Google_Sheet_20261012_175842"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "17f93a05-cf88-4e27-92ad-acc4cb48bbb6"
+  }
+}
