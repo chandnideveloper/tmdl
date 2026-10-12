@@ -1,0 +1,69 @@
+table 'organizations'
+    lineageTag: dae1045c-9c9e-4faa-ba53-e2b33cf4739d
+
+    column 'Id (organizations)'
+        dataType: string
+        lineageTag: 9b5081a0-d93c-4945-b0d1-7111ae388842
+        summarizeBy: none
+        sourceColumn: "Id (organizations)"
+
+    column 'Name'
+        dataType: string
+        lineageTag: 34d537ff-d124-4792-9c6c-d12b853b67a3
+        summarizeBy: none
+        sourceColumn: Name
+
+    column 'ADDRESS (organizations)'
+        dataType: string
+        lineageTag: dacf534b-85f9-4b93-bb23-ae0dd60da144
+        summarizeBy: none
+        sourceColumn: "ADDRESS (organizations)"
+
+    column 'CITY (organizations)'
+        dataType: string
+        lineageTag: 3790fd91-4b3e-4d52-ab0f-97ac15127ec5
+        summarizeBy: none
+        sourceColumn: "CITY (organizations)"
+
+    column 'STATE (organizations)'
+        dataType: string
+        lineageTag: 5b82f955-03da-4e0f-a9d6-2ee7a8a08fd7
+        summarizeBy: none
+        sourceColumn: "STATE (organizations)"
+
+    column 'ZIP (organizations)'
+        dataType: double
+        lineageTag: d9fb5ffd-d472-4e6d-9782-cf8d6da9f02e
+        summarizeBy: none
+        sourceColumn: "ZIP (organizations)"
+
+    column 'LAT (organizations)'
+        dataType: double
+        lineageTag: 57b94a13-377f-47e2-8dd2-4e38af532de5
+        summarizeBy: none
+        sourceColumn: "LAT (organizations)"
+
+    column 'LON (organizations)'
+        dataType: double
+        lineageTag: e726d744-6ed2-4e52-a584-5a1eed115fdc
+        summarizeBy: none
+        sourceColumn: "LON (organizations)"
+
+    column 'RLS - Organization Access' = "Unmapped"
+        dataType: string
+
+        summarizeBy: none
+
+    column 'Username' = "Unmapped"
+        dataType: string
+
+        summarizeBy: none
+
+    partition 'organizations' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Gfqr930PI28eveUiJrS8ikSsyzDUbPE4pJy7nG9ZIUc"),
+            #"Navigation 1" = Source{[name = "organizations", ItemKind = "Table"]}[Data],
+                            #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"Id", "Id (organizations)"}, {"NAME", "Name"}, {"ADDRESS", "ADDRESS (organizations)"}, {"CITY", "CITY (organizations)"}, {"STATE", "STATE (organizations)"}, {"ZIP", "ZIP (organizations)"}, {"LAT", "LAT (organizations)"}, {"LON", "LON (organizations)"}}, MissingField.Ignore)
+                        in
+                            #"Final Renamed Columns"

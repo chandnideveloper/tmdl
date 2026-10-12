@@ -1,0 +1,133 @@
+table 'encounters'
+    lineageTag: 169c5368-1f49-417e-ba79-38b53775cbc6
+
+    column 'Id'
+        dataType: string
+        lineageTag: 49b5353b-b6e8-4a24-ab1a-14bba3105d65
+        summarizeBy: none
+        sourceColumn: Id
+
+    column 'Start'
+        dataType: string
+        lineageTag: c404e34a-51ef-4256-8761-7e106f9f86d4
+        summarizeBy: none
+        sourceColumn: Start
+
+    column 'Stop'
+        dataType: string
+        lineageTag: 958622d3-835b-40fd-bc5f-69597a3bdbf4
+        summarizeBy: none
+        sourceColumn: Stop
+
+    column 'Patient'
+        dataType: string
+        lineageTag: 7c2c50e7-171d-4cbb-9dd1-268c0ab897e9
+        summarizeBy: none
+        sourceColumn: Patient
+
+    column 'Organization'
+        dataType: string
+        lineageTag: 2417d64b-72a0-40d9-b725-21c8e5653da7
+        summarizeBy: none
+        sourceColumn: Organization
+
+    column 'Payer'
+        dataType: string
+        lineageTag: ba40c1d7-96c0-4329-a8ad-46d5de18e389
+        summarizeBy: none
+        sourceColumn: Payer
+
+    column 'Encounterclass'
+        dataType: string
+        lineageTag: bc30d404-ec88-4001-b5a1-b8c210382051
+        summarizeBy: none
+        sourceColumn: Encounterclass
+
+    column 'Code'
+        dataType: double
+        lineageTag: 0a4dd533-9664-47b9-8c81-a4151eb8ff80
+        summarizeBy: none
+        sourceColumn: Code
+
+    column 'Description'
+        dataType: string
+        lineageTag: 1d066550-b8f5-4a01-b9b8-443c4e6e3379
+        summarizeBy: none
+        sourceColumn: Description
+
+    column 'Base Encounter Cost'
+        dataType: double
+        lineageTag: 7943225c-46be-4b68-befc-bf27a7d2ec67
+        summarizeBy: none
+        sourceColumn: "Base Encounter Cost"
+
+    column 'Total Claim Cost'
+        dataType: double
+        lineageTag: f53658b0-2650-40fb-a891-f54b79cce125
+        summarizeBy: none
+        sourceColumn: "Total Claim Cost"
+
+    column 'Payer Coverage'
+        dataType: double
+        lineageTag: f61a874a-8792-41ff-9359-ff909484531c
+        summarizeBy: none
+        sourceColumn: "Payer Coverage"
+
+    column 'Reasoncode'
+        dataType: double
+        lineageTag: 6927473f-76de-4f12-96aa-4eb39174c8aa
+        summarizeBy: none
+        sourceColumn: Reasoncode
+
+    column 'Reasondescription'
+        dataType: string
+        lineageTag: aaa01cf0-5785-4f40-88af-84ffe7a86bf3
+        summarizeBy: none
+        sourceColumn: Reasondescription
+
+    column 'Patient Visits Rank (Top N Patients)' = "Unmapped"
+        dataType: string
+
+        summarizeBy: none
+
+    column 'Encounter Start Date' = "Unmapped"
+        dataType: string
+
+        summarizeBy: none
+
+    measure 'Top N Patients' =
+        IF([Patient Visits Rank (Top N Patients)] <= [Top N Patients], 1, 0)
+
+
+    measure 'Visits % Contribution (LOD)' =
+        DIVIDE(DISTINCTCOUNT('encounters'[Id]), SUMX(VALUES('encounters'[Id]), [Total Visits (LOD)]))
+
+
+    measure 'CNT of Id' =
+        COUNT('encounters'[Id])
+
+
+    measure 'Total Visits' =
+        COUNT('encounters'[Id])
+
+
+    measure 'SUM of Base Encounter Cost' =
+        SUM('encounters'[Base Encounter Cost])
+
+
+    measure 'Top N Patients' =
+        BLANK()
+
+
+    measure 'Visits % Contribution (LOD)' =
+        BLANK()
+
+
+    partition 'encounters' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1UFffx5ngb7j1Y2kqRzPCPVA0uvA88GLaftek_fwOjKY"),
+            #"Navigation 1" = Source{[name = "encounters", ItemKind = "Table"]}[Data],
+                            #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"START", "Start"}, {"STOP", "Stop"}, {"PATIENT", "Patient"}, {"ORGANIZATION", "Organization"}, {"PAYER", "Payer"}, {"ENCOUNTERCLASS", "Encounterclass"}, {"CODE", "Code"}, {"DESCRIPTION", "Description"}, {"BASE_ENCOUNTER_COST", "Base Encounter Cost"}, {"TOTAL_CLAIM_COST", "Total Claim Cost"}, {"PAYER_COVERAGE", "Payer Coverage"}, {"REASONCODE", "Reasoncode"}, {"REASONDESCRIPTION", "Reasondescription"}}, MissingField.Ignore)
+                        in
+                            #"Final Renamed Columns"
