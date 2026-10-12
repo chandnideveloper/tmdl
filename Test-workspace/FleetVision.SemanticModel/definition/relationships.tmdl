@@ -1,5 +1,0 @@
-relationship 0bd7dee1-4ad7-47c8-b2f2-cac928a23eae
-	joinOnDateBehavior: datePartOnly
-	fromColumn: trips.dispatch_date
-	toColumn: LocalDateTable_7bb8e36e-b442-421c-935e-3f6a8af966d4.Date
-
