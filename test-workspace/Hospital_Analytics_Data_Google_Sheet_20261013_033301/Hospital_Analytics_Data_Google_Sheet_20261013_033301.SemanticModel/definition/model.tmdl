@@ -1,0 +1,23 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+annotation PBIDesktopVersion = 2.138.1004.0 (24.11)
+
+ref table encounters
+ref table organizations
+ref table patients
+ref table payers
+ref table procedures
+ref table 'Top N Procedures(Parameter)'
+ref table 'Metric Selector'
+ref table 'Top N Patients'
+ref table LocalDateTable_6c86b08fd4e2108b83ed8ffdd201198a
+ref table LocalDateTable_3c868348c67e511f15c12ac0375c7d9e
+
+ref cultureInfo en-US
