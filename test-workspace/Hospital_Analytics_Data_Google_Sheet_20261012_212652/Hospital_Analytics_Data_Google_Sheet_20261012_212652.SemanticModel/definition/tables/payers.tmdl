@@ -1,0 +1,54 @@
+table 'payers'
+    lineageTag: 64b10675-b316-4b27-9f85-7fc000133ded
+
+    column 'Id (payers)'
+        dataType: string
+        lineageTag: 875508f8-6862-41d5-a887-dc32bbb78145
+        summarizeBy: none
+        sourceColumn: Id (payers)
+
+    column 'NAME (payers)'
+        dataType: string
+        lineageTag: 9d5bf24c-af74-48d2-ada3-c314f15e1626
+        summarizeBy: none
+        sourceColumn: NAME (payers)
+
+    column 'ADDRESS (payers)'
+        dataType: string
+        lineageTag: 9e6c8421-4361-44a5-89dc-378d09339b5e
+        summarizeBy: none
+        sourceColumn: ADDRESS (payers)
+
+    column 'CITY (payers)'
+        dataType: string
+        lineageTag: 16d2f063-6ff5-430c-be67-49ca1a0b9e22
+        summarizeBy: none
+        sourceColumn: CITY (payers)
+
+    column 'State Headquartered'
+        dataType: string
+        lineageTag: 59e8db98-c40d-4d63-9f6c-d14358e89658
+        summarizeBy: none
+        sourceColumn: State Headquartered
+
+    column 'ZIP (payers)'
+        dataType: double
+        lineageTag: 0c18b8e1-7d7a-432f-a219-a6583394c0af
+        summarizeBy: none
+        sourceColumn: ZIP (payers)
+
+    column 'Phone'
+        dataType: string
+        lineageTag: 9be90da6-c100-4f97-b4e0-91a9c91d06eb
+        summarizeBy: none
+        sourceColumn: Phone
+
+    partition 'payers' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1NB9uAQnBa6RYGfm5addKbcToYUZJY_5OlBkWxVZRrbU"),
+            #"Navigation 1" = Source{[name = "payers", ItemKind = "Table"]}[Data],
+            #"Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"Id", "Id (payers)"}, {"NAME", "NAME (payers)"}, {"ADDRESS", "ADDRESS (payers)"}, {"CITY", "CITY (payers)"}, {"STATE_HEADQUARTERED", "State Headquartered"}, {"ZIP", "ZIP (payers)"}, {"PHONE", "Phone"}}, MissingField.Ignore),
+                            #"Final Renamed Columns" = Table.RenameColumns(#"Renamed Columns", {{"Id", "Id (payers)"}, {"NAME", "NAME (payers)"}, {"ADDRESS", "ADDRESS (payers)"}, {"CITY", "CITY (payers)"}, {"STATE_HEADQUARTERED", "State Headquartered"}, {"ZIP", "ZIP (payers)"}, {"PHONE", "Phone"}}, MissingField.Ignore)
+                        in
+                            #"Final Renamed Columns"

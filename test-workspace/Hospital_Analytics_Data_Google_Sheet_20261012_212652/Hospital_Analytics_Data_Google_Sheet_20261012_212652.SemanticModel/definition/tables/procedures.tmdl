@@ -1,0 +1,84 @@
+table 'procedures'
+    lineageTag: 033585cb-7d74-4077-bdfb-6db8a42ac268
+
+    column 'START (procedures)'
+        dataType: string
+        lineageTag: c147aa17-f322-4ebe-97df-513ae0bcc434
+        summarizeBy: none
+        sourceColumn: START (procedures)
+
+    column 'STOP (procedures)'
+        dataType: string
+        lineageTag: 09086f77-6a79-4eed-809b-c393b7f8cd9d
+        summarizeBy: none
+        sourceColumn: STOP (procedures)
+
+    column 'PATIENT (procedures)'
+        dataType: string
+        lineageTag: 472f9365-7f4f-4eb2-89ef-692bb08823b0
+        summarizeBy: none
+        sourceColumn: PATIENT (procedures)
+
+    column 'Encounter'
+        dataType: string
+        lineageTag: 1dcf60fe-2f4a-4bfc-a414-0fbcb1dd5fb9
+        summarizeBy: none
+        sourceColumn: Encounter
+
+    column 'CODE (procedures)'
+        dataType: double
+        lineageTag: 392ec7a8-040b-417f-9063-9ed06646c945
+        summarizeBy: none
+        sourceColumn: CODE (procedures)
+
+    column 'DESCRIPTION (procedures)'
+        dataType: string
+        lineageTag: 302b347a-f182-44c9-8ad4-56ebb66c10d1
+        summarizeBy: none
+        sourceColumn: DESCRIPTION (procedures)
+
+    column 'Base Cost'
+        dataType: double
+        lineageTag: 7c2203bf-6a17-4a4f-87c6-86c30e675316
+        summarizeBy: none
+        sourceColumn: Base Cost
+
+    column 'REASONCODE (procedures)'
+        dataType: double
+        lineageTag: 8fa220b9-171b-4f02-82d6-207fa48aa471
+        summarizeBy: none
+        sourceColumn: REASONCODE (procedures)
+
+    column 'REASONDESCRIPTION (procedures)'
+        dataType: string
+        lineageTag: 56d007c5-e89d-4a2d-9406-51690147ff92
+        summarizeBy: none
+        sourceColumn: REASONDESCRIPTION (procedures)
+
+    column 'DESCRIPTION__procedures__Set_Category' = IF('procedures'[DESCRIPTION (procedures)] IN { "Admission to burn unit", "Admission to long stay hospital", "Admission to orthopedic department", "Admission to trauma surgery department", "Ankle X-ray", "Antenatal RhD antibody screening", "Assessment of health and social care needs (procedure)" }, "In", "Out")
+        dataType: string
+
+        summarizeBy: none
+
+    column 'Top N Procedures Filter' = "Unmapped"
+        dataType: string
+
+        summarizeBy: none
+
+    measure 'Procedure Rank(Top N Procedure Parameter)' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
+
+
+    measure 'Selected Metric' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
+
+
+    partition 'procedures' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo"),
+            #"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data],
+            #"Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"START", "START (procedures)"}, {"STOP", "STOP (procedures)"}, {"PATIENT", "PATIENT (procedures)"}, {"ENCOUNTER", "Encounter"}, {"CODE", "CODE (procedures)"}, {"DESCRIPTION", "DESCRIPTION (procedures)"}, {"BASE_COST", "Base Cost"}, {"REASONCODE", "REASONCODE (procedures)"}, {"REASONDESCRIPTION", "REASONDESCRIPTION (procedures)"}}, MissingField.Ignore),
+                            #"Final Renamed Columns" = Table.RenameColumns(#"Renamed Columns", {{"START", "START (procedures)"}, {"STOP", "STOP (procedures)"}, {"PATIENT", "PATIENT (procedures)"}, {"ENCOUNTER", "Encounter"}, {"CODE", "CODE (procedures)"}, {"DESCRIPTION", "DESCRIPTION (procedures)"}, {"BASE_COST", "Base Cost"}, {"REASONCODE", "REASONCODE (procedures)"}, {"REASONDESCRIPTION", "REASONDESCRIPTION (procedures)"}}, MissingField.Ignore)
+                        in
+                            #"Final Renamed Columns"
