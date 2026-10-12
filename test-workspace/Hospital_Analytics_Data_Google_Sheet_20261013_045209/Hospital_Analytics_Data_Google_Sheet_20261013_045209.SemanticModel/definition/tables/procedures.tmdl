@@ -1,0 +1,83 @@
+table 'procedures'
+    lineageTag: 476df075-4801-4f11-a006-e0603ed2e7cf
+
+    column 'START (procedures)'
+        dataType: string
+        lineageTag: cb2f6031-35ed-4384-852c-e598a37247d7
+        summarizeBy: none
+        sourceColumn: "START (procedures)"
+
+    column 'STOP (procedures)'
+        dataType: string
+        lineageTag: 711068d3-eb82-4082-9491-90d62ee1f9ec
+        summarizeBy: none
+        sourceColumn: "STOP (procedures)"
+
+    column 'PATIENT (procedures)'
+        dataType: string
+        lineageTag: cba7cb9c-af63-414e-8292-a2158d52ff61
+        summarizeBy: none
+        sourceColumn: "PATIENT (procedures)"
+
+    column 'Encounter'
+        dataType: string
+        lineageTag: 71d006ca-185b-438d-a69c-ba2a29a7a9d7
+        summarizeBy: none
+        sourceColumn: Encounter
+
+    column 'CODE (procedures)'
+        dataType: double
+        lineageTag: 96dcc5bd-1b1e-4f0f-b22f-7a2baeb012dc
+        summarizeBy: none
+        sourceColumn: "CODE (procedures)"
+
+    column 'DESCRIPTION (procedures)'
+        dataType: string
+        lineageTag: 1c7c86d5-a1bd-4878-8a5d-732b96df015c
+        summarizeBy: none
+        sourceColumn: "DESCRIPTION (procedures)"
+
+    column 'Base Cost'
+        dataType: double
+        lineageTag: 49167585-1ab9-44fd-9498-d5c7a2fb5375
+        summarizeBy: none
+        sourceColumn: "Base Cost"
+
+    column 'REASONCODE (procedures)'
+        dataType: double
+        lineageTag: f3d98099-0cd6-4575-9010-f744f1d6a807
+        summarizeBy: none
+        sourceColumn: "REASONCODE (procedures)"
+
+    column 'REASONDESCRIPTION (procedures)'
+        dataType: string
+        lineageTag: 0ae2aaa3-eec2-4002-95ee-9385d62c0a15
+        summarizeBy: none
+        sourceColumn: "REASONDESCRIPTION (procedures)"
+
+    column 'DESCRIPTION__procedures__Set_Category' = IF('procedures'[DESCRIPTION (procedures)] IN { "Admission to burn unit", "Admission to long stay hospital", "Admission to orthopedic department", "Admission to trauma surgery department", "Ankle X-ray", "Antenatal RhD antibody screening", "Assessment of health and social care needs (procedure)" }, "In", "Out")
+        dataType: string
+
+        summarizeBy: none
+
+    column 'Top N Procedures Filter' = "Unmapped"
+        dataType: string
+
+        summarizeBy: none
+
+    measure 'Procedure Rank(Top N Procedure Parameter)' =
+        RANKX(ALLSELECTED('procedures'[CODE (procedures)]), CALCULATE(COUNT('procedures'[CODE (procedures)])), , DESC, DENSE)
+
+
+    measure 'Selected Metric' =
+        BLANK()
+
+
+    partition 'procedures' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo"),
+            #"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data],
+                            #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"START", "START (procedures)"}, {"STOP", "STOP (procedures)"}, {"PATIENT", "PATIENT (procedures)"}, {"ENCOUNTER", "Encounter"}, {"CODE", "CODE (procedures)"}, {"DESCRIPTION", "DESCRIPTION (procedures)"}, {"BASE_COST", "Base Cost"}, {"REASONCODE", "REASONCODE (procedures)"}, {"REASONDESCRIPTION", "REASONDESCRIPTION (procedures)"}}, MissingField.Ignore)
+                        in
+                            #"Final Renamed Columns"
