@@ -1,0 +1,31 @@
+table 'Metric Selector'
+
+    column 'Value'
+        formatString: General
+        summarizeBy: none
+        isNameInferred
+        sourceColumn: 'Metric Selector'[Value]
+        annotation SummarizationSetBy = Automatic
+
+    partition 'Metric Selector' = calculated
+        mode: import
+        source = DATATABLE("Value", STRING, {{"Visits"}, {"Patients"}, {"Procedures"}})
+
+    measure 'SelectedMetricSelector'
+        expression: SELECTEDVALUE('Metric Selector'[Value], "Visits")
+        formatString: General
+        isHidden: true
+
+    measure 'Selected Metric' =
+        VAR _Metric = SELECTEDVALUE('Metric Selector'[Value])
+        RETURN
+        SWITCH(
+            TRUE(),
+            _Metric = "Visits", COUNTROWS('procedures'),
+            _Metric = "Patients", DISTINCTCOUNT('patients'[Id (patients)]),
+            _Metric = "Procedures", COUNT('procedures'[CODE (procedures)]),
+            BLANK()
+        )
+
+    annotation PBI_Id = 5fc7bf77fd8b466a8396926ee7fd7f0b
+    
