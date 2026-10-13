@@ -1,0 +1,117 @@
+table 'procedures'
+    lineageTag: 82fdd7a6-3f04-4ddb-9812-e07e5d069a6b
+
+    column 'START'
+        dataType: string
+        lineageTag: 0ddd4484-29a6-4cec-9210-8c149409d709
+        summarizeBy: none
+        sourceColumn: START
+
+    column 'STOP'
+        dataType: string
+        lineageTag: e69082d0-859f-4486-9067-e6d7c08d21f1
+        summarizeBy: none
+        sourceColumn: STOP
+
+    column 'PATIENT'
+        dataType: string
+        lineageTag: b216a650-94db-4c58-99cb-4165ae8df168
+        summarizeBy: none
+        sourceColumn: PATIENT
+
+    column 'Encounter'
+        dataType: string
+        lineageTag: 2d5f1a15-07fa-49bf-9012-5a28334a5dd1
+        summarizeBy: none
+        sourceColumn: Encounter
+
+    column 'CODE'
+        dataType: double
+        lineageTag: f7bf65fe-aa29-49c9-a197-a555c7921952
+        summarizeBy: none
+        sourceColumn: CODE
+
+    column 'DESCRIPTION'
+        dataType: string
+        lineageTag: 9a5b073c-9f3b-4d77-a62a-f9adfe3493cb
+        summarizeBy: none
+        sourceColumn: DESCRIPTION
+
+    column 'Base Cost'
+        dataType: double
+        lineageTag: 2e2f04e2-388d-472e-a946-d1ed748704fd
+        summarizeBy: none
+        sourceColumn: Base Cost
+
+    column 'REASONCODE'
+        dataType: double
+        lineageTag: d6dbde19-6713-4076-a6b6-419dffad0188
+        summarizeBy: none
+        sourceColumn: REASONCODE
+
+    column 'REASONDESCRIPTION'
+        dataType: string
+        lineageTag: a8ac749f-5cb8-4902-8c37-07adb6fd1512
+        summarizeBy: none
+        sourceColumn: REASONDESCRIPTION
+
+    column 'DESCRIPTION__procedures__Set_Category' = IF('procedures'[DESCRIPTION] IN { "Admission to burn unit", "Admission to long stay hospital", "Admission to orthopedic department", "Admission to trauma surgery department", "Ankle X-ray", "Antenatal RhD antibody screening", "Assessment of health and social care needs (procedure)" }, "In", "Out")
+        dataType: string
+
+        summarizeBy: none
+
+    column 'Encounter Start Date' = -- ERROR: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: a0427c83-e523-4a28-80c1-ddf8acf1fe67
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: b4c7dda3-3097-494c-83cb-44fe21974697
+            defaultHierarchy: LocalDateTable_1a30940c-bb70-4cab-bf9a-1f8578106043.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    measure 'Patient Visits Rank (Top N Patients)' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
+
+
+    measure 'Top N Patients' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
+
+
+    measure 'Procedure Rank(Top N Procedure Parameter)' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
+
+
+    measure 'Top N Procedures Filter' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
+
+
+    measure 'Selected Metric' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
+
+
+    measure 'Total Procedures' =
+        COUNT('procedures'[CODE])
+
+
+    measure 'Procedures' =
+        COUNT('procedures'[CODE])
+
+
+    measure 'Total Procedures (LOD)' =
+        CALCULATE(COUNT('procedures'[CODE]), REMOVEFILTERS('procedures'))
+
+
+    partition 'procedures' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo"),
+            #"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data],
+                            #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"ENCOUNTER", "Encounter"}, {"BASE_COST", "Base Cost"}}, MissingField.Ignore)
+                        in
+                            #"Final Renamed Columns"

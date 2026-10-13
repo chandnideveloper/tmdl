@@ -1,0 +1,72 @@
+table 'organizations'
+    lineageTag: 6bd9bdad-4095-4b6b-9187-f99c35f62115
+
+    column 'Id'
+        dataType: string
+        lineageTag: a5ad11c5-ede2-4c50-abf7-3bcbe86da5fc
+        summarizeBy: none
+        sourceColumn: Id
+
+    column 'Name'
+        dataType: string
+        lineageTag: c9b6715a-f451-4d1d-86e4-33ff476b3293
+        summarizeBy: none
+        sourceColumn: Name
+
+    column 'ADDRESS'
+        dataType: string
+        lineageTag: 061ef6bc-3d27-4c5b-aece-71005ffcd5ec
+        summarizeBy: none
+        sourceColumn: ADDRESS
+
+    column 'CITY'
+        dataType: string
+        lineageTag: 7debb480-a0d5-44f4-a816-49a8080a5439
+        summarizeBy: none
+        sourceColumn: CITY
+
+    column 'STATE'
+        dataType: string
+        lineageTag: f0b8c8ca-6b13-463f-abde-d9fd17588c7b
+        summarizeBy: none
+        sourceColumn: STATE
+
+    column 'ZIP'
+        dataType: double
+        lineageTag: eba9f259-a7d9-4fbe-b3db-ab9dd50deba5
+        summarizeBy: none
+        sourceColumn: ZIP
+
+    column 'LAT'
+        dataType: double
+        lineageTag: 2b8ce9cf-ff8a-463a-8b7a-5fca6daf0009
+        summarizeBy: none
+        sourceColumn: LAT
+
+    column 'LON'
+        dataType: double
+        lineageTag: f5daed1d-9afd-4bd7-91bd-c7c3c973d572
+        summarizeBy: none
+        sourceColumn: LON
+
+    column 'Username' = SELECTEDVALUE('organizations'[Name])
+        dataType: string
+
+        summarizeBy: none
+
+    measure 'Visits % Contribution (LOD)' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
+
+
+    measure 'RLS - Organization Access' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 413 Client Error: Payload Too Large for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    partition 'organizations' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Gfqr930PI28eveUiJrS8ikSsyzDUbPE4pJy7nG9ZIUc"),
+            #"Navigation 1" = Source{[name = "organizations", ItemKind = "Table"]}[Data],
+                            #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"NAME", "Name"}}, MissingField.Ignore)
+                        in
+                            #"Final Renamed Columns"
