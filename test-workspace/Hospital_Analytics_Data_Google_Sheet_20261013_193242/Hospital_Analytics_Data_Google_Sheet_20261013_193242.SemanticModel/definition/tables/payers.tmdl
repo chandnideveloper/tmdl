@@ -1,0 +1,61 @@
+table 'payers'
+    lineageTag: 843b697b-0515-48a8-a556-f4c8c6258277
+
+    column 'Id'
+        dataType: string
+        lineageTag: c45cd09e-ad0a-4a64-b2c9-557fa67f2f9f
+        summarizeBy: none
+        sourceColumn: Id
+
+    column 'NAME'
+        dataType: string
+        lineageTag: 09a113a9-f037-4fc7-90bb-af2560dde177
+        summarizeBy: none
+        sourceColumn: NAME
+
+    column 'ADDRESS'
+        dataType: string
+        lineageTag: 0951a8dc-d567-4510-b870-863cfa32f29e
+        summarizeBy: none
+        sourceColumn: ADDRESS
+
+    column 'CITY'
+        dataType: string
+        lineageTag: f5d436a3-3dac-462a-af3f-80d6ab79e7ca
+        summarizeBy: none
+        sourceColumn: CITY
+
+    column 'State Headquartered'
+        dataType: string
+        lineageTag: 4482c4b4-7de0-4a93-9c02-0a3499afad2d
+        summarizeBy: none
+        sourceColumn: State Headquartered
+
+    column 'ZIP'
+        dataType: double
+        lineageTag: c82020df-ca10-45e4-a3e2-fbce0e44ab5c
+        summarizeBy: none
+        sourceColumn: ZIP
+
+    column 'Phone'
+        dataType: string
+        lineageTag: e43d70fe-1fce-42c0-ab14-30b664080a90
+        summarizeBy: none
+        sourceColumn: Phone
+
+    measure 'CNT of Id (payers)' =
+        COUNT('payers'[Id])
+
+
+    measure 'Total Visits' =
+        COUNT('payers'[Id])
+
+
+    partition 'payers' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1NB9uAQnBa6RYGfm5addKbcToYUZJY_5OlBkWxVZRrbU"),
+            #"Navigation 1" = Source{[name = "payers", ItemKind = "Table"]}[Data],
+                            #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"STATE_HEADQUARTERED", "State Headquartered"}, {"PHONE", "Phone"}}, MissingField.Ignore)
+                        in
+                            #"Final Renamed Columns"
