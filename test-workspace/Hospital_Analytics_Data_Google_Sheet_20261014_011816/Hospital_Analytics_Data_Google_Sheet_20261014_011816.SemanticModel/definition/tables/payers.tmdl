@@ -1,0 +1,56 @@
+table 'payers'
+    lineageTag: b1fb8a1a-6ff4-4a8b-bc4f-885afd7f82ec
+
+    column 'Id'
+        dataType: string
+        lineageTag: 513dbdc0-7a34-4dbb-9475-e59d52beae89
+        summarizeBy: none
+        sourceColumn: Id
+
+    column 'NAME'
+        dataType: string
+        lineageTag: 1a71006d-3c98-41c7-b374-884e7eeb4682
+        summarizeBy: none
+        sourceColumn: NAME
+
+    column 'ADDRESS'
+        dataType: string
+        lineageTag: a521d847-2366-47f1-8168-12aa3edd27a5
+        summarizeBy: none
+        sourceColumn: ADDRESS
+
+    column 'CITY'
+        dataType: string
+        lineageTag: 697bd0ac-cf21-4da8-aeb1-614c3179707d
+        summarizeBy: none
+        sourceColumn: CITY
+
+    column 'State Headquartered'
+        dataType: string
+        lineageTag: e58504a1-fb5a-4440-9179-19addec8d214
+        summarizeBy: none
+        sourceColumn: State Headquartered
+
+    column 'ZIP'
+        dataType: double
+        lineageTag: 7acc4a08-2827-4808-9783-ef76c6776f06
+        summarizeBy: none
+        sourceColumn: ZIP
+
+    column 'Phone'
+        dataType: string
+        lineageTag: 460162c7-bd93-4824-86e3-190be1cca856
+        summarizeBy: none
+        sourceColumn: Phone
+
+    partition 'payers' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1NB9uAQnBa6RYGfm5addKbcToYUZJY_5OlBkWxVZRrbU"),
+            #"Navigation 1" = Source{[name = "payers", ItemKind = "Table"]}[Data],
+            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+            #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"STATE_HEADQUARTERED", "State Headquartered"}, {"PHONE", "Phone"}}),
+            #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"Id", type text}, {"NAME", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"State Headquartered", type text}, {"ZIP", Int64.Type}, {"Phone", type text}}),
+                            #"Final Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"STATE_HEADQUARTERED", "State Headquartered"}, {"PHONE", "Phone"}}, MissingField.Ignore)
+                        in
+                            #"Final Renamed Columns"

@@ -1,0 +1,75 @@
+table 'organizations'
+    lineageTag: e88c2acf-da59-452c-8a78-8fbed0c0abdc
+
+    column 'Id'
+        dataType: string
+        lineageTag: 29d7ff84-e064-4c45-bea7-6bbe6119433f
+        summarizeBy: none
+        sourceColumn: Id
+
+    column 'Name'
+        dataType: string
+        lineageTag: 531cf0a9-adf2-42bc-acfa-5fe7dcb7cf71
+        summarizeBy: none
+        sourceColumn: Name
+
+    column 'ADDRESS'
+        dataType: string
+        lineageTag: c5729a6f-a811-457c-9fb5-dc9f82672303
+        summarizeBy: none
+        sourceColumn: ADDRESS
+
+    column 'CITY'
+        dataType: string
+        lineageTag: 3c5e6e34-7308-4a60-998a-32111694477a
+        summarizeBy: none
+        sourceColumn: CITY
+
+    column 'STATE'
+        dataType: string
+        lineageTag: 975c4ef1-7995-46be-8950-980ea992f7ab
+        summarizeBy: none
+        sourceColumn: STATE
+
+    column 'ZIP'
+        dataType: double
+        lineageTag: 2c86760b-d79c-4f05-a0cd-80d83e5c2ff1
+        summarizeBy: none
+        sourceColumn: ZIP
+
+    column 'LAT'
+        dataType: double
+        lineageTag: 0b05bf5a-314a-4cc1-9a3b-cf0d6e6de2ec
+        summarizeBy: none
+        sourceColumn: LAT
+
+    column 'LON'
+        dataType: double
+        lineageTag: 88d534dc-9d84-4b10-a9ff-77585c5caa81
+        summarizeBy: none
+        sourceColumn: LON
+
+    column 'Username' = -- ERROR: LLM call failed after 6 retries. Last error: None
+        dataType: string
+
+        summarizeBy: none
+
+    measure 'Visits % Contribution (LOD)' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 413 Client Error: Payload Too Large for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure 'RLS - Organization Access' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 413 Client Error: Payload Too Large for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    partition 'organizations' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Gfqr930PI28eveUiJrS8ikSsyzDUbPE4pJy7nG9ZIUc"),
+            #"Navigation 1" = Source{[name = "organizations", ItemKind = "Table"]}[Data],
+            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+            #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"NAME", "Name"}}),
+            #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"Id", type text}, {"Name", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE", type text}, {"ZIP", Int64.Type}, {"LAT", type number}, {"LON", type number}}),
+                            #"Final Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"NAME", "Name"}}, MissingField.Ignore)
+                        in
+                            #"Final Renamed Columns"

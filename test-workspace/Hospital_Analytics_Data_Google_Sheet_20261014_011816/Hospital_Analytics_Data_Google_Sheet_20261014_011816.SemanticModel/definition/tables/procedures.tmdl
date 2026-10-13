@@ -1,0 +1,120 @@
+table 'procedures'
+    lineageTag: a1d86a2f-655f-4b38-a111-28e1b53ddd48
+
+    column 'START'
+        dataType: string
+        lineageTag: 95989664-8d5a-475a-a19e-215410f34295
+        summarizeBy: none
+        sourceColumn: START
+
+    column 'STOP'
+        dataType: string
+        lineageTag: d333f889-2421-425b-b16d-1d8e5a4f0e26
+        summarizeBy: none
+        sourceColumn: STOP
+
+    column 'PATIENT'
+        dataType: string
+        lineageTag: 6b625ee3-225a-46e5-ac48-2551ad2cdf86
+        summarizeBy: none
+        sourceColumn: PATIENT
+
+    column 'Encounter'
+        dataType: string
+        lineageTag: 27b622e9-abb7-4f31-bdeb-7bb6e0496de0
+        summarizeBy: none
+        sourceColumn: Encounter
+
+    column 'CODE'
+        dataType: double
+        lineageTag: c31a7c3a-aade-4053-b25d-6550ea3f3d68
+        summarizeBy: none
+        sourceColumn: CODE
+
+    column 'DESCRIPTION'
+        dataType: string
+        lineageTag: c65b50d4-b838-4845-9c12-c6396da2e117
+        summarizeBy: none
+        sourceColumn: DESCRIPTION
+
+    column 'Base Cost'
+        dataType: double
+        lineageTag: 24a50638-b316-4e47-9ec0-9f71ea171b95
+        summarizeBy: none
+        sourceColumn: Base Cost
+
+    column 'REASONCODE'
+        dataType: double
+        lineageTag: 9e4bcb0d-1e9c-4745-af26-799ce7978903
+        summarizeBy: none
+        sourceColumn: REASONCODE
+
+    column 'REASONDESCRIPTION'
+        dataType: string
+        lineageTag: 6a8e87ac-c301-4d90-839a-d8f476cbe017
+        summarizeBy: none
+        sourceColumn: REASONDESCRIPTION
+
+    column 'DESCRIPTION__procedures__Set_Category' = IF('procedures'[DESCRIPTION] IN { "Admission to burn unit", "Admission to long stay hospital", "Admission to orthopedic department", "Admission to trauma surgery department", "Ankle X-ray", "Antenatal RhD antibody screening", "Assessment of health and social care needs (procedure)" }, "In", "Out")
+        dataType: string
+
+        summarizeBy: none
+
+    column 'Encounter Start Date' = DATEVALUE(LEFT('procedures'[START],10))
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: ce380cb9-cd6e-4e52-9932-84dfabbc4ff7
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: 042c5e45-5fe2-47e3-8e62-336633d4ebee
+            defaultHierarchy: LocalDateTable_38c20727-e63a-43ca-b89b-9b5925ae2fbc.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    measure 'Patient Visits Rank (Top N Patients)' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 413 Client Error: Payload Too Large for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure 'Top N Patients' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 413 Client Error: Payload Too Large for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure 'Procedure Rank(Top N Procedure Parameter)' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 413 Client Error: Payload Too Large for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure 'Top N Procedures Filter' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 413 Client Error: Payload Too Large for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure 'Selected Metric' =
+        -- ERROR: LLM call failed after 6 retries. Last error: 413 Client Error: Payload Too Large for url: https://api.groq.com/openai/v1/chat/completions
+
+
+    measure 'Total Procedures' =
+        COUNT('procedures'[CODE])
+
+
+    measure 'Procedures' =
+        COUNT('procedures'[CODE])
+
+
+    measure 'Total Procedures (LOD)' =
+        CALCULATE(COUNT('procedures'[CODE]), REMOVEFILTERS('procedures'))
+
+
+    partition 'procedures' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo"),
+            #"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data],
+            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+            #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"ENCOUNTER", "Encounter"}, {"BASE_COST", "Base Cost"}}),
+            #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"START", type text}, {"STOP", type text}, {"PATIENT", type text}, {"Encounter", type text}, {"CODE", Int64.Type}, {"DESCRIPTION", type text}, {"Base Cost", Int64.Type}, {"REASONCODE", Int64.Type}, {"REASONDESCRIPTION", type text}}),
+                            #"Final Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"ENCOUNTER", "Encounter"}, {"BASE_COST", "Base Cost"}}, MissingField.Ignore)
+                        in
+                            #"Final Renamed Columns"
