@@ -1,0 +1,59 @@
+model Model
+    culture: en-US
+    defaultPowerBIDataSourceVersion: powerBI_V3
+    sourceQueryCulture: en-US
+    dataAccessOptions
+        legacyRedirects
+        returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+annotation PBIDesktopVersion = 2.138.1004.0 (24.11)
+
+ref table 'organizations'
+ref table 'patients'
+ref table 'payers'
+ref table 'procedures'
+ref table 'encounters'
+ref table 'Top N Procedures(Parameter)'
+ref table 'Metric Selector'
+ref table 'Top N Patients'
+ref table 'LocalDateTable_68b92ee9-5cb2-4e34-b627-2ce102780069'
+ref table 'LocalDateTable_eedfad30-c3d8-45ee-8807-30c0c35bde97'
+ref table 'LocalDateTable_d29258ce-faeb-4e33-8252-ed52e471fbfb'
+
+ref cultureInfo en-US
+
+relationship 1883ff50-6a25-48d5-b88c-bcc17439a342
+    fromColumn: 'encounters'.'Organization'
+    toColumn: 'organizations'.'Id'
+    crossFilteringBehavior: bothDirections
+
+relationship d1062a6a-2911-4cc5-a6e8-5dddf8e76aaa
+    fromColumn: 'encounters'.'Patient'
+    toColumn: 'patients'.'Id'
+    crossFilteringBehavior: bothDirections
+
+relationship 0b539e1c-5a7b-48a6-b2e8-f5d9a526b921
+    fromColumn: 'encounters'.'Payer'
+    toColumn: 'payers'.'Id'
+    crossFilteringBehavior: bothDirections
+
+relationship 9eead2fe-c655-4133-808f-f711c7de7732
+    fromColumn: 'procedures'.'Encounter'
+    toColumn: 'encounters'.'Id'
+    crossFilteringBehavior: bothDirections
+
+relationship a53955c7-5178-426d-8d75-5c4a9934457e
+    fromColumn: 'patients'.'Birthdate'
+    toColumn: 'LocalDateTable_68b92ee9-5cb2-4e34-b627-2ce102780069'.'Date'
+    joinOnDateBehavior: datePartOnly
+
+relationship 0ed3dbbb-9a34-4b17-9552-ef062bff685c
+    fromColumn: 'patients'.'Deathdate'
+    toColumn: 'LocalDateTable_eedfad30-c3d8-45ee-8807-30c0c35bde97'.'Date'
+    joinOnDateBehavior: datePartOnly
+
+relationship 8ffe28cd-6668-44c9-b9c7-103b772bbf20
+    fromColumn: 'procedures'.'Encounter Start Date'
+    toColumn: 'LocalDateTable_d29258ce-faeb-4e33-8252-ed52e471fbfb'.'Date'
+    joinOnDateBehavior: datePartOnly
