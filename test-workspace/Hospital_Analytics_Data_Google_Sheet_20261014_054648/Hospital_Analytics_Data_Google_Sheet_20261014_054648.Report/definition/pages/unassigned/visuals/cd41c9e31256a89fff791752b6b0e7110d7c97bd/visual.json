@@ -1,0 +1,87 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "cd41c9e31256a89fff791752b6b0e7110d7c97bd",
+  "position": {
+    "x": 648,
+    "y": 1145,
+    "width": 616,
+    "height": 320,
+    "z": 10,
+    "tabOrder": 10
+  },
+  "visual": {
+    "visualType": "scatterChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "encounters"
+                    }
+                  },
+                  "Property": "Encounterclass"
+                }
+              },
+              "queryRef": "encounters.Encounterclass",
+              "nativeQueryRef": "Encounterclass",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "organizations"
+                    }
+                  },
+                  "Property": "Visits % Contribution (LOD)"
+                }
+              },
+              "queryRef": "organizations.Visits % Contribution (LOD)",
+              "nativeQueryRef": "Visits % Contribution (LOD)"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "general": [
+        {
+          "properties": {}
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Visit Percentage By Visit Class'"
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": []
+  }
+}

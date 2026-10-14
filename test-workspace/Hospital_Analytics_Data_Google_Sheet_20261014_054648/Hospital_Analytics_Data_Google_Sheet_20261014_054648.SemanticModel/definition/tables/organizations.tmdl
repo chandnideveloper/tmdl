@@ -1,0 +1,91 @@
+table organizations
+	lineageTag: 40907f16-1c31-5c84-97c5-cb309f986244
+
+	measure 'Visits % Contribution (LOD)' = BLANK()
+		lineageTag: 1a4197cb-5a9f-5ff9-bf5e-bd1cd667f6e1
+
+	measure 'Total Visits (LOD)' = CALCULATE(COUNT('organizations'[Id]), ALL('organizations'))
+		lineageTag: 77e01fe7-8526-51fd-947c-0ced8b37fa69
+
+	measure 'Visits per Patient' = CALCULATE(COUNT('organizations'[Id]), ALLEXCEPT("patients", 'patients'[Id]))
+		lineageTag: d42dbccc-2955-5fcd-8910-234f45899a40
+
+	column Id
+		dataType: string
+		lineageTag: 6460c967-9830-5a6c-9fcd-7bdd7d3fec34
+		summarizeBy: none
+		sourceColumn: Id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: cc40b7b6-7d36-5ec4-95b8-0d3e7ad31a4b
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column ADDRESS
+		dataType: string
+		lineageTag: 9c5b413f-56b9-5edf-b0ca-e3c211d1dc93
+		summarizeBy: none
+		sourceColumn: ADDRESS
+
+		annotation SummarizationSetBy = Automatic
+
+	column CITY
+		dataType: string
+		lineageTag: a8544e6c-81b6-546a-ad4d-ca51f9fcc047
+		summarizeBy: none
+		sourceColumn: CITY
+
+		annotation SummarizationSetBy = Automatic
+
+	column STATE
+		dataType: string
+		lineageTag: 34b8cfd5-ad98-503c-9568-0543061df1bb
+		summarizeBy: none
+		sourceColumn: STATE
+
+		annotation SummarizationSetBy = Automatic
+
+	column ZIP
+		dataType: int64
+		lineageTag: 03e9a575-b7cc-589a-bfae-961a00c71b34
+		summarizeBy: sum
+		sourceColumn: ZIP
+		formatString: #,##0
+
+		annotation SummarizationSetBy = Automatic
+
+	column LAT
+		dataType: string
+		lineageTag: dcd0822f-5793-5e07-80c5-8cc9cee42cd4
+		summarizeBy: none
+		sourceColumn: LAT
+
+		annotation SummarizationSetBy = Automatic
+
+	column LON
+		dataType: string
+		lineageTag: e000f05a-153a-5822-ab4d-1013fe805082
+		summarizeBy: none
+		sourceColumn: LON
+
+		annotation SummarizationSetBy = Automatic
+
+	partition organizations = m
+		mode: import
+		source =
+				let
+				    Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Gfqr930PI28eveUiJrS8ikSsyzDUbPE4pJy7nG9ZIUc"),
+				    #"Navigation 1" = Source{[name = "organizations", ItemKind = "Table"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+				    #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"NAME", "Name"}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"Id", type text}, {"Name", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE", type text}, {"ZIP", Int64.Type}, {"LAT", type number}, {"LON", type number}}),
+				    #"Filtered Blank Rows" = Table.SelectRows(#"Changed Type", each [Id] <> null and [Id] <> "")
+				in
+				    #"Filtered Blank Rows"
+
+	annotation PBI_ResultType = Table
