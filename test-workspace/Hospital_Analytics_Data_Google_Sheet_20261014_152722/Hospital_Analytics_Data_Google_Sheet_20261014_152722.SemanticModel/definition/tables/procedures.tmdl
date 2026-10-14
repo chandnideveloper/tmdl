@@ -1,0 +1,117 @@
+table 'procedures'
+    lineageTag: 2b4c1617-7ad7-4702-9c60-b24e320c11aa
+
+    column 'START'
+        dataType: string
+        lineageTag: 7c3b180f-7e3c-4d39-81b0-51d4b001c789
+        summarizeBy: none
+        sourceColumn: START
+
+    column 'STOP'
+        dataType: string
+        lineageTag: ac0ecd7b-1c14-4685-8d11-61baccc6e86b
+        summarizeBy: none
+        sourceColumn: STOP
+
+    column 'PATIENT'
+        dataType: string
+        lineageTag: 1af9b285-893f-469e-879d-49ecafcc4d16
+        summarizeBy: none
+        sourceColumn: PATIENT
+
+    column 'Encounter'
+        dataType: string
+        lineageTag: 59be4f39-62d0-4a32-976a-2e019877b799
+        summarizeBy: none
+        sourceColumn: Encounter
+
+    column 'CODE'
+        dataType: double
+        lineageTag: 98ef001c-8c7c-4ac8-809f-17b6a9c5459f
+        summarizeBy: none
+        sourceColumn: CODE
+
+    column 'DESCRIPTION'
+        dataType: string
+        lineageTag: 58c9795e-e9e6-4001-9bac-06215672e3c5
+        summarizeBy: none
+        sourceColumn: DESCRIPTION
+
+    column 'Base Cost'
+        dataType: double
+        lineageTag: f9c4bb92-cc78-408c-b3f5-69644562bf6c
+        summarizeBy: none
+        sourceColumn: Base Cost
+
+    column 'REASONCODE'
+        dataType: double
+        lineageTag: 10e5dfc9-2f1f-4bc7-aa92-f42711e7a629
+        summarizeBy: none
+        sourceColumn: REASONCODE
+
+    column 'REASONDESCRIPTION'
+        dataType: string
+        lineageTag: 8682e63a-e9fa-460b-b72a-75d9738aef94
+        summarizeBy: none
+        sourceColumn: REASONDESCRIPTION
+
+    column 'DESCRIPTION__procedures__Set_Category' = IF('procedures'[DESCRIPTION] IN { "Admission to burn unit", "Admission to long stay hospital", "Admission to orthopedic department", "Admission to trauma surgery department", "Ankle X-ray", "Antenatal RhD antibody screening", "Assessment of health and social care needs (procedure)" }, "In", "Out")
+        dataType: string
+
+        summarizeBy: none
+
+    column 'Encounter Start Date' = DATEVALUE(LEFT('procedures'[START],10))
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: ca061ca3-097d-47e9-8c6a-a7972fe08621
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: 036af24e-7394-4a95-9c2e-fd875ab89ef8
+            defaultHierarchy: LocalDateTable_ada0abe8-ace8-4c10-9f77-a343d9f86e7f.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    measure 'Patient Visits Rank (Top N Patients)' =
+        BLANK()
+
+
+    measure 'Top N Patients' =
+        BLANK()
+
+
+    measure 'Procedure Rank(Top N Procedure Parameter)' =
+        BLANK()
+
+
+    measure 'Top N Procedures Filter' =
+        BLANK()
+
+
+    measure 'Selected Metric' =
+        BLANK()
+
+
+    measure 'Total Procedures' =
+        COUNT('procedures'[CODE])
+
+
+    measure 'Procedures' =
+        COUNT('procedures'[CODE])
+
+
+    partition 'procedures' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo"),
+            #"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data],
+            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+            #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"ENCOUNTER", "Encounter"}, {"BASE_COST", "Base Cost"}}),
+            #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"START", type text}, {"STOP", type text}, {"PATIENT", type text}, {"Encounter", type text}, {"CODE", Int64.Type}, {"DESCRIPTION", type text}, {"Base Cost", Int64.Type}, {"REASONCODE", Int64.Type}, {"REASONDESCRIPTION", type text}}),
+            #"Filtered Blank Rows" = Table.SelectRows(#"Changed Type", each [CODE] <> null and [CODE] <> ""),
+                            #"Final Renamed Columns" = Table.RenameColumns(#"Filtered Blank Rows", {{"ENCOUNTER", "Encounter"}, {"BASE_COST", "Base Cost"}}, MissingField.Ignore)
+                        in
+                            #"Final Renamed Columns"
