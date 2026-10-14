@@ -1,0 +1,136 @@
+table encounters
+	lineageTag: e46f3090-3db9-5189-9d9e-d822ee94531c
+
+	measure 'Total Procedures (LOD)' = CALCULATE(COUNT('encounters'[Code]), ALL('encounters'))
+		lineageTag: f4e63f8f-dac4-513f-8830-40b148cacc66
+
+	column Id
+		dataType: string
+		lineageTag: 49bc0bfe-cf83-5928-9df8-b5ee753c1dd4
+		summarizeBy: none
+		sourceColumn: Id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Start
+		dataType: string
+		lineageTag: dccbadad-431d-5b2d-ac6e-994159918ae9
+		summarizeBy: none
+		sourceColumn: Start
+
+		annotation SummarizationSetBy = Automatic
+
+	column Stop
+		dataType: string
+		lineageTag: 265d5cc1-5bd2-515e-82a1-9bac46abc9d8
+		summarizeBy: none
+		sourceColumn: Stop
+
+		annotation SummarizationSetBy = Automatic
+
+	column Patient
+		dataType: string
+		lineageTag: 764b83cf-cc09-5cd6-87f1-6fe60ad3f732
+		summarizeBy: none
+		sourceColumn: Patient
+
+		annotation SummarizationSetBy = Automatic
+
+	column Organization
+		dataType: string
+		lineageTag: 6ffa4bc7-2812-5c6b-97c6-f00abb647c9c
+		summarizeBy: none
+		sourceColumn: Organization
+
+		annotation SummarizationSetBy = Automatic
+
+	column Payer
+		dataType: string
+		lineageTag: 3e4fc5e0-d46c-5ae9-a87a-fe74846e8133
+		summarizeBy: none
+		sourceColumn: Payer
+
+		annotation SummarizationSetBy = Automatic
+
+	column Encounterclass
+		dataType: string
+		lineageTag: b63351e5-62ba-5eb9-819d-36664657fb7b
+		summarizeBy: none
+		sourceColumn: Encounterclass
+
+		annotation SummarizationSetBy = Automatic
+
+	column Code
+		dataType: int64
+		lineageTag: e40d8b9a-0999-5510-960c-3eccd700ffd1
+		summarizeBy: none
+		sourceColumn: Code
+		formatString: #,##0
+
+		annotation SummarizationSetBy = Automatic
+
+	column Description
+		dataType: string
+		lineageTag: 0662f99d-0581-5e89-bdfb-123e8733fa5b
+		summarizeBy: none
+		sourceColumn: Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Base Encounter Cost'
+		dataType: double
+		lineageTag: 4dfa55c5-5a5b-5f7b-a2dc-1f1b798c775a
+		summarizeBy: sum
+		sourceColumn: Base Encounter Cost
+		formatString: #,##0.00
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Claim Cost'
+		dataType: double
+		lineageTag: e64468f5-a71e-5006-b24c-acfa749891be
+		summarizeBy: sum
+		sourceColumn: Total Claim Cost
+		formatString: #,##0.00
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Payer Coverage'
+		dataType: string
+		lineageTag: c5ab7f86-dabe-5cbe-af96-4a2e823c3b8b
+		summarizeBy: none
+		sourceColumn: Payer Coverage
+
+		annotation SummarizationSetBy = Automatic
+
+	column Reasoncode
+		dataType: int64
+		lineageTag: c84d6e39-96a6-529c-94a5-e985ce30adcb
+		summarizeBy: none
+		sourceColumn: Reasoncode
+		formatString: #,##0
+
+		annotation SummarizationSetBy = Automatic
+
+	column Reasondescription
+		dataType: string
+		lineageTag: c0841b27-9387-593e-8d2c-de18a6eadee5
+		summarizeBy: none
+		sourceColumn: Reasondescription
+
+		annotation SummarizationSetBy = Automatic
+
+	partition encounters = m
+		mode: import
+		source =
+				let
+				    Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1UFffx5ngb7j1Y2kqRzPCPVA0uvA88GLaftek_fwOjKY"),
+				    #"Navigation 1" = Source{[name = "encounters", ItemKind = "Table"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+				    #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"START", "Start"}, {"STOP", "Stop"}, {"PATIENT", "Patient"}, {"ORGANIZATION", "Organization"}, {"PAYER", "Payer"}, {"ENCOUNTERCLASS", "Encounterclass"}, {"CODE", "Code"}, {"DESCRIPTION", "Description"}, {"BASE_ENCOUNTER_COST", "Base Encounter Cost"}, {"TOTAL_CLAIM_COST", "Total Claim Cost"}, {"PAYER_COVERAGE", "Payer Coverage"}, {"REASONCODE", "Reasoncode"}, {"REASONDESCRIPTION", "Reasondescription"}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"Id", type text}, {"Start", type text}, {"Stop", type text}, {"Patient", type text}, {"Organization", type text}, {"Payer", type text}, {"Encounterclass", type text}, {"Code", Int64.Type}, {"Description", type text}, {"Base Encounter Cost", type number}, {"Total Claim Cost", type number}, {"Payer Coverage", type number}, {"Reasoncode", Int64.Type}, {"Reasondescription", type text}}),
+				    #"Filtered Blank Rows" = Table.SelectRows(#"Changed Type", each [Id] <> null and [Id] <> "")
+				in
+				    #"Filtered Blank Rows"
+
+	annotation PBI_ResultType = Table
