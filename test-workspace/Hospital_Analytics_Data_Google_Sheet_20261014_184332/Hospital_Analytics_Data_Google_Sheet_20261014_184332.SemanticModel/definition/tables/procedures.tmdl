@@ -1,0 +1,107 @@
+table 'procedures'
+    lineageTag: 4a548e3f-14a8-451e-86f2-7a53a112fff6
+
+    column 'START'
+        dataType: string
+        lineageTag: 31a0658c-6f9c-445b-9936-5734be527f0d
+        summarizeBy: none
+        sourceColumn: START
+
+    column 'STOP'
+        dataType: string
+        lineageTag: b6b5e7ff-fdea-4687-8d70-1e2a2b98d438
+        summarizeBy: none
+        sourceColumn: STOP
+
+    column 'PATIENT'
+        dataType: string
+        lineageTag: 65d836ea-176d-4f5d-b5e4-12444b3efa30
+        summarizeBy: none
+        sourceColumn: PATIENT
+
+    column 'Encounter'
+        dataType: string
+        lineageTag: 09bbccd6-d7e6-44c3-9e06-807d99af7daf
+        summarizeBy: none
+        sourceColumn: Encounter
+
+    column 'CODE'
+        dataType: double
+        lineageTag: 169fcdf1-c069-4bf7-8b0f-0ae5b7db2b8b
+        summarizeBy: none
+        sourceColumn: CODE
+
+    column 'DESCRIPTION'
+        dataType: string
+        lineageTag: 6163294d-ee4f-4501-8f52-5465e98ede41
+        summarizeBy: none
+        sourceColumn: DESCRIPTION
+
+    column 'Base Cost'
+        dataType: double
+        lineageTag: ce12a0bf-4719-4a6f-839b-446130080a3b
+        summarizeBy: none
+        sourceColumn: Base Cost
+
+    column 'REASONCODE'
+        dataType: double
+        lineageTag: 2579b8bf-6646-47b3-ace5-24603d70e4b6
+        summarizeBy: none
+        sourceColumn: REASONCODE
+
+    column 'REASONDESCRIPTION'
+        dataType: string
+        lineageTag: ef2c13d7-86bf-4563-8665-f0bea987b3cc
+        summarizeBy: none
+        sourceColumn: REASONDESCRIPTION
+
+    column 'DESCRIPTION (procedures) Set' = BLANK()
+        dataType: string
+
+        summarizeBy: none
+
+    column 'Encounter Start Date' = BLANK()
+        dataType: string
+
+        summarizeBy: none
+
+    measure 'Patient Visits Rank (Top N Patients)' =
+        BLANK()
+
+
+    measure 'Top N Patients Measure' =
+        BLANK()
+
+
+    measure 'Procedure Rank(Top N Procedure Parameter)' =
+        BLANK()
+
+
+    measure 'Top N Procedures Filter' =
+        BLANK()
+
+
+    measure 'Selected Metric' =
+        BLANK()
+
+
+    measure 'Total Procedures' =
+        COUNT('procedures'[CODE])
+
+
+    measure 'Procedures Measure' =
+        COUNT('procedures'[CODE])
+
+
+    partition 'procedures' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo"),
+            #"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data],
+            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+            #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"ENCOUNTER", "Encounter"}, {"BASE_COST", "Base Cost"}}),
+            #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"START", type text}, {"STOP", type text}, {"PATIENT", type text}, {"Encounter", type text}, {"CODE", Int64.Type}, {"DESCRIPTION", type text}, {"Base Cost", Int64.Type}, {"REASONCODE", Int64.Type}, {"REASONDESCRIPTION", type text}}),
+            #"Filtered Blank Rows" = Table.SelectRows(#"Changed Type", each [CODE] <> null and [CODE] <> ""),
+                            #"Removed Blank Columns" = Table.SelectColumns(#"Filtered Blank Rows", {"START", "STOP", "PATIENT", "Encounter", "CODE", "DESCRIPTION", "Base Cost", "REASONCODE", "REASONDESCRIPTION"}, MissingField.Ignore)
+                        in
+                            #"Removed Blank Columns"
