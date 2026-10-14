@@ -1,0 +1,74 @@
+table payers
+	lineageTag: b0c017bd-cbe4-5ab7-8183-0447decea520
+
+	column Id
+		dataType: string
+		lineageTag: d6db8ba2-8b8d-5014-80c8-56b5798aa4a7
+		summarizeBy: none
+		sourceColumn: Id
+
+		annotation SummarizationSetBy = Automatic
+
+	column NAME
+		dataType: string
+		lineageTag: d90c605d-4358-5a7b-a1d9-43de9b824cce
+		summarizeBy: none
+		sourceColumn: NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column ADDRESS
+		dataType: string
+		lineageTag: 5dde700d-ea37-5b93-82e4-eb7dc8b05e48
+		summarizeBy: none
+		sourceColumn: ADDRESS
+
+		annotation SummarizationSetBy = Automatic
+
+	column CITY
+		dataType: string
+		lineageTag: 030d4277-831a-55a1-8dc5-a9a70b509dfa
+		summarizeBy: none
+		sourceColumn: CITY
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'State Headquartered'
+		dataType: string
+		lineageTag: a464346d-7e21-548e-9d86-c85a21aae121
+		summarizeBy: none
+		sourceColumn: State Headquartered
+
+		annotation SummarizationSetBy = Automatic
+
+	column ZIP
+		dataType: int64
+		lineageTag: a1a0b7cf-3f82-59dc-81e0-c8ab37af6ea9
+		summarizeBy: sum
+		sourceColumn: ZIP
+		formatString: #,##0
+
+		annotation SummarizationSetBy = Automatic
+
+	column Phone
+		dataType: string
+		lineageTag: 12ac9115-4a21-56f6-9897-32ac703a7616
+		summarizeBy: none
+		sourceColumn: Phone
+
+		annotation SummarizationSetBy = Automatic
+
+	partition payers = m
+		mode: import
+		source =
+				let
+				    Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1NB9uAQnBa6RYGfm5addKbcToYUZJY_5OlBkWxVZRrbU"),
+				    #"Navigation 1" = Source{[name = "payers", ItemKind = "Table"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+				    #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"STATE_HEADQUARTERED", "State Headquartered"}, {"PHONE", "Phone"}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"Id", type text}, {"NAME", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"State Headquartered", type text}, {"ZIP", Int64.Type}, {"Phone", type text}}),
+				    #"Filtered Blank Rows" = Table.SelectRows(#"Changed Type", each [Id] <> null and [Id] <> "")
+				in
+				    #"Filtered Blank Rows"
+
+	annotation PBI_ResultType = Table
