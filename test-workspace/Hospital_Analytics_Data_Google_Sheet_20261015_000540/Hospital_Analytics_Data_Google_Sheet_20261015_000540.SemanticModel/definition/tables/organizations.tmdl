@@ -1,0 +1,100 @@
+table 'organizations'
+    lineageTag: a413d80c-ff62-4488-a962-d9d61aa4fc68
+
+    column 'Id'
+        dataType: string
+        lineageTag: d13a56c7-e4db-48c9-84d0-48d15a6a3805
+        summarizeBy: none
+        sourceColumn: Id
+
+    column 'Name'
+        dataType: string
+        lineageTag: 5e2225d1-edcc-4dca-ae4d-ca76f2ff5846
+        summarizeBy: none
+        sourceColumn: Name
+
+    column 'ADDRESS'
+        dataType: string
+        lineageTag: 55fa7474-a511-4d9b-a5ae-73dc3be40b7b
+        summarizeBy: none
+        sourceColumn: ADDRESS
+
+    column 'CITY'
+        dataType: string
+        lineageTag: 0a03fb2d-2c7c-4255-b2dc-21252ff8ede1
+        summarizeBy: none
+        sourceColumn: CITY
+
+    column 'STATE'
+        dataType: string
+        lineageTag: 7a557a88-e733-4eeb-9839-52d5ee78dd34
+        summarizeBy: none
+        sourceColumn: STATE
+
+    column 'ZIP'
+        dataType: double
+        lineageTag: a402d1bc-5fa9-4e3c-b8c8-3cbfae03bcb2
+        summarizeBy: none
+        sourceColumn: ZIP
+
+    column 'LAT'
+        dataType: double
+        lineageTag: 3c9494df-ab88-4307-a424-4bb8e510cbe6
+        summarizeBy: none
+        sourceColumn: LAT
+
+    column 'LON'
+        dataType: double
+        lineageTag: e9ccccb1-e0b1-4346-ab6a-6b984b1297d9
+        summarizeBy: none
+        sourceColumn: LON
+
+    column 'Username' = SELECTEDVALUE('organizations'[Name])
+        dataType: string
+
+        summarizeBy: none
+
+    measure 'Visits % Contribution (LOD)' =
+        DIVIDE(DISTINCTCOUNT('organizations'[Id]), CALCULATE([Total Visits (LOD)], ALLSELECTED()), 0)
+
+
+    measure 'Total Patients (LOD)' =
+        CALCULATE(DISTINCTCOUNT('patients'[Id]), ALL('patients'))
+
+
+    measure 'Total Procedures (LOD)' =
+        CALCULATE(COUNT('encounters'[Code]), ALL('encounters'))
+
+
+    measure 'Total Visits (LOD)' =
+        CALCULATE(COUNT('organizations'[Id]), ALL('organizations'))
+
+
+    measure 'Visits per Patient' =
+        CALCULATE(COUNT('organizations'[Id]), ALLEXCEPT('patients', 'patients'[Id]))
+
+
+    measure 'Avg Visits per Patient' =
+        CALCULATE(AVERAGE('patients'[Visits per Patient]), ALLEXCEPT('patients', 'patients'[Gender]))
+
+
+    measure 'SUM of Visits per Patient' =
+        SUM('organizations'[Visits per Patient])
+
+
+    measure 'RLS - Organization Access' =
+        IF(USERNAME() = "akash020102@gmail.com", TRUE(), 'organizations'[Name] = "MASSACHUSETTS GENERAL HOSPITAL")
+
+
+    partition 'organizations' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Gfqr930PI28eveUiJrS8ikSsyzDUbPE4pJy7nG9ZIUc"),
+            #"Navigation 1" = Source{[name = "organizations", ItemKind = "Table"]}[Data],
+            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+            #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"NAME", "Name"}}),
+            #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"Id", type text}, {"Name", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE", type text}, {"ZIP", Int64.Type}, {"LAT", type number}, {"LON", type number}}),
+            #"Filtered Blank Rows" = Table.SelectRows(#"Changed Type", each [Id] <> null and [Id] <> ""),
+                            #"Removed Blank Columns" = Table.SelectColumns(#"Filtered Blank Rows", {"Id", "Name", "ADDRESS", "CITY", "STATE", "ZIP", "LAT", "LON"}, MissingField.Ignore)
+                        in
+                            #"Removed Blank Columns"
