@@ -1,0 +1,117 @@
+table 'procedures'
+    lineageTag: 1abd2272-888f-444e-a3fb-60b84252df88
+
+    column 'START'
+        dataType: string
+        lineageTag: 7bbab13e-d779-4df9-afb6-a865042afc2f
+        summarizeBy: none
+        sourceColumn: START
+
+    column 'STOP'
+        dataType: string
+        lineageTag: 820ec630-67d3-4898-954c-1f25c937a7d7
+        summarizeBy: none
+        sourceColumn: STOP
+
+    column 'PATIENT'
+        dataType: string
+        lineageTag: 0b58c6fd-75fa-42a2-90a6-582fedfb5650
+        summarizeBy: none
+        sourceColumn: PATIENT
+
+    column 'Encounter'
+        dataType: string
+        lineageTag: bac71697-bc52-410d-b059-a39d1aea5e4c
+        summarizeBy: none
+        sourceColumn: Encounter
+
+    column 'CODE'
+        dataType: double
+        lineageTag: 995b234b-ab58-4d90-b920-80ac4be7b8b0
+        summarizeBy: none
+        sourceColumn: CODE
+
+    column 'DESCRIPTION'
+        dataType: string
+        lineageTag: ca66e5b4-c4f3-4f65-a2e1-78d85ccf9b08
+        summarizeBy: none
+        sourceColumn: DESCRIPTION
+
+    column 'Base Cost'
+        dataType: double
+        lineageTag: dfc59e42-0ec1-4fca-b18b-13503670d9ee
+        summarizeBy: none
+        sourceColumn: Base Cost
+
+    column 'REASONCODE'
+        dataType: double
+        lineageTag: c08d239c-be44-44cc-aa42-334a922ebe55
+        summarizeBy: none
+        sourceColumn: REASONCODE
+
+    column 'REASONDESCRIPTION'
+        dataType: string
+        lineageTag: bb29678a-6232-44de-9c7b-c134f77122cf
+        summarizeBy: none
+        sourceColumn: REASONDESCRIPTION
+
+    column 'DESCRIPTION__procedures__Set_Category' = IF('procedures'[DESCRIPTION] IN { "Admission to burn unit", "Admission to long stay hospital", "Admission to orthopedic department", "Admission to trauma surgery department", "Ankle X-ray", "Antenatal RhD antibody screening", "Assessment of health and social care needs (procedure)" }, "In", "Out")
+        dataType: string
+
+        summarizeBy: none
+
+    column 'Encounter Start Date' = DATEVALUE(LEFT('procedures'[START],10))
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: 46387f53-61c0-4b0f-8990-11dea4f139bc
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: cd5cfbf0-7ff4-4f27-b408-47ccdc3c22e6
+            defaultHierarchy: LocalDateTable_d532a8eb-282f-4260-92bb-0e3ade919e9f.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    measure 'Patient Visits Rank (Top N Patients)' =
+        BLANK()
+
+
+    measure 'Top N Patients' =
+        BLANK()
+
+
+    measure 'Procedure Rank(Top N Procedure Parameter)' =
+        BLANK()
+
+
+    measure 'Top N Procedures Filter' =
+        BLANK()
+
+
+    measure 'Selected Metric' =
+        BLANK()
+
+
+    measure 'Total Procedures' =
+        COUNT('procedures'[CODE])
+
+
+    measure 'Procedures' =
+        COUNT('procedures'[CODE])
+
+
+    partition 'procedures' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo"),
+            #"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data],
+            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+            #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"ENCOUNTER", "Encounter"}, {"BASE_COST", "Base Cost"}}),
+            #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"START", type text}, {"STOP", type text}, {"PATIENT", type text}, {"Encounter", type text}, {"CODE", Int64.Type}, {"DESCRIPTION", type text}, {"Base Cost", Int64.Type}, {"REASONCODE", Int64.Type}, {"REASONDESCRIPTION", type text}}),
+            #"Filtered Blank Rows" = Table.SelectRows(#"Changed Type", each [CODE] <> null and [CODE] <> ""),
+                            #"Removed Blank Columns" = Table.SelectColumns(#"Filtered Blank Rows", List.Select(Table.ColumnNames(#"Filtered Blank Rows"), each _ <> null and Text.Trim(Text.From(_)) <> ""))
+                        in
+                            #"Removed Blank Columns"

@@ -1,0 +1,19 @@
+table 'Metric Selector'
+
+    column 'Value'
+        formatString: General
+        summarizeBy: none
+        isNameInferred
+        sourceColumn: [Value]
+        annotation SummarizationSetBy = Automatic
+
+    partition 'Metric Selector' = calculated
+        mode: import
+        source = DATATABLE("Value", STRING, {{"Visits"}, {"Patients"}, {"Procedures"}})
+
+    measure 'SelectedMetricSelector' = SELECTEDVALUE('Metric Selector'[Value], "Visits")
+        formatString: General
+        isHidden: true
+
+    annotation PBI_Id = 4862372c01ea4704b8a66f6c308a8337
+    
