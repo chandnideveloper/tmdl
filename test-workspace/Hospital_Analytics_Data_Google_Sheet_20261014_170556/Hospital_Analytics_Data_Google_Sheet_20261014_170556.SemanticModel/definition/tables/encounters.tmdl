@@ -1,0 +1,133 @@
+table 'encounters'
+    lineageTag: b166ea01-5cb6-4f2d-9a9a-bc56ac1f7faa
+
+    column 'Id'
+        dataType: string
+        lineageTag: 4ddf7f3e-7f6b-4bbc-ac49-edc33d004cbf
+        summarizeBy: none
+        sourceColumn: Id
+
+    column 'Start'
+        dataType: string
+        lineageTag: 552f1b21-28b8-4cd4-be8f-f98892ed276d
+        summarizeBy: none
+        sourceColumn: Start
+
+    column 'Stop'
+        dataType: string
+        lineageTag: 063afcbd-b27e-4610-b3c8-e56cc8c64d59
+        summarizeBy: none
+        sourceColumn: Stop
+
+    column 'Patient'
+        dataType: string
+        lineageTag: e206ec2d-b19e-4275-855a-8d5cbda8a4d1
+        summarizeBy: none
+        sourceColumn: Patient
+
+    column 'Organization'
+        dataType: string
+        lineageTag: 9ef74ea2-cc4e-40d8-bdb3-0edd0767f8c8
+        summarizeBy: none
+        sourceColumn: Organization
+
+    column 'Payer'
+        dataType: string
+        lineageTag: cb293096-baa3-45fa-bf0d-a35c5f788999
+        summarizeBy: none
+        sourceColumn: Payer
+
+    column 'Encounterclass'
+        dataType: string
+        lineageTag: 40142b33-84be-463c-93b0-e418a325a371
+        summarizeBy: none
+        sourceColumn: Encounterclass
+
+    column 'Code'
+        dataType: double
+        lineageTag: 81dff532-7d60-42fa-ab81-a5163838ed39
+        summarizeBy: none
+        sourceColumn: Code
+
+    column 'Description'
+        dataType: string
+        lineageTag: c470ec1d-8f3b-4100-ad16-53f7541d6db1
+        summarizeBy: none
+        sourceColumn: Description
+
+    column 'Base Encounter Cost'
+        dataType: double
+        lineageTag: 8fdd682e-6717-4bfa-8fcb-f742afa0d5f1
+        summarizeBy: none
+        sourceColumn: Base Encounter Cost
+
+    column 'Total Claim Cost'
+        dataType: double
+        lineageTag: 1492ed8b-2c21-4202-b7a4-6d3cb0f50054
+        summarizeBy: none
+        sourceColumn: Total Claim Cost
+
+    column 'Payer Coverage'
+        dataType: double
+        lineageTag: 2f17687f-621b-48d5-ae81-368baf91ae78
+        summarizeBy: none
+        sourceColumn: Payer Coverage
+
+    column 'Reasoncode'
+        dataType: double
+        lineageTag: 50038c0c-3d93-4b55-a64a-eb6073d5a1e8
+        summarizeBy: none
+        sourceColumn: Reasoncode
+
+    column 'Reasondescription'
+        dataType: string
+        lineageTag: 106d3a90-29e4-4a38-8a00-a6145f08e9a1
+        summarizeBy: none
+        sourceColumn: Reasondescription
+
+    column 'Encounter Start Date' = BLANK()
+        dataType: string
+
+        summarizeBy: none
+
+    measure 'Patient Visits Rank (Top N Patients)' =
+        BLANK()
+
+
+    measure 'Top N Patients' =
+        BLANK()
+
+
+    measure 'Visits % Contribution (LOD)' =
+        BLANK()
+
+
+    measure 'CNT of Id' =
+        COUNT('encounters'[Id])
+
+
+    measure 'Total Visits' =
+        COUNT('encounters'[Id])
+
+
+    measure 'SUM of Base Encounter Cost' =
+        SUM('encounters'[Base Encounter Cost])
+
+
+    measure 'Total Procedures (LOD)' =
+        BLANK()
+
+
+    measure 'Total Visits (LOD)' =
+        BLANK()
+
+
+    partition 'encounters' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1UFffx5ngb7j1Y2kqRzPCPVA0uvA88GLaftek_fwOjKY"),
+            #"Navigation 1" = Source{[name = "encounters", ItemKind = "Table"]}[Data],
+                            #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"START", "Start"}, {"STOP", "Stop"}, {"PATIENT", "Patient"}, {"ORGANIZATION", "Organization"}, {"PAYER", "Payer"}, {"ENCOUNTERCLASS", "Encounterclass"}, {"CODE", "Code"}, {"DESCRIPTION", "Description"}, {"BASE_ENCOUNTER_COST", "Base Encounter Cost"}, {"TOTAL_CLAIM_COST", "Total Claim Cost"}, {"PAYER_COVERAGE", "Payer Coverage"}, {"REASONCODE", "Reasoncode"}, {"REASONDESCRIPTION", "Reasondescription"}}, MissingField.Ignore),
+                            #"Removed Blank Columns" = Table.SelectColumns(#"Final Renamed Columns", List.Select(Table.ColumnNames(#"Final Renamed Columns"), each _ <> null and Text.Trim(Text.From(_)) <> ""))
+                        in
+                            #"Removed Blank Columns"

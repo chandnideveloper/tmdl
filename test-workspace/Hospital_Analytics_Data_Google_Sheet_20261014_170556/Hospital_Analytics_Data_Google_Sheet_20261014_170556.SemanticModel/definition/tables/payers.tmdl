@@ -1,0 +1,54 @@
+table 'payers'
+    lineageTag: 365d06f3-e55a-4f31-bc89-0a9519a8bc71
+
+    column 'Id (payers)'
+        dataType: string
+        lineageTag: 0298bd6b-efbd-436b-b89f-6e2f94ce8477
+        summarizeBy: none
+        sourceColumn: Id (payers)
+
+    column 'NAME (payers)'
+        dataType: string
+        lineageTag: 0ac592ba-68e5-40bc-9a07-a7a9eaa266c7
+        summarizeBy: none
+        sourceColumn: NAME (payers)
+
+    column 'ADDRESS (payers)'
+        dataType: string
+        lineageTag: 3e2aa916-71be-44a1-9306-d24a8a61ce91
+        summarizeBy: none
+        sourceColumn: ADDRESS (payers)
+
+    column 'CITY (payers)'
+        dataType: string
+        lineageTag: c8f5f30d-ac84-43ff-bfb4-69399b5101cd
+        summarizeBy: none
+        sourceColumn: CITY (payers)
+
+    column 'State Headquartered'
+        dataType: string
+        lineageTag: 42f47d5b-bb8e-4aed-9384-b6abacc43d56
+        summarizeBy: none
+        sourceColumn: State Headquartered
+
+    column 'ZIP (payers)'
+        dataType: double
+        lineageTag: dc49d1a5-4fef-414d-af29-3c0b554616a4
+        summarizeBy: none
+        sourceColumn: ZIP (payers)
+
+    column 'Phone'
+        dataType: string
+        lineageTag: c9d934f3-d4c8-4c7c-9894-27f8b770ef49
+        summarizeBy: none
+        sourceColumn: Phone
+
+    partition 'payers' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1NB9uAQnBa6RYGfm5addKbcToYUZJY_5OlBkWxVZRrbU"),
+            #"Navigation 1" = Source{[name = "payers", ItemKind = "Table"]}[Data],
+                            #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"Id", "Id (payers)"}, {"NAME", "NAME (payers)"}, {"ADDRESS", "ADDRESS (payers)"}, {"CITY", "CITY (payers)"}, {"STATE_HEADQUARTERED", "State Headquartered"}, {"ZIP", "ZIP (payers)"}, {"PHONE", "Phone"}}, MissingField.Ignore),
+                            #"Removed Blank Columns" = Table.SelectColumns(#"Final Renamed Columns", List.Select(Table.ColumnNames(#"Final Renamed Columns"), each _ <> null and Text.Trim(Text.From(_)) <> ""))
+                        in
+                            #"Removed Blank Columns"

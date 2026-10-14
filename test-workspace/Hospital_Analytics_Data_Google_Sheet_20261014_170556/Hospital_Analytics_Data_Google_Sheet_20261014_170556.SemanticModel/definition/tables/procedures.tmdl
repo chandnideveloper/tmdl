@@ -1,0 +1,83 @@
+table 'procedures'
+    lineageTag: 9fae707f-2368-43e9-bc00-6391a6886762
+
+    column 'START (procedures)'
+        dataType: string
+        lineageTag: 8dfc7052-eebc-4d62-8fc2-bb6fde9e8bc7
+        summarizeBy: none
+        sourceColumn: START (procedures)
+
+    column 'STOP (procedures)'
+        dataType: string
+        lineageTag: ff950363-1450-4783-a9a7-034fec837f69
+        summarizeBy: none
+        sourceColumn: STOP (procedures)
+
+    column 'PATIENT (procedures)'
+        dataType: string
+        lineageTag: 0a638086-f85e-4070-8ed0-0c734d274887
+        summarizeBy: none
+        sourceColumn: PATIENT (procedures)
+
+    column 'Encounter'
+        dataType: string
+        lineageTag: 16b73246-2b62-4632-a8f3-f81ed3e23e50
+        summarizeBy: none
+        sourceColumn: Encounter
+
+    column 'CODE (procedures)'
+        dataType: double
+        lineageTag: 4113da83-b7c4-4eab-99b0-a598c7a632a7
+        summarizeBy: none
+        sourceColumn: CODE (procedures)
+
+    column 'DESCRIPTION (procedures)'
+        dataType: string
+        lineageTag: 615154c1-a1c7-49af-912d-19701fd3d0e0
+        summarizeBy: none
+        sourceColumn: DESCRIPTION (procedures)
+
+    column 'Base Cost'
+        dataType: double
+        lineageTag: 01defb5f-22c9-4662-97ff-9f4216f4990f
+        summarizeBy: none
+        sourceColumn: Base Cost
+
+    column 'REASONCODE (procedures)'
+        dataType: double
+        lineageTag: 73f330e4-0673-43d6-8391-3f13ea77e5b3
+        summarizeBy: none
+        sourceColumn: REASONCODE (procedures)
+
+    column 'REASONDESCRIPTION (procedures)'
+        dataType: string
+        lineageTag: ffa16156-195a-4d86-83be-0eaca8592e82
+        summarizeBy: none
+        sourceColumn: REASONDESCRIPTION (procedures)
+
+    column 'DESCRIPTION (procedures) Set' = BLANK()
+        dataType: string
+
+        summarizeBy: none
+
+    measure 'Procedure Rank(Top N Procedure Parameter)' =
+        BLANK()
+
+
+    measure 'Top N Procedures Filter' =
+        BLANK()
+
+
+    measure 'Selected Metric' =
+        BLANK()
+
+
+    partition 'procedures' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo"),
+            #"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data],
+                            #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"START", "START (procedures)"}, {"STOP", "STOP (procedures)"}, {"PATIENT", "PATIENT (procedures)"}, {"ENCOUNTER", "Encounter"}, {"CODE", "CODE (procedures)"}, {"DESCRIPTION", "DESCRIPTION (procedures)"}, {"BASE_COST", "Base Cost"}, {"REASONCODE", "REASONCODE (procedures)"}, {"REASONDESCRIPTION", "REASONDESCRIPTION (procedures)"}}, MissingField.Ignore),
+                            #"Removed Blank Columns" = Table.SelectColumns(#"Final Renamed Columns", List.Select(Table.ColumnNames(#"Final Renamed Columns"), each _ <> null and Text.Trim(Text.From(_)) <> ""))
+                        in
+                            #"Removed Blank Columns"
