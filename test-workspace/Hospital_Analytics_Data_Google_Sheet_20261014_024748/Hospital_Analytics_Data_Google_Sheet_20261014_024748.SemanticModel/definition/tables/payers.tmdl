@@ -1,56 +1,57 @@
-table 'payers'
-    lineageTag: a4f84471-b979-408a-9d4b-699428a6ebc0
+table payers
+	lineageTag: a4f84471-b979-408a-9d4b-699428a6ebc0
 
-    column 'Id'
-        dataType: string
-        lineageTag: 0d6db6a2-3805-40dc-b103-b4e565a58cfb
-        summarizeBy: none
-        sourceColumn: Id
+	column Id
+		dataType: string
+		lineageTag: 0d6db6a2-3805-40dc-b103-b4e565a58cfb
+		summarizeBy: none
+		sourceColumn: Id
 
-    column 'NAME'
-        dataType: string
-        lineageTag: c0d07663-36ba-4ea0-ae98-b4e4f7c46ecf
-        summarizeBy: none
-        sourceColumn: NAME
+	column NAME
+		dataType: string
+		lineageTag: c0d07663-36ba-4ea0-ae98-b4e4f7c46ecf
+		summarizeBy: none
+		sourceColumn: NAME
 
-    column 'ADDRESS'
-        dataType: string
-        lineageTag: 5fa5b1fe-6f31-45ee-bab6-9786e2eb689c
-        summarizeBy: none
-        sourceColumn: ADDRESS
+	column ADDRESS
+		dataType: string
+		lineageTag: 5fa5b1fe-6f31-45ee-bab6-9786e2eb689c
+		summarizeBy: none
+		sourceColumn: ADDRESS
 
-    column 'CITY'
-        dataType: string
-        lineageTag: 845fb182-353b-4dfd-89cf-9fc52200a880
-        summarizeBy: none
-        sourceColumn: CITY
+	column CITY
+		dataType: string
+		lineageTag: 845fb182-353b-4dfd-89cf-9fc52200a880
+		summarizeBy: none
+		sourceColumn: CITY
 
-    column 'State Headquartered'
-        dataType: string
-        lineageTag: 83d2fb67-65d2-4fb3-b005-6d858aa94f3f
-        summarizeBy: none
-        sourceColumn: State Headquartered
+	column 'State Headquartered'
+		dataType: string
+		lineageTag: 83d2fb67-65d2-4fb3-b005-6d858aa94f3f
+		summarizeBy: none
+		sourceColumn: State Headquartered
 
-    column 'ZIP'
-        dataType: double
-        lineageTag: 99cbc53d-3ddd-4c14-9978-089a382d56c5
-        summarizeBy: none
-        sourceColumn: ZIP
+	column ZIP
+		dataType: double
+		lineageTag: 99cbc53d-3ddd-4c14-9978-089a382d56c5
+		summarizeBy: none
+		sourceColumn: ZIP
 
-    column 'Phone'
-        dataType: string
-        lineageTag: a8ce72e3-e787-4e6d-b49a-e0dfec60ebde
-        summarizeBy: none
-        sourceColumn: Phone
+	column Phone
+		dataType: string
+		lineageTag: a8ce72e3-e787-4e6d-b49a-e0dfec60ebde
+		summarizeBy: none
+		sourceColumn: Phone
 
-    partition 'payers' = m
-        mode: import
-        source =
-            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1NB9uAQnBa6RYGfm5addKbcToYUZJY_5OlBkWxVZRrbU"),
-            #"Navigation 1" = Source{[name = "payers", ItemKind = "Table"]}[Data],
-            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
-            #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"STATE_HEADQUARTERED", "State Headquartered"}, {"PHONE", "Phone"}}),
-            #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"Id", type text}, {"NAME", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"State Headquartered", type text}, {"ZIP", Int64.Type}, {"Phone", type text}}),
-                            #"Final Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"STATE_HEADQUARTERED", "State Headquartered"}, {"PHONE", "Phone"}}, MissingField.Ignore)
-                        in
-                            #"Final Renamed Columns"
+	partition payers = m
+		mode: import
+		source =
+				let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1NB9uAQnBa6RYGfm5addKbcToYUZJY_5OlBkWxVZRrbU"),
+				#"Navigation 1" = Source{[name = "payers", ItemKind = "Table"]}[Data],
+				#"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+				#"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"STATE_HEADQUARTERED", "State Headquartered"}, {"PHONE", "Phone"}}),
+				#"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"Id", type text}, {"NAME", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"State Headquartered", type text}, {"ZIP", Int64.Type}, {"Phone", type text}}),
+				                #"Final Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"STATE_HEADQUARTERED", "State Headquartered"}, {"PHONE", "Phone"}}, MissingField.Ignore)
+				            in
+				                #"Final Renamed Columns"
+

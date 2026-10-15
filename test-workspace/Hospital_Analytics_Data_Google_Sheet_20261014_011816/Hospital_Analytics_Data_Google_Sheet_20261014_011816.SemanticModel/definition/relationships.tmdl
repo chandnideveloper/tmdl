@@ -1,0 +1,5 @@
+relationship 042c5e45-5fe2-47e3-8e62-336633d4ebee
+	joinOnDateBehavior: datePartOnly
+	fromColumn: procedures.'Encounter Start Date'
+	toColumn: LocalDateTable_38c20727-e63a-43ca-b89b-9b5925ae2fbc.Date
+

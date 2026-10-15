@@ -1,163 +1,197 @@
-table 'patients'
-    lineageTag: 9681d3de-bbaf-4224-a51c-b04b658b34f1
+table patients
+	lineageTag: 9681d3de-bbaf-4224-a51c-b04b658b34f1
 
-    column 'Id'
-        dataType: string
-        lineageTag: 1c157d7f-2fe5-4b8a-942d-72f9101dc043
-        summarizeBy: none
-        sourceColumn: Id
+	measure 'SUM of Avg Visits per Patient (patients)' = SUM('patients'[Avg Visits per Patient])
+		lineageTag: be61f012-73e9-4878-a19f-2e21283a9610
 
-    column 'Birthdate'
-        sourceColumn: Birthdate
-        dataType: dateTime
-        formatString: Long Date
-        lineageTag: 56e91e95-718a-4c3d-9876-c0afbcc590c4
-        summarizeBy: none
+	measure 'Total Patients (LOD)' = -- ERROR CONVERTING: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
+		lineageTag: 0f8afebd-d2d1-4d13-b838-1a5745bd768a
 
-        variation Variation
-            isDefault
-            relationship: e4d4bf7a-fea3-4a7d-8987-42536282badc
-            defaultHierarchy: LocalDateTable_5a699a5b-1a98-438a-aa7f-cac2b8616304.'Date Hierarchy'
+	measure 'Avg Visits per Patient' = -- ERROR CONVERTING: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
+		lineageTag: c6c77d86-0abe-47bc-ac2b-04e528af9d0c
 
-        changedProperty = DataType
+	column Column1
+		dataType: string
+		lineageTag: b953b1c8-cf0d-484c-9015-f26f4fb409cd
+		summarizeBy: none
+		sourceColumn: Column1
 
-        annotation UnderlyingDateTimeDataType = Date
+		annotation SummarizationSetBy = Automatic
 
-    column 'Deathdate'
-        sourceColumn: Deathdate
-        dataType: dateTime
-        formatString: Long Date
-        lineageTag: 78555dcb-4e12-40e9-97b6-bcb0d0b1723f
-        summarizeBy: none
+	column Column2
+		dataType: string
+		lineageTag: a75cce0a-a375-4ab0-8bc0-fa0b2b47f4c8
+		summarizeBy: none
+		sourceColumn: Column2
 
-        variation Variation
-            isDefault
-            relationship: 99e8e2a9-5214-4562-a08e-2b2c985a7d58
-            defaultHierarchy: LocalDateTable_a0bbd175-7377-48e8-a26b-efcbc5341e8b.'Date Hierarchy'
+		annotation SummarizationSetBy = Automatic
 
-        changedProperty = DataType
+	column Column3
+		dataType: string
+		lineageTag: a3f24a76-ff4e-4c5d-a9e3-25244f9d1972
+		summarizeBy: none
+		sourceColumn: Column3
 
-        annotation UnderlyingDateTimeDataType = Date
+		annotation SummarizationSetBy = Automatic
 
-    column 'Prefix'
-        dataType: string
-        lineageTag: 81572099-1dee-4e1d-8b54-5fb49beed61b
-        summarizeBy: none
-        sourceColumn: Prefix
+	column Column4
+		dataType: string
+		lineageTag: cf93087e-2a0a-4cb0-9da9-8d1730f6240b
+		summarizeBy: none
+		sourceColumn: Column4
 
-    column 'First'
-        dataType: string
-        lineageTag: 0ef29a9b-24dd-4825-ae84-3a49581daacd
-        summarizeBy: none
-        sourceColumn: First
+		annotation SummarizationSetBy = Automatic
 
-    column 'Last'
-        dataType: string
-        lineageTag: 67309629-2562-4bd3-a0a8-34a8596c7c76
-        summarizeBy: none
-        sourceColumn: Last
+	column Column5
+		dataType: string
+		lineageTag: 240d74fd-1c01-4e4e-b2ba-d0674a87e6e2
+		summarizeBy: none
+		sourceColumn: Column5
 
-    column 'Suffix'
-        dataType: string
-        lineageTag: b730ab48-63e6-4f92-afa0-e8db38d9d2e7
-        summarizeBy: none
-        sourceColumn: Suffix
+		annotation SummarizationSetBy = Automatic
 
-    column 'Maiden'
-        dataType: string
-        lineageTag: cd3d50a3-25e3-4ca2-b2b6-7fe8dc189eba
-        summarizeBy: none
-        sourceColumn: Maiden
+	column Column6
+		dataType: string
+		lineageTag: 75bb367d-0fef-49bd-a979-40dd91cb0b0b
+		summarizeBy: none
+		sourceColumn: Column6
 
-    column 'Marital'
-        dataType: string
-        lineageTag: 947cc024-f204-42e7-8a66-2c61f062b1dd
-        summarizeBy: none
-        sourceColumn: Marital
+		annotation SummarizationSetBy = Automatic
 
-    column 'Race'
-        dataType: string
-        lineageTag: 5866cd92-fce3-4b47-adc2-3652f49fcbd4
-        summarizeBy: none
-        sourceColumn: Race
+	column Column7
+		dataType: string
+		lineageTag: f5bec113-be06-4212-840f-c389a723ee82
+		summarizeBy: none
+		sourceColumn: Column7
 
-    column 'Ethnicity'
-        dataType: string
-        lineageTag: 679f252c-b0bc-4f80-b858-43628477aea3
-        summarizeBy: none
-        sourceColumn: Ethnicity
+		annotation SummarizationSetBy = Automatic
 
-    column 'Gender'
-        dataType: string
-        lineageTag: bc2fd5a0-2c14-4b7c-8297-9c25af11018e
-        summarizeBy: none
-        sourceColumn: Gender
+	column Column8
+		dataType: string
+		lineageTag: cb9e42a2-1b1a-44ce-a7d0-045e4b3e992f
+		summarizeBy: none
+		sourceColumn: Column8
 
-    column 'Birthplace'
-        dataType: string
-        lineageTag: 71db4e77-6774-42e0-ab28-0b16675f5a99
-        summarizeBy: none
-        sourceColumn: Birthplace
+		annotation SummarizationSetBy = Automatic
 
-    column 'Address'
-        dataType: string
-        lineageTag: 2359841b-f087-41af-884f-6bb316b1a485
-        summarizeBy: none
-        sourceColumn: Address
+	column Column9
+		dataType: string
+		lineageTag: d1f2c1e5-7c64-4efc-927c-b327a82457ba
+		summarizeBy: none
+		sourceColumn: Column9
 
-    column 'City'
-        dataType: string
-        lineageTag: 25efea9f-4326-499e-ba40-3e666ac33114
-        summarizeBy: none
-        sourceColumn: City
+		annotation SummarizationSetBy = Automatic
 
-    column 'State'
-        dataType: string
-        lineageTag: 3ffba066-f0f7-4ded-bcb0-6673bb193b4e
-        summarizeBy: none
-        sourceColumn: State
+	column Column10
+		dataType: string
+		lineageTag: 716c3f10-4128-4d21-bf7b-5594247ab761
+		summarizeBy: none
+		sourceColumn: Column10
 
-    column 'County'
-        dataType: string
-        lineageTag: 7e947ea3-431c-41a5-97fd-94853860e6fc
-        summarizeBy: none
-        sourceColumn: County
+		annotation SummarizationSetBy = Automatic
 
-    column 'ZIP'
-        dataType: double
-        lineageTag: 637ed724-6cd8-48e9-a9bb-1b3c3ed92172
-        summarizeBy: none
-        sourceColumn: ZIP
+	column Column11
+		dataType: string
+		lineageTag: 7d1761a9-baed-4882-a8f0-0395bdf7b580
+		summarizeBy: none
+		sourceColumn: Column11
 
-    column 'LAT'
-        dataType: double
-        lineageTag: b8db7bf1-c15e-4d51-845b-cccfcb695c78
-        summarizeBy: none
-        sourceColumn: LAT
+		annotation SummarizationSetBy = Automatic
 
-    column 'LON'
-        dataType: double
-        lineageTag: e9f4275a-0528-4dd3-9dbf-86a554e2af3a
-        summarizeBy: none
-        sourceColumn: LON
+	column Column12
+		dataType: string
+		lineageTag: 0bd2ea0b-392f-41ae-9d0c-fa188885ed87
+		summarizeBy: none
+		sourceColumn: Column12
 
-    measure 'SUM of Avg Visits per Patient (patients)' =
-        SUM('patients'[Avg Visits per Patient])
+		annotation SummarizationSetBy = Automatic
 
+	column Column13
+		dataType: string
+		lineageTag: 599922e1-f3a0-4ed0-8b55-c894bfea721a
+		summarizeBy: none
+		sourceColumn: Column13
 
-    measure 'Total Patients (LOD)' =
-        -- ERROR CONVERTING: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
+		annotation SummarizationSetBy = Automatic
 
+	column Column14
+		dataType: string
+		lineageTag: 07a33501-3623-4f55-91ff-df6b89319a31
+		summarizeBy: none
+		sourceColumn: Column14
 
-    measure 'Avg Visits per Patient' =
-        -- ERROR CONVERTING: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
+		annotation SummarizationSetBy = Automatic
 
+	column Column15
+		dataType: string
+		lineageTag: 276bb70b-4fea-4e24-a710-5a817a69f8c0
+		summarizeBy: none
+		sourceColumn: Column15
 
-    partition 'patients' = m
-        mode: import
-        source =
-            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Sd4bEK0Fm9q7yTVOwI4GdtixeeY8hPkKqpvnI4WdixA"),
-            #"Navigation 1" = Source{[name = "patients", ItemKind = "Table"]}[Data],
-                            #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"BIRTHDATE", "Birthdate"}, {"DEATHDATE", "Deathdate"}, {"PREFIX", "Prefix"}, {"FIRST", "First"}, {"LAST", "Last"}, {"SUFFIX", "Suffix"}, {"MAIDEN", "Maiden"}, {"MARITAL", "Marital"}, {"RACE", "Race"}, {"ETHNICITY", "Ethnicity"}, {"GENDER", "Gender"}, {"BIRTHPLACE", "Birthplace"}, {"ADDRESS", "Address"}, {"CITY", "City"}, {"STATE", "State"}, {"COUNTY", "County"}}, MissingField.Ignore)
-                        in
-                            #"Final Renamed Columns"
+		annotation SummarizationSetBy = Automatic
+
+	column Column16
+		dataType: string
+		lineageTag: cbd136f4-52ce-4757-94e8-90d588a4083c
+		summarizeBy: none
+		sourceColumn: Column16
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column17
+		dataType: string
+		lineageTag: 76f2bc72-58ec-4ff8-b699-af81d6aeda94
+		summarizeBy: none
+		sourceColumn: Column17
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column18
+		dataType: string
+		lineageTag: 89737395-a545-4d61-8386-66fdfb846fd8
+		summarizeBy: none
+		sourceColumn: Column18
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column19
+		dataType: string
+		lineageTag: 441441e0-6016-44ff-b26e-1a8245ebbbfd
+		summarizeBy: none
+		sourceColumn: Column19
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column20
+		dataType: string
+		lineageTag: 9d06d76c-92e3-415f-b8a1-078ec8b33230
+		summarizeBy: none
+		sourceColumn: Column20
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column21
+		dataType: string
+		lineageTag: a66ca172-008c-4e6b-b669-db4bb383bbe1
+		summarizeBy: none
+		sourceColumn: Column21
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column22
+		dataType: string
+		lineageTag: 7366f210-6c94-4da6-972d-1576054b1830
+		summarizeBy: none
+		sourceColumn: Column22
+
+		annotation SummarizationSetBy = Automatic
+
+	partition patients = m
+		mode: import
+		source =
+				let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Sd4bEK0Fm9q7yTVOwI4GdtixeeY8hPkKqpvnI4WdixA"),
+				#"Navigation 1" = Source{[name = "patients", ItemKind = "Table"]}[Data],
+				                #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"BIRTHDATE", "Birthdate"}, {"DEATHDATE", "Deathdate"}, {"PREFIX", "Prefix"}, {"FIRST", "First"}, {"LAST", "Last"}, {"SUFFIX", "Suffix"}, {"MAIDEN", "Maiden"}, {"MARITAL", "Marital"}, {"RACE", "Race"}, {"ETHNICITY", "Ethnicity"}, {"GENDER", "Gender"}, {"BIRTHPLACE", "Birthplace"}, {"ADDRESS", "Address"}, {"CITY", "City"}, {"STATE", "State"}, {"COUNTY", "County"}}, MissingField.Ignore)
+				            in
+				                #"Final Renamed Columns"
+

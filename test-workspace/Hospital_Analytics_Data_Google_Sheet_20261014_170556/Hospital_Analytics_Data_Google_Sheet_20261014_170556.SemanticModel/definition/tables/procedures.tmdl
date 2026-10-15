@@ -1,83 +1,99 @@
-table 'procedures'
-    lineageTag: 9fae707f-2368-43e9-bc00-6391a6886762
+table procedures
+	lineageTag: 9fae707f-2368-43e9-bc00-6391a6886762
 
-    column 'START (procedures)'
-        dataType: string
-        lineageTag: 8dfc7052-eebc-4d62-8fc2-bb6fde9e8bc7
-        summarizeBy: none
-        sourceColumn: START (procedures)
+	measure 'Procedure Rank(Top N Procedure Parameter)' = BLANK()
+		lineageTag: 0b2fbb95-2148-4c9d-924b-394f982c95d1
 
-    column 'STOP (procedures)'
-        dataType: string
-        lineageTag: ff950363-1450-4783-a9a7-034fec837f69
-        summarizeBy: none
-        sourceColumn: STOP (procedures)
+	measure 'Top N Procedures Filter' = BLANK()
+		lineageTag: 80fe9d65-0d28-4293-a9d1-d9970c59e4e1
 
-    column 'PATIENT (procedures)'
-        dataType: string
-        lineageTag: 0a638086-f85e-4070-8ed0-0c734d274887
-        summarizeBy: none
-        sourceColumn: PATIENT (procedures)
+	measure 'Selected Metric' = BLANK()
+		lineageTag: 0b7ca4a4-c17f-4969-aaf3-9b08a4686522
 
-    column 'Encounter'
-        dataType: string
-        lineageTag: 16b73246-2b62-4632-a8f3-f81ed3e23e50
-        summarizeBy: none
-        sourceColumn: Encounter
+	column 'DESCRIPTION (procedures) Set' = BLANK()
+		dataType: string
+		lineageTag: 23f5a761-6ea7-44aa-8c6e-8558e39d18f8
+		summarizeBy: none
 
-    column 'CODE (procedures)'
-        dataType: double
-        lineageTag: 4113da83-b7c4-4eab-99b0-a598c7a632a7
-        summarizeBy: none
-        sourceColumn: CODE (procedures)
+	column Column1
+		dataType: string
+		lineageTag: 0124db63-0c9b-4c38-8969-9efcec3faf75
+		summarizeBy: none
+		sourceColumn: Column1
 
-    column 'DESCRIPTION (procedures)'
-        dataType: string
-        lineageTag: 615154c1-a1c7-49af-912d-19701fd3d0e0
-        summarizeBy: none
-        sourceColumn: DESCRIPTION (procedures)
+		annotation SummarizationSetBy = Automatic
 
-    column 'Base Cost'
-        dataType: double
-        lineageTag: 01defb5f-22c9-4662-97ff-9f4216f4990f
-        summarizeBy: none
-        sourceColumn: Base Cost
+	column Column2
+		dataType: string
+		lineageTag: 8a208381-865a-4039-925c-181304782c95
+		summarizeBy: none
+		sourceColumn: Column2
 
-    column 'REASONCODE (procedures)'
-        dataType: double
-        lineageTag: 73f330e4-0673-43d6-8391-3f13ea77e5b3
-        summarizeBy: none
-        sourceColumn: REASONCODE (procedures)
+		annotation SummarizationSetBy = Automatic
 
-    column 'REASONDESCRIPTION (procedures)'
-        dataType: string
-        lineageTag: ffa16156-195a-4d86-83be-0eaca8592e82
-        summarizeBy: none
-        sourceColumn: REASONDESCRIPTION (procedures)
+	column Column3
+		dataType: string
+		lineageTag: 62c2f3a7-f6e0-4a22-bc6a-55cb92511b31
+		summarizeBy: none
+		sourceColumn: Column3
 
-    column 'DESCRIPTION (procedures) Set' = BLANK()
-        dataType: string
+		annotation SummarizationSetBy = Automatic
 
-        summarizeBy: none
+	column Column4
+		dataType: string
+		lineageTag: 3646d2d2-5a72-4dc6-8cbc-2f7289a68b6d
+		summarizeBy: none
+		sourceColumn: Column4
 
-    measure 'Procedure Rank(Top N Procedure Parameter)' =
-        BLANK()
+		annotation SummarizationSetBy = Automatic
 
+	column Column5
+		dataType: string
+		lineageTag: 3521c2b5-3cb4-4ef6-9d2e-45894d50e772
+		summarizeBy: none
+		sourceColumn: Column5
 
-    measure 'Top N Procedures Filter' =
-        BLANK()
+		annotation SummarizationSetBy = Automatic
 
+	column Column6
+		dataType: string
+		lineageTag: 4e9dca3b-af25-46c4-a409-4c36dac0617e
+		summarizeBy: none
+		sourceColumn: Column6
 
-    measure 'Selected Metric' =
-        BLANK()
+		annotation SummarizationSetBy = Automatic
 
+	column Column7
+		dataType: string
+		lineageTag: 73d534a6-9dce-4213-8e1f-140297df8671
+		summarizeBy: none
+		sourceColumn: Column7
 
-    partition 'procedures' = m
-        mode: import
-        source =
-            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo"),
-            #"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data],
-                            #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"START", "START (procedures)"}, {"STOP", "STOP (procedures)"}, {"PATIENT", "PATIENT (procedures)"}, {"ENCOUNTER", "Encounter"}, {"CODE", "CODE (procedures)"}, {"DESCRIPTION", "DESCRIPTION (procedures)"}, {"BASE_COST", "Base Cost"}, {"REASONCODE", "REASONCODE (procedures)"}, {"REASONDESCRIPTION", "REASONDESCRIPTION (procedures)"}}, MissingField.Ignore),
-                            #"Removed Blank Columns" = Table.SelectColumns(#"Final Renamed Columns", List.Select(Table.ColumnNames(#"Final Renamed Columns"), each _ <> null and Text.Trim(Text.From(_)) <> ""))
-                        in
-                            #"Removed Blank Columns"
+		annotation SummarizationSetBy = Automatic
+
+	column Column8
+		dataType: string
+		lineageTag: 06209159-bd32-41fb-babe-41fca90a8d3f
+		summarizeBy: none
+		sourceColumn: Column8
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column9
+		dataType: string
+		lineageTag: 0abca6a7-00d3-4ff8-a6fa-87e5057d4d28
+		summarizeBy: none
+		sourceColumn: Column9
+
+		annotation SummarizationSetBy = Automatic
+
+	partition procedures = m
+		mode: import
+		source =
+				let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo"),
+				#"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data],
+				                #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"START", "START (procedures)"}, {"STOP", "STOP (procedures)"}, {"PATIENT", "PATIENT (procedures)"}, {"ENCOUNTER", "Encounter"}, {"CODE", "CODE (procedures)"}, {"DESCRIPTION", "DESCRIPTION (procedures)"}, {"BASE_COST", "Base Cost"}, {"REASONCODE", "REASONCODE (procedures)"}, {"REASONDESCRIPTION", "REASONDESCRIPTION (procedures)"}}, MissingField.Ignore),
+				                #"Removed Blank Columns" = Table.SelectColumns(#"Final Renamed Columns", List.Select(Table.ColumnNames(#"Final Renamed Columns"), each _ <> null and Text.Trim(Text.From(_)) <> ""))
+				            in
+				                #"Removed Blank Columns"
+

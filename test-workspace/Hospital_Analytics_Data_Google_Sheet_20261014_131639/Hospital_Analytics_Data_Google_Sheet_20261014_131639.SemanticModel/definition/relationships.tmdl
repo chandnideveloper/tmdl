@@ -1,0 +1,35 @@
+relationship e7f76b02-2779-4b16-9d2b-a8228ee22bc7
+	crossFilteringBehavior: bothDirections
+	fromColumn: encounters.Organization
+	toColumn: organizations.Id
+
+relationship 8b0c1f75-565b-463f-abe8-5f7d1e8cbff5
+	crossFilteringBehavior: bothDirections
+	fromColumn: encounters.Patient
+	toColumn: patients.Id
+
+relationship 969b5582-1cc3-40e8-99b3-1abfeebc1522
+	crossFilteringBehavior: bothDirections
+	fromColumn: encounters.Payer
+	toColumn: payers.Id
+
+relationship 497b58ee-48f1-41e5-9444-4952c6d42c2e
+	crossFilteringBehavior: bothDirections
+	fromColumn: procedures.Encounter
+	toColumn: encounters.Id
+
+relationship 822f88e1-7edd-4f09-9091-6cb479f5f6e3
+	joinOnDateBehavior: datePartOnly
+	fromColumn: procedures.'Encounter Start Date'
+	toColumn: LocalDateTable_9fc60536-f454-4471-8673-b50f8b47e91c.Date
+
+relationship aa283a19-0a5f-46a8-b343-54c042e369cc
+	joinOnDateBehavior: datePartOnly
+	fromColumn: patients.Birthdate
+	toColumn: LocalDateTable_255bf5cf-6280-46cc-b456-6d1181626505.Date
+
+relationship 19eb155d-d6e0-42fe-a0c5-7a5c7ebd9ec4
+	joinOnDateBehavior: datePartOnly
+	fromColumn: patients.Deathdate
+	toColumn: LocalDateTable_7b93bb74-3ea5-4260-ac2c-8d6bacda0d32.Date
+

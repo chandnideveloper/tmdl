@@ -1,53 +1,23 @@
 model Model
-    culture: en-US
-    defaultPowerBIDataSourceVersion: powerBI_V3
-    sourceQueryCulture: en-US
-    dataAccessOptions
-        legacyRedirects
-        returnErrorValuesAsNull
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
 
 annotation __PBI_TimeIntelligenceEnabled = 1
-annotation PBIDesktopVersion = 2.138.1004.0 (24.11)
 
-ref table 'encounters'
-ref table 'organizations'
-ref table 'patients'
-ref table 'payers'
-ref table 'procedures'
+annotation PBI_QueryOrder = ["encounters","organizations","patients","payers","procedures"]
+
+ref table encounters
+ref table organizations
+ref table patients
+ref table payers
+ref table procedures
 ref table 'Top N Procedures(Parameter)'
 ref table 'Metric Selector'
 ref table 'Top N Patients'
-ref table 'LocalDateTable_76e4fe34-a1d5-448d-94cf-693776923c70'
-ref table 'LocalDateTable_734de2f6-c14a-47dc-bec2-55246e52ca6d'
 
 ref cultureInfo en-US
 
-relationship fbcb7117-cc61-47ee-be75-091adbf09838
-    fromColumn: 'encounters'.'Organization'
-    toColumn: 'organizations'.'Id (organizations)'
-    crossFilteringBehavior: bothDirections
-
-relationship e179cedd-6776-4004-927d-0a952f1ff1a9
-    fromColumn: 'encounters'.'Patient'
-    toColumn: 'patients'.'Id (patients)'
-    crossFilteringBehavior: bothDirections
-
-relationship 9d22e7cc-c109-4efc-a162-306c83b76ac0
-    fromColumn: 'encounters'.'Payer'
-    toColumn: 'payers'.'Id (payers)'
-    crossFilteringBehavior: bothDirections
-
-relationship df55d481-fd50-4e03-91bc-771b037bd91d
-    fromColumn: 'procedures'.'Encounter'
-    toColumn: 'encounters'.'Id'
-    crossFilteringBehavior: bothDirections
-
-relationship bc889f38-5ed2-499d-ac14-a494b6f054c9
-    fromColumn: 'patients'.'Birthdate'
-    toColumn: 'LocalDateTable_76e4fe34-a1d5-448d-94cf-693776923c70'.'Date'
-    joinOnDateBehavior: datePartOnly
-
-relationship c8e47020-c9f4-4e9f-a0f4-135d17055a28
-    fromColumn: 'patients'.'Deathdate'
-    toColumn: 'LocalDateTable_734de2f6-c14a-47dc-bec2-55246e52ca6d'.'Date'
-    joinOnDateBehavior: datePartOnly

@@ -1,120 +1,130 @@
-table 'procedures'
-    lineageTag: a1d86a2f-655f-4b38-a111-28e1b53ddd48
+table procedures
+	lineageTag: a1d86a2f-655f-4b38-a111-28e1b53ddd48
 
-    column 'START'
-        dataType: string
-        lineageTag: 95989664-8d5a-475a-a19e-215410f34295
-        summarizeBy: none
-        sourceColumn: START
+	measure 'Patient Visits Rank (Top N Patients)' = -- ERROR: LLM call failed after 6 retries. Last error: 413 Client Error: Payload Too Large for url: https://api.groq.com/openai/v1/chat/completions
+		lineageTag: b8487a9d-a8c5-48b0-85a7-2a2f8e0e3147
 
-    column 'STOP'
-        dataType: string
-        lineageTag: d333f889-2421-425b-b16d-1d8e5a4f0e26
-        summarizeBy: none
-        sourceColumn: STOP
+	measure 'Top N Patients' = -- ERROR: LLM call failed after 6 retries. Last error: 413 Client Error: Payload Too Large for url: https://api.groq.com/openai/v1/chat/completions
+		lineageTag: 80dfef58-aad6-4ee3-89e4-cd9d164e7be4
 
-    column 'PATIENT'
-        dataType: string
-        lineageTag: 6b625ee3-225a-46e5-ac48-2551ad2cdf86
-        summarizeBy: none
-        sourceColumn: PATIENT
+	measure 'Procedure Rank(Top N Procedure Parameter)' = -- ERROR: LLM call failed after 6 retries. Last error: 413 Client Error: Payload Too Large for url: https://api.groq.com/openai/v1/chat/completions
+		lineageTag: 5e3c1907-aceb-47bf-89fb-87364e858b41
 
-    column 'Encounter'
-        dataType: string
-        lineageTag: 27b622e9-abb7-4f31-bdeb-7bb6e0496de0
-        summarizeBy: none
-        sourceColumn: Encounter
+	measure 'Top N Procedures Filter' = -- ERROR: LLM call failed after 6 retries. Last error: 413 Client Error: Payload Too Large for url: https://api.groq.com/openai/v1/chat/completions
+		lineageTag: a134f547-7ece-43eb-8b3d-52423526556d
 
-    column 'CODE'
-        dataType: double
-        lineageTag: c31a7c3a-aade-4053-b25d-6550ea3f3d68
-        summarizeBy: none
-        sourceColumn: CODE
+	measure 'Selected Metric' = -- ERROR: LLM call failed after 6 retries. Last error: 413 Client Error: Payload Too Large for url: https://api.groq.com/openai/v1/chat/completions
+		lineageTag: 0b68d3d4-c0e9-436b-bd62-fa2fe7a836ae
 
-    column 'DESCRIPTION'
-        dataType: string
-        lineageTag: c65b50d4-b838-4845-9c12-c6396da2e117
-        summarizeBy: none
-        sourceColumn: DESCRIPTION
+	measure 'Total Procedures' = COUNT('procedures'[CODE])
+		lineageTag: 399fe4a1-2ed0-4e6b-9fde-b31091fa3464
 
-    column 'Base Cost'
-        dataType: double
-        lineageTag: 24a50638-b316-4e47-9ec0-9f71ea171b95
-        summarizeBy: none
-        sourceColumn: Base Cost
+	measure Procedures = COUNT('procedures'[CODE])
+		lineageTag: 8dfe98ee-4409-449d-9d33-2d54f0f82ead
 
-    column 'REASONCODE'
-        dataType: double
-        lineageTag: 9e4bcb0d-1e9c-4745-af26-799ce7978903
-        summarizeBy: none
-        sourceColumn: REASONCODE
+	measure 'Total Procedures (LOD)' = CALCULATE(COUNT('procedures'[CODE]), REMOVEFILTERS('procedures'))
+		lineageTag: 876f846a-828c-4129-8501-8cef3c53b8a1
 
-    column 'REASONDESCRIPTION'
-        dataType: string
-        lineageTag: 6a8e87ac-c301-4d90-839a-d8f476cbe017
-        summarizeBy: none
-        sourceColumn: REASONDESCRIPTION
+	column DESCRIPTION__procedures__Set_Category = IF('procedures'[DESCRIPTION] IN { "Admission to burn unit", "Admission to long stay hospital", "Admission to orthopedic department", "Admission to trauma surgery department", "Ankle X-ray", "Antenatal RhD antibody screening", "Assessment of health and social care needs (procedure)" }, "In", "Out")
+		dataType: string
+		lineageTag: 1a066994-72bf-48c3-bc90-5d6d230e5adf
+		summarizeBy: none
 
-    column 'DESCRIPTION__procedures__Set_Category' = IF('procedures'[DESCRIPTION] IN { "Admission to burn unit", "Admission to long stay hospital", "Admission to orthopedic department", "Admission to trauma surgery department", "Ankle X-ray", "Antenatal RhD antibody screening", "Assessment of health and social care needs (procedure)" }, "In", "Out")
-        dataType: string
+	column 'Encounter Start Date' = DATEVALUE(LEFT('procedures'[START],10))
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: ce380cb9-cd6e-4e52-9932-84dfabbc4ff7
+		summarizeBy: none
 
-        summarizeBy: none
+		variation Variation
+			isDefault
+			relationship: 042c5e45-5fe2-47e3-8e62-336633d4ebee
+			defaultHierarchy: LocalDateTable_38c20727-e63a-43ca-b89b-9b5925ae2fbc.'Date Hierarchy'
 
-    column 'Encounter Start Date' = DATEVALUE(LEFT('procedures'[START],10))
-        dataType: dateTime
-        formatString: Long Date
-        lineageTag: ce380cb9-cd6e-4e52-9932-84dfabbc4ff7
-        summarizeBy: none
+		changedProperty = DataType
 
-        variation Variation
-            isDefault
-            relationship: 042c5e45-5fe2-47e3-8e62-336633d4ebee
-            defaultHierarchy: LocalDateTable_38c20727-e63a-43ca-b89b-9b5925ae2fbc.'Date Hierarchy'
+		annotation UnderlyingDateTimeDataType = Date
 
-        changedProperty = DataType
+	column Column1
+		dataType: string
+		lineageTag: 2d703afe-f080-4b58-8e02-da023efc76d1
+		summarizeBy: none
+		sourceColumn: Column1
 
-        annotation UnderlyingDateTimeDataType = Date
+		annotation SummarizationSetBy = Automatic
 
-    measure 'Patient Visits Rank (Top N Patients)' =
-        -- ERROR: LLM call failed after 6 retries. Last error: 413 Client Error: Payload Too Large for url: https://api.groq.com/openai/v1/chat/completions
+	column Column2
+		dataType: string
+		lineageTag: a2bc6fcd-cd4c-4de3-8344-a6a3560c515a
+		summarizeBy: none
+		sourceColumn: Column2
 
+		annotation SummarizationSetBy = Automatic
 
-    measure 'Top N Patients' =
-        -- ERROR: LLM call failed after 6 retries. Last error: 413 Client Error: Payload Too Large for url: https://api.groq.com/openai/v1/chat/completions
+	column Column3
+		dataType: string
+		lineageTag: 510285da-1c0c-4785-98aa-7b6521541cc1
+		summarizeBy: none
+		sourceColumn: Column3
 
+		annotation SummarizationSetBy = Automatic
 
-    measure 'Procedure Rank(Top N Procedure Parameter)' =
-        -- ERROR: LLM call failed after 6 retries. Last error: 413 Client Error: Payload Too Large for url: https://api.groq.com/openai/v1/chat/completions
+	column Column4
+		dataType: string
+		lineageTag: 075a8258-dfaf-4885-bbce-c08cf8528980
+		summarizeBy: none
+		sourceColumn: Column4
 
+		annotation SummarizationSetBy = Automatic
 
-    measure 'Top N Procedures Filter' =
-        -- ERROR: LLM call failed after 6 retries. Last error: 413 Client Error: Payload Too Large for url: https://api.groq.com/openai/v1/chat/completions
+	column Column5
+		dataType: string
+		lineageTag: 0092986d-c8d0-4511-8e00-d720e7eca459
+		summarizeBy: none
+		sourceColumn: Column5
 
+		annotation SummarizationSetBy = Automatic
 
-    measure 'Selected Metric' =
-        -- ERROR: LLM call failed after 6 retries. Last error: 413 Client Error: Payload Too Large for url: https://api.groq.com/openai/v1/chat/completions
+	column Column6
+		dataType: string
+		lineageTag: dd29d2c1-8d30-49d7-a76e-4935953964ba
+		summarizeBy: none
+		sourceColumn: Column6
 
+		annotation SummarizationSetBy = Automatic
 
-    measure 'Total Procedures' =
-        COUNT('procedures'[CODE])
+	column Column7
+		dataType: string
+		lineageTag: ab9c1d3f-e370-4b5e-974e-be067c826958
+		summarizeBy: none
+		sourceColumn: Column7
 
+		annotation SummarizationSetBy = Automatic
 
-    measure 'Procedures' =
-        COUNT('procedures'[CODE])
+	column Column8
+		dataType: string
+		lineageTag: f3ac8480-f2e1-4e1e-839a-a4e525372f35
+		summarizeBy: none
+		sourceColumn: Column8
 
+		annotation SummarizationSetBy = Automatic
 
-    measure 'Total Procedures (LOD)' =
-        CALCULATE(COUNT('procedures'[CODE]), REMOVEFILTERS('procedures'))
+	column Column9
+		dataType: string
+		lineageTag: dd0974f8-078c-44ac-b7e4-ccb4782c4a10
+		summarizeBy: none
+		sourceColumn: Column9
 
+		annotation SummarizationSetBy = Automatic
 
-    partition 'procedures' = m
-        mode: import
-        source =
-            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo"),
-            #"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data],
-            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
-            #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"ENCOUNTER", "Encounter"}, {"BASE_COST", "Base Cost"}}),
-            #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"START", type text}, {"STOP", type text}, {"PATIENT", type text}, {"Encounter", type text}, {"CODE", Int64.Type}, {"DESCRIPTION", type text}, {"Base Cost", Int64.Type}, {"REASONCODE", Int64.Type}, {"REASONDESCRIPTION", type text}}),
-                            #"Final Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"ENCOUNTER", "Encounter"}, {"BASE_COST", "Base Cost"}}, MissingField.Ignore)
-                        in
-                            #"Final Renamed Columns"
+	partition procedures = m
+		mode: import
+		source =
+				let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo"),
+				#"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data]
+				
+				in
+				  #"Navigation 1"
+
+	annotation PBI_ResultType = Table
+

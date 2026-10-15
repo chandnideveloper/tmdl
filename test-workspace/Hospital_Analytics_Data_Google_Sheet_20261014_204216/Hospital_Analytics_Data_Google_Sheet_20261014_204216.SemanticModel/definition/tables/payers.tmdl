@@ -1,57 +1,59 @@
-table 'payers'
-    lineageTag: 36cc600c-3fcd-47d4-baf9-0867a3e2f0b5
+table payers
+	lineageTag: 36cc600c-3fcd-47d4-baf9-0867a3e2f0b5
 
-    column 'Id'
-        dataType: string
-        lineageTag: 73635e18-c948-4fed-a17d-812e9606416f
-        summarizeBy: none
-        sourceColumn: Id
+	column Id
+		dataType: string
+		lineageTag: 73635e18-c948-4fed-a17d-812e9606416f
+		summarizeBy: none
+		sourceColumn: Id
 
-    column 'NAME'
-        dataType: string
-        lineageTag: 2edcfbb8-3eb9-436e-8c69-4c12f8283480
-        summarizeBy: none
-        sourceColumn: NAME
+	column NAME
+		dataType: string
+		lineageTag: 2edcfbb8-3eb9-436e-8c69-4c12f8283480
+		summarizeBy: none
+		sourceColumn: NAME
 
-    column 'ADDRESS'
-        dataType: string
-        lineageTag: 0021b465-39a6-4fb2-a16e-b5fcd7ce4bfc
-        summarizeBy: none
-        sourceColumn: ADDRESS
+	column ADDRESS
+		dataType: string
+		lineageTag: 0021b465-39a6-4fb2-a16e-b5fcd7ce4bfc
+		summarizeBy: none
+		sourceColumn: ADDRESS
 
-    column 'CITY'
-        dataType: string
-        lineageTag: 8b01fa2f-3e29-41a3-a087-077472b05a13
-        summarizeBy: none
-        sourceColumn: CITY
+	column CITY
+		dataType: string
+		lineageTag: 8b01fa2f-3e29-41a3-a087-077472b05a13
+		summarizeBy: none
+		sourceColumn: CITY
 
-    column 'State Headquartered'
-        dataType: string
-        lineageTag: 648fb02e-47cf-44e4-941b-0bc55dfb3c5f
-        summarizeBy: none
-        sourceColumn: State Headquartered
+	column 'State Headquartered'
+		dataType: string
+		lineageTag: 648fb02e-47cf-44e4-941b-0bc55dfb3c5f
+		summarizeBy: none
+		sourceColumn: State Headquartered
 
-    column 'ZIP'
-        dataType: double
-        lineageTag: 8c8560a5-a93a-4f96-b1d2-b4d8755d4526
-        summarizeBy: none
-        sourceColumn: ZIP
+	column ZIP
+		dataType: int64
+		formatString: 0
+		lineageTag: 8c8560a5-a93a-4f96-b1d2-b4d8755d4526
+		summarizeBy: none
+		sourceColumn: ZIP
 
-    column 'Phone'
-        dataType: string
-        lineageTag: c6072e4b-f2a2-48e0-80dd-a13508e42734
-        summarizeBy: none
-        sourceColumn: Phone
+	column Phone
+		dataType: string
+		lineageTag: c6072e4b-f2a2-48e0-80dd-a13508e42734
+		summarizeBy: none
+		sourceColumn: Phone
 
-    partition 'payers' = m
-        mode: import
-        source =
-            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1NB9uAQnBa6RYGfm5addKbcToYUZJY_5OlBkWxVZRrbU"),
-            #"Navigation 1" = Source{[name = "payers", ItemKind = "Table"]}[Data],
-            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
-            #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"STATE_HEADQUARTERED", "State Headquartered"}, {"PHONE", "Phone"}}),
-            #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"Id", type text}, {"NAME", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"State Headquartered", type text}, {"ZIP", Int64.Type}, {"Phone", type text}}),
-            #"Filtered Blank Rows" = Table.SelectRows(#"Changed Type", each [Id] <> null and [Id] <> ""),
-                            #"Removed Blank Columns" = Table.SelectColumns(#"Filtered Blank Rows", {"Id", "NAME", "ADDRESS", "CITY", "State Headquartered", "ZIP", "Phone"}, MissingField.Ignore)
-                        in
-                            #"Removed Blank Columns"
+	partition payers = m
+		mode: import
+		source =
+				let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1NB9uAQnBa6RYGfm5addKbcToYUZJY_5OlBkWxVZRrbU"),
+				#"Navigation 1" = Source{[name = "payers", ItemKind = "Table"]}[Data],
+				#"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+				#"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"STATE_HEADQUARTERED", "State Headquartered"}, {"PHONE", "Phone"}}),
+				#"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"Id", type text}, {"NAME", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"State Headquartered", type text}, {"ZIP", Int64.Type}, {"Phone", type text}}),
+				#"Filtered Blank Rows" = Table.SelectRows(#"Changed Type", each [Id] <> null and [Id] <> ""),
+				                #"Removed Blank Columns" = Table.SelectColumns(#"Filtered Blank Rows", {"Id", "NAME", "ADDRESS", "CITY", "State Headquartered", "ZIP", "Phone"}, MissingField.Ignore)
+				            in
+				                #"Removed Blank Columns"
+

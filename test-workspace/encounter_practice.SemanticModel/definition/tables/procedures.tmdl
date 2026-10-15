@@ -1,0 +1,86 @@
+table procedures
+	lineageTag: 6b4508f2-be90-49df-83c6-ec8582498e3a
+
+	column Column1
+		dataType: string
+		lineageTag: a6c1f494-5c2f-43af-9269-02ed5ba6d02d
+		summarizeBy: none
+		sourceColumn: Column1
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column2
+		dataType: string
+		lineageTag: 3b94bb4e-9a78-406b-8744-f624e4516774
+		summarizeBy: none
+		sourceColumn: Column2
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column3
+		dataType: string
+		lineageTag: 2688b68f-270b-4842-8ff9-7bed6d05fcf0
+		summarizeBy: none
+		sourceColumn: Column3
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column4
+		dataType: string
+		lineageTag: 165f9488-e8eb-4290-bab8-75825e428047
+		summarizeBy: none
+		sourceColumn: Column4
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column5
+		dataType: string
+		lineageTag: caf5741e-c677-4ffa-9eea-68f1b2fe8359
+		summarizeBy: none
+		sourceColumn: Column5
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column6
+		dataType: string
+		lineageTag: 068cedee-3457-44cf-9461-c357e812691a
+		summarizeBy: none
+		sourceColumn: Column6
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column7
+		dataType: string
+		lineageTag: 0c07d187-1d4f-4bce-83ad-a293722dff37
+		summarizeBy: none
+		sourceColumn: Column7
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column8
+		dataType: string
+		lineageTag: 7cffe366-55ca-4228-ae1b-d23001338453
+		summarizeBy: none
+		sourceColumn: Column8
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column9
+		dataType: string
+		lineageTag: e69b1204-f1c3-42df-b16c-2fc216dd7f77
+		summarizeBy: none
+		sourceColumn: Column9
+
+		annotation SummarizationSetBy = Automatic
+
+	partition procedures = m
+		mode: import
+		source =
+				let
+				  Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo"),
+				  #"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data]
+				in
+				  #"Navigation 1"
+
+	annotation PBI_ResultType = Table
+

@@ -1,20 +1,19 @@
 table 'Top N Patients'
+	lineageTag: 202e9a55-2ae1-4d7b-b638-c3cee9cbecef
 
-    column 'Value'
-        formatString: 0
-        summarizeBy: sum
-        isNameInferred
-        sourceColumn: 'Top N Patients'[Value]
-        annotation SummarizationSetBy = Automatic
+	measure SelectedTopNPatients = SELECTEDVALUE('Top N Patients'[Value], 29)
+		formatString: 0
+		isHidden
+		lineageTag: d374969d-2d73-461b-b8bb-e2112a7e737d
 
-    partition 'Top N Patients' = calculated
-        mode: import
-        source = GENERATESERIES(1, 1381, 1)
+	column Value
+		lineageTag: bd09596f-a019-434c-96b9-bdde198df999
+		isNameInferred
+		sourceColumn: [Value]
 
-    measure 'SelectedTopNPatients'
-        expression: SELECTEDVALUE('Top N Patients'[Value], 29)
-        formatString: 0
-        isHidden: true
+	partition 'Top N Patients' = calculated
+		mode: import
+		source = GENERATESERIES(1, 1381, 1)
 
-    annotation PBI_Id = 2286da6960f9495fabd8e4626090ab1e
-    
+	annotation PBI_Id = 2286da6960f9495fabd8e4626090ab1e
+

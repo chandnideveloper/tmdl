@@ -1,69 +1,85 @@
-table 'organizations'
-    lineageTag: a4e8fb2a-215e-4a2f-9a32-78317f5d1d37
+table organizations
+	lineageTag: a4e8fb2a-215e-4a2f-9a32-78317f5d1d37
 
-    column 'Id (organizations)'
-        dataType: string
-        lineageTag: 9010dec2-a747-4288-990f-27c89872b2ac
-        summarizeBy: none
-        sourceColumn: Id (organizations)
+	measure 'RLS - Organization Access' = BLANK()
+		lineageTag: 235eecc6-9d79-4be1-bc2a-f3a4144adb73
 
-    column 'Name'
-        dataType: string
-        lineageTag: 0398802f-b102-40cf-afb0-cc3a340d4cbb
-        summarizeBy: none
-        sourceColumn: Name
+	column Username = BLANK()
+		dataType: string
+		lineageTag: 3ae40e54-2b0a-44ec-94c1-89c9b5eb0fd7
+		summarizeBy: none
 
-    column 'ADDRESS (organizations)'
-        dataType: string
-        lineageTag: 8743122b-1940-4773-b30e-7bd4e8d865c1
-        summarizeBy: none
-        sourceColumn: ADDRESS (organizations)
+	column Column1
+		dataType: string
+		lineageTag: f575a3b8-06c3-46c4-baf2-c05ad7cb57f1
+		summarizeBy: none
+		sourceColumn: Column1
 
-    column 'CITY (organizations)'
-        dataType: string
-        lineageTag: 20002a41-fc14-42d4-9e6e-7e94a25d671a
-        summarizeBy: none
-        sourceColumn: CITY (organizations)
+		annotation SummarizationSetBy = Automatic
 
-    column 'STATE (organizations)'
-        dataType: string
-        lineageTag: 4514eb07-160e-4f5a-abd7-3aebd9f7ee24
-        summarizeBy: none
-        sourceColumn: STATE (organizations)
+	column Column2
+		dataType: string
+		lineageTag: c846e483-9c98-49b8-adc5-c3c57f8e28eb
+		summarizeBy: none
+		sourceColumn: Column2
 
-    column 'ZIP (organizations)'
-        dataType: double
-        lineageTag: 7c3f04d2-55a8-4733-a363-a22d199858cf
-        summarizeBy: none
-        sourceColumn: ZIP (organizations)
+		annotation SummarizationSetBy = Automatic
 
-    column 'LAT (organizations)'
-        dataType: double
-        lineageTag: 99505df5-1e7f-46e2-b2bc-93071654a407
-        summarizeBy: none
-        sourceColumn: LAT (organizations)
+	column Column3
+		dataType: string
+		lineageTag: 8b82b14e-4d75-4ce0-98db-a2459ac424e3
+		summarizeBy: none
+		sourceColumn: Column3
 
-    column 'LON (organizations)'
-        dataType: double
-        lineageTag: 17d9e099-ee35-4253-85d9-b40d9e78af37
-        summarizeBy: none
-        sourceColumn: LON (organizations)
+		annotation SummarizationSetBy = Automatic
 
-    column 'Username' = BLANK()
-        dataType: string
+	column Column4
+		dataType: string
+		lineageTag: a5c16552-9f9e-43d3-aef0-bf1c6a88bbd5
+		summarizeBy: none
+		sourceColumn: Column4
 
-        summarizeBy: none
+		annotation SummarizationSetBy = Automatic
 
-    measure 'RLS - Organization Access' =
-        BLANK()
+	column Column5
+		dataType: string
+		lineageTag: a33c707b-6e08-4141-85b9-448d56c00f18
+		summarizeBy: none
+		sourceColumn: Column5
 
+		annotation SummarizationSetBy = Automatic
 
-    partition 'organizations' = m
-        mode: import
-        source =
-            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Gfqr930PI28eveUiJrS8ikSsyzDUbPE4pJy7nG9ZIUc"),
-            #"Navigation 1" = Source{[name = "organizations", ItemKind = "Table"]}[Data],
-                            #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"Id", "Id (organizations)"}, {"NAME", "Name"}, {"ADDRESS", "ADDRESS (organizations)"}, {"CITY", "CITY (organizations)"}, {"STATE", "STATE (organizations)"}, {"ZIP", "ZIP (organizations)"}, {"LAT", "LAT (organizations)"}, {"LON", "LON (organizations)"}}, MissingField.Ignore),
-                            #"Removed Blank Columns" = Table.SelectColumns(#"Final Renamed Columns", List.Select(Table.ColumnNames(#"Final Renamed Columns"), each _ <> null and Text.Trim(Text.From(_)) <> ""))
-                        in
-                            #"Removed Blank Columns"
+	column Column6
+		dataType: string
+		lineageTag: f7ac1f5d-9e9f-4894-a739-f19730bd4a02
+		summarizeBy: none
+		sourceColumn: Column6
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column7
+		dataType: string
+		lineageTag: 13ba5773-cc81-4598-ab79-44708d53143d
+		summarizeBy: none
+		sourceColumn: Column7
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column8
+		dataType: string
+		lineageTag: f7aeb48f-fe3d-445f-8e73-998fc6cc2322
+		summarizeBy: none
+		sourceColumn: Column8
+
+		annotation SummarizationSetBy = Automatic
+
+	partition organizations = m
+		mode: import
+		source =
+				let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Gfqr930PI28eveUiJrS8ikSsyzDUbPE4pJy7nG9ZIUc"),
+				#"Navigation 1" = Source{[name = "organizations", ItemKind = "Table"]}[Data],
+				                #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"Id", "Id (organizations)"}, {"NAME", "Name"}, {"ADDRESS", "ADDRESS (organizations)"}, {"CITY", "CITY (organizations)"}, {"STATE", "STATE (organizations)"}, {"ZIP", "ZIP (organizations)"}, {"LAT", "LAT (organizations)"}, {"LON", "LON (organizations)"}}, MissingField.Ignore),
+				                #"Removed Blank Columns" = Table.SelectColumns(#"Final Renamed Columns", List.Select(Table.ColumnNames(#"Final Renamed Columns"), each _ <> null and Text.Trim(Text.From(_)) <> ""))
+				            in
+				                #"Removed Blank Columns"
+

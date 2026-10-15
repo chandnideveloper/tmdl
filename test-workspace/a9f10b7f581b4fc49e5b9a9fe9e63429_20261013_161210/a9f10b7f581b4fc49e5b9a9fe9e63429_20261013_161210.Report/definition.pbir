@@ -1,9 +1,0 @@
-{
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definitionProperties/1.0.0/schema.json",
-  "version": "4.0",
-  "datasetReference": {
-    "byPath": {
-      "path": "../a9f10b7f581b4fc49e5b9a9fe9e63429_20261013_161210.SemanticModel"
-    }
-  }
-}

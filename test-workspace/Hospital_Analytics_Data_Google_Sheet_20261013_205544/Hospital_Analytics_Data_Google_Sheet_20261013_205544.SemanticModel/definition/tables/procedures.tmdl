@@ -1,117 +1,128 @@
-table 'procedures'
-    lineageTag: 82fdd7a6-3f04-4ddb-9812-e07e5d069a6b
+table procedures
+	lineageTag: 82fdd7a6-3f04-4ddb-9812-e07e5d069a6b
 
-    column 'START'
-        dataType: string
-        lineageTag: 0ddd4484-29a6-4cec-9210-8c149409d709
-        summarizeBy: none
-        sourceColumn: START
+	measure 'Patient Visits Rank (Top N Patients)' = -- ERROR: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
+		lineageTag: f0c6e203-0685-4d44-93d7-6fc2b3ff4f4e
 
-    column 'STOP'
-        dataType: string
-        lineageTag: e69082d0-859f-4486-9067-e6d7c08d21f1
-        summarizeBy: none
-        sourceColumn: STOP
+	measure 'Top N Patients' = -- ERROR: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
+		lineageTag: 18ff4cbe-aaa8-4a48-96cd-445d7250e3ef
 
-    column 'PATIENT'
-        dataType: string
-        lineageTag: b216a650-94db-4c58-99cb-4165ae8df168
-        summarizeBy: none
-        sourceColumn: PATIENT
+	measure 'Procedure Rank(Top N Procedure Parameter)' = -- ERROR: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
+		lineageTag: 01cadde9-421d-4430-bbec-fdf0a789ce13
 
-    column 'Encounter'
-        dataType: string
-        lineageTag: 2d5f1a15-07fa-49bf-9012-5a28334a5dd1
-        summarizeBy: none
-        sourceColumn: Encounter
+	measure 'Top N Procedures Filter' = -- ERROR: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
+		lineageTag: 62d08b3c-efe2-4752-adbd-8c07bc8b0569
 
-    column 'CODE'
-        dataType: double
-        lineageTag: f7bf65fe-aa29-49c9-a197-a555c7921952
-        summarizeBy: none
-        sourceColumn: CODE
+	measure 'Selected Metric' = -- ERROR: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
+		lineageTag: 0dda5e6c-adbd-482c-ac71-56a5efb60f62
 
-    column 'DESCRIPTION'
-        dataType: string
-        lineageTag: 9a5b073c-9f3b-4d77-a62a-f9adfe3493cb
-        summarizeBy: none
-        sourceColumn: DESCRIPTION
+	measure 'Total Procedures' = COUNT('procedures'[CODE])
+		lineageTag: 2138d18a-6aab-4d08-a1cb-8283cfc442f3
 
-    column 'Base Cost'
-        dataType: double
-        lineageTag: 2e2f04e2-388d-472e-a946-d1ed748704fd
-        summarizeBy: none
-        sourceColumn: Base Cost
+	measure Procedures = COUNT('procedures'[CODE])
+		lineageTag: 92c3d66e-7add-4dc8-9323-78eb8e639c03
 
-    column 'REASONCODE'
-        dataType: double
-        lineageTag: d6dbde19-6713-4076-a6b6-419dffad0188
-        summarizeBy: none
-        sourceColumn: REASONCODE
+	measure 'Total Procedures (LOD)' = CALCULATE(COUNT('procedures'[CODE]), REMOVEFILTERS('procedures'))
+		lineageTag: 339be3e6-591a-4f2e-a138-9f2b595c88d6
 
-    column 'REASONDESCRIPTION'
-        dataType: string
-        lineageTag: a8ac749f-5cb8-4902-8c37-07adb6fd1512
-        summarizeBy: none
-        sourceColumn: REASONDESCRIPTION
+	column DESCRIPTION__procedures__Set_Category = IF('procedures'[DESCRIPTION] IN { "Admission to burn unit", "Admission to long stay hospital", "Admission to orthopedic department", "Admission to trauma surgery department", "Ankle X-ray", "Antenatal RhD antibody screening", "Assessment of health and social care needs (procedure)" }, "In", "Out")
+		dataType: string
+		lineageTag: 8c01c735-e0ca-4f87-bf0d-86a2715369f4
+		summarizeBy: none
 
-    column 'DESCRIPTION__procedures__Set_Category' = IF('procedures'[DESCRIPTION] IN { "Admission to burn unit", "Admission to long stay hospital", "Admission to orthopedic department", "Admission to trauma surgery department", "Ankle X-ray", "Antenatal RhD antibody screening", "Assessment of health and social care needs (procedure)" }, "In", "Out")
-        dataType: string
+	column 'Encounter Start Date' = -- ERROR: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: a0427c83-e523-4a28-80c1-ddf8acf1fe67
+		summarizeBy: none
 
-        summarizeBy: none
+		variation Variation
+			isDefault
+			relationship: b4c7dda3-3097-494c-83cb-44fe21974697
+			defaultHierarchy: LocalDateTable_1a30940c-bb70-4cab-bf9a-1f8578106043.'Date Hierarchy'
 
-    column 'Encounter Start Date' = -- ERROR: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
-        dataType: dateTime
-        formatString: Long Date
-        lineageTag: a0427c83-e523-4a28-80c1-ddf8acf1fe67
-        summarizeBy: none
+		changedProperty = DataType
 
-        variation Variation
-            isDefault
-            relationship: b4c7dda3-3097-494c-83cb-44fe21974697
-            defaultHierarchy: LocalDateTable_1a30940c-bb70-4cab-bf9a-1f8578106043.'Date Hierarchy'
+		annotation UnderlyingDateTimeDataType = Date
 
-        changedProperty = DataType
+	column Column1
+		dataType: string
+		lineageTag: 914f97c4-a55a-4889-afe5-ae37ce9aaa0d
+		summarizeBy: none
+		sourceColumn: Column1
 
-        annotation UnderlyingDateTimeDataType = Date
+		annotation SummarizationSetBy = Automatic
 
-    measure 'Patient Visits Rank (Top N Patients)' =
-        -- ERROR: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
+	column Column2
+		dataType: string
+		lineageTag: 6b08670f-fbb6-4ab4-861e-9701d1f91532
+		summarizeBy: none
+		sourceColumn: Column2
 
+		annotation SummarizationSetBy = Automatic
 
-    measure 'Top N Patients' =
-        -- ERROR: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
+	column Column3
+		dataType: string
+		lineageTag: 3f39be87-699b-44bf-b230-3fe441fcda82
+		summarizeBy: none
+		sourceColumn: Column3
 
+		annotation SummarizationSetBy = Automatic
 
-    measure 'Procedure Rank(Top N Procedure Parameter)' =
-        -- ERROR: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
+	column Column4
+		dataType: string
+		lineageTag: 96339949-4041-48a1-8ded-681f6a23b15c
+		summarizeBy: none
+		sourceColumn: Column4
 
+		annotation SummarizationSetBy = Automatic
 
-    measure 'Top N Procedures Filter' =
-        -- ERROR: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
+	column Column5
+		dataType: string
+		lineageTag: 4c39cbcc-6234-4d33-93a2-d2e205fcca5f
+		summarizeBy: none
+		sourceColumn: Column5
 
+		annotation SummarizationSetBy = Automatic
 
-    measure 'Selected Metric' =
-        -- ERROR: LLM call failed after 6 retries. Last error: 429 rate limit on attempt 6
+	column Column6
+		dataType: string
+		lineageTag: 718bdf4e-1b15-4624-a4b6-f8a83ebed17d
+		summarizeBy: none
+		sourceColumn: Column6
 
+		annotation SummarizationSetBy = Automatic
 
-    measure 'Total Procedures' =
-        COUNT('procedures'[CODE])
+	column Column7
+		dataType: string
+		lineageTag: 5f9771d1-0a87-45bc-b1ab-1ba5f8d4bf4a
+		summarizeBy: none
+		sourceColumn: Column7
 
+		annotation SummarizationSetBy = Automatic
 
-    measure 'Procedures' =
-        COUNT('procedures'[CODE])
+	column Column8
+		dataType: string
+		lineageTag: df9e970d-2d64-488c-bef1-46c631c929ca
+		summarizeBy: none
+		sourceColumn: Column8
 
+		annotation SummarizationSetBy = Automatic
 
-    measure 'Total Procedures (LOD)' =
-        CALCULATE(COUNT('procedures'[CODE]), REMOVEFILTERS('procedures'))
+	column Column9
+		dataType: string
+		lineageTag: c0a6fd91-d258-479b-8708-f91de92183e0
+		summarizeBy: none
+		sourceColumn: Column9
 
+		annotation SummarizationSetBy = Automatic
 
-    partition 'procedures' = m
-        mode: import
-        source =
-            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo"),
-            #"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data],
-                            #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"ENCOUNTER", "Encounter"}, {"BASE_COST", "Base Cost"}}, MissingField.Ignore)
-                        in
-                            #"Final Renamed Columns"
+	partition procedures = m
+		mode: import
+		source =
+				let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo"),
+				#"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data],
+				                #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"ENCOUNTER", "Encounter"}, {"BASE_COST", "Base Cost"}}, MissingField.Ignore)
+				            in
+				                #"Final Renamed Columns"
+

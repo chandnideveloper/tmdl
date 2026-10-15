@@ -1,99 +1,93 @@
-table 'organizations'
-    lineageTag: d71a1225-3e79-47ff-b3b6-c500bc276cd3
+table organizations
+	lineageTag: d71a1225-3e79-47ff-b3b6-c500bc276cd3
 
-    column 'Id'
-        dataType: string
-        lineageTag: e8d2fa33-9669-49a8-a19e-955c81b7aeaf
-        summarizeBy: none
-        sourceColumn: Id
+	measure 'Visits % Contribution (LOD)' = BLANK()
+		lineageTag: 5611b35e-9496-4019-a0c2-f96a918b7f90
 
-    column 'Name'
-        dataType: string
-        lineageTag: 3921b2f6-03ca-4dd8-a028-3ec2e7858043
-        summarizeBy: none
-        sourceColumn: Name
+	measure 'Total Patients (LOD)' = CALCULATE(DISTINCTCOUNT('patients'[Id]), ALL('patients'))
+		lineageTag: 778ab667-b442-4aed-a2e2-807f829432fe
 
-    column 'ADDRESS'
-        dataType: string
-        lineageTag: 0a5c337f-1bf9-4c3b-8450-5793401fcab2
-        summarizeBy: none
-        sourceColumn: ADDRESS
+	measure 'Total Procedures (LOD)' = CALCULATE(COUNT('encounters'[Code]), ALL('encounters'))
+		lineageTag: da5b0e84-e023-4e2c-b91a-d158ce0b27fd
 
-    column 'CITY'
-        dataType: string
-        lineageTag: b99e3ec0-4a57-457b-afd6-961f47236bbf
-        summarizeBy: none
-        sourceColumn: CITY
+	measure 'Total Visits (LOD)' = CALCULATE(COUNT('organizations'[Id]), ALL('organizations'))
+		lineageTag: 1ff22bf3-28fb-4dc1-af2e-82d5528eef23
 
-    column 'STATE'
-        dataType: string
-        lineageTag: c9e46596-a53d-4ca6-b6f1-7fcbbfd8d3a2
-        summarizeBy: none
-        sourceColumn: STATE
+	measure 'Visits per Patient' = CALCULATE(COUNT('organizations'[Id]), ALLEXCEPT('patients', 'patients'[Id]))
+		lineageTag: 02e1b7d6-94f8-45dd-9694-3e62a9b44272
 
-    column 'ZIP'
-        dataType: double
-        lineageTag: be842dce-4c0c-4b60-8bab-1591d3f4d720
-        summarizeBy: none
-        sourceColumn: ZIP
+	measure 'Avg Visits per Patient' = CALCULATE(AVERAGE('patients'[Visits per Patient]), ALLEXCEPT('patients', 'patients'[Gender]))
+		lineageTag: a7c79edb-1aed-4c4c-ad96-6d335d46f37e
 
-    column 'LAT'
-        dataType: double
-        lineageTag: 3f966571-764d-43d7-930b-3e9dc52f2b73
-        summarizeBy: none
-        sourceColumn: LAT
+	measure 'SUM of Visits per Patient' = SUM('organizations'[Visits per Patient])
+		lineageTag: 6faebee9-648e-4b56-ab29-c79f2d64ca79
 
-    column 'LON'
-        dataType: double
-        lineageTag: 6008e7da-cb2b-4518-aa34-15af6989046a
-        summarizeBy: none
-        sourceColumn: LON
+	measure 'RLS - Organization Access' = BLANK()
+		lineageTag: 15ed00d2-b2e4-4447-90e7-526614c3904c
 
-    column 'Username' = SELECTEDVALUE('organizations'[Name])
-        dataType: string
+	column Id
+		dataType: string
+		lineageTag: e8d2fa33-9669-49a8-a19e-955c81b7aeaf
+		summarizeBy: none
+		sourceColumn: Id
 
-        summarizeBy: none
+	column Name
+		dataType: string
+		lineageTag: 3921b2f6-03ca-4dd8-a028-3ec2e7858043
+		summarizeBy: none
+		sourceColumn: Name
 
-    measure 'Visits % Contribution (LOD)' =
-        BLANK()
+	column ADDRESS
+		dataType: string
+		lineageTag: 0a5c337f-1bf9-4c3b-8450-5793401fcab2
+		summarizeBy: none
+		sourceColumn: ADDRESS
 
+	column CITY
+		dataType: string
+		lineageTag: b99e3ec0-4a57-457b-afd6-961f47236bbf
+		summarizeBy: none
+		sourceColumn: CITY
 
-    measure 'Total Patients (LOD)' =
-        CALCULATE(DISTINCTCOUNT('patients'[Id]), ALL('patients'))
+	column STATE
+		dataType: string
+		lineageTag: c9e46596-a53d-4ca6-b6f1-7fcbbfd8d3a2
+		summarizeBy: none
+		sourceColumn: STATE
 
+	column ZIP
+		dataType: int64
+		formatString: 0
+		lineageTag: be842dce-4c0c-4b60-8bab-1591d3f4d720
+		summarizeBy: none
+		sourceColumn: ZIP
 
-    measure 'Total Procedures (LOD)' =
-        CALCULATE(COUNT('encounters'[Code]), ALL('encounters'))
+	column LAT
+		dataType: double
+		lineageTag: 3f966571-764d-43d7-930b-3e9dc52f2b73
+		summarizeBy: none
+		sourceColumn: LAT
 
+	column LON
+		dataType: double
+		lineageTag: 6008e7da-cb2b-4518-aa34-15af6989046a
+		summarizeBy: none
+		sourceColumn: LON
 
-    measure 'Total Visits (LOD)' =
-        CALCULATE(COUNT('organizations'[Id]), ALL('organizations'))
+	column Username = SELECTEDVALUE('organizations'[Name])
+		dataType: string
+		lineageTag: dcb0fc09-152a-47d1-baa5-8cb8ec49145c
+		summarizeBy: none
 
+	partition organizations = m
+		mode: import
+		source =
+				let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Gfqr930PI28eveUiJrS8ikSsyzDUbPE4pJy7nG9ZIUc"),
+				#"Navigation 1" = Source{[name = "organizations", ItemKind = "Table"]}[Data],
+				#"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+				#"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"NAME", "Name"}}),
+				#"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"Id", type text}, {"Name", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE", type text}, {"ZIP", Int64.Type}, {"LAT", type number}, {"LON", type number}}),
+				                #"Removed Blank Columns" = Table.SelectColumns(#"Changed Type", List.Select(Table.ColumnNames(#"Changed Type"), each _ <> null and Text.Trim(Text.From(_)) <> ""))
+				            in
+				                #"Removed Blank Columns"
 
-    measure 'Visits per Patient' =
-        CALCULATE(COUNT('organizations'[Id]), ALLEXCEPT('patients', 'patients'[Id]))
-
-
-    measure 'Avg Visits per Patient' =
-        CALCULATE(AVERAGE('patients'[Visits per Patient]), ALLEXCEPT('patients', 'patients'[Gender]))
-
-
-    measure 'SUM of Visits per Patient' =
-        SUM('organizations'[Visits per Patient])
-
-
-    measure 'RLS - Organization Access' =
-        BLANK()
-
-
-    partition 'organizations' = m
-        mode: import
-        source =
-            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Gfqr930PI28eveUiJrS8ikSsyzDUbPE4pJy7nG9ZIUc"),
-            #"Navigation 1" = Source{[name = "organizations", ItemKind = "Table"]}[Data],
-            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
-            #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"NAME", "Name"}}),
-            #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"Id", type text}, {"Name", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE", type text}, {"ZIP", Int64.Type}, {"LAT", type number}, {"LON", type number}}),
-                            #"Removed Blank Columns" = Table.SelectColumns(#"Changed Type", List.Select(Table.ColumnNames(#"Changed Type"), each _ <> null and Text.Trim(Text.From(_)) <> ""))
-                        in
-                            #"Removed Blank Columns"

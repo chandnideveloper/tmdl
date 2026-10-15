@@ -1,99 +1,99 @@
-table 'organizations'
-    lineageTag: 0faa2de5-f97d-4aaf-a7b9-395a7bfa9e83
+table organizations
+	lineageTag: 0faa2de5-f97d-4aaf-a7b9-395a7bfa9e83
 
-    column 'Id'
-        dataType: string
-        lineageTag: 3151ad70-89a2-4740-b390-62c16d7b2a14
-        summarizeBy: none
-        sourceColumn: Id
+	measure 'Visits % Contribution (LOD)' = BLANK()
+		lineageTag: 08c3faa4-17e2-408d-a3fc-d04643b76546
 
-    column 'Name'
-        dataType: string
-        lineageTag: ff5ebca1-d5ba-469a-8fc1-24013b204162
-        summarizeBy: none
-        sourceColumn: Name
+	measure 'Total Patients (LOD)' = CALCULATE(DISTINCTCOUNT('patients'[Id]), ALL('patients'))
+		lineageTag: 376dd0fb-71a2-4fc7-bda7-4876cfbf6084
 
-    column 'ADDRESS'
-        dataType: string
-        lineageTag: c8f91446-5156-4978-8060-2511eee22f7f
-        summarizeBy: none
-        sourceColumn: ADDRESS
+	measure 'Total Procedures (LOD)' = CALCULATE(COUNT('encounters'[Code]), ALL('encounters'))
+		lineageTag: c7929956-1a35-4822-974e-88545d1113a6
 
-    column 'CITY'
-        dataType: string
-        lineageTag: 3aec410e-73ab-4cdf-91fc-039bac137e69
-        summarizeBy: none
-        sourceColumn: CITY
+	measure 'Total Visits (LOD)' = CALCULATE(COUNT('organizations'[Id]), ALL('organizations'))
+		lineageTag: e7a904dd-2915-4b5e-a54d-3d3bf13ff88b
 
-    column 'STATE'
-        dataType: string
-        lineageTag: de614034-2021-49a2-a428-203ce850c303
-        summarizeBy: none
-        sourceColumn: STATE
+	measure 'Visits per Patient' = CALCULATE(COUNT('organizations'[Id]), ALLEXCEPT('patients', 'patients'[Id]))
+		lineageTag: a98621dd-3076-4fe7-8094-2eaf26a360b2
 
-    column 'ZIP'
-        dataType: double
-        lineageTag: 02e8230a-f276-4429-8434-7c01930a4805
-        summarizeBy: none
-        sourceColumn: ZIP
+	measure 'Avg Visits per Patient - Test 2' =
+			
+			DIVIDE(
+			    COUNTROWS('encounters'),
+			    DISTINCTCOUNT('encounters'[Patient])
+			)
+		lineageTag: a06fb542-7ddb-42ca-8998-b1b4b06c784f
 
-    column 'LAT'
-        dataType: double
-        lineageTag: 4da6f809-401e-410a-a3c2-3e68e99f43b9
-        summarizeBy: none
-        sourceColumn: LAT
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-    column 'LON'
-        dataType: double
-        lineageTag: 4de36caa-a278-4602-b0e3-c905764d3fc5
-        summarizeBy: none
-        sourceColumn: LON
+	measure 'SUM of Visits per Patient' = SUM('organizations'[Visits per Patient])
+		lineageTag: eb05e09d-0baf-463a-a8a4-52a14891ffc5
 
-    column 'Username' = SELECTEDVALUE('organizations'[Name])
-        dataType: string
+	measure 'RLS - Organization Access' = -- ERROR: LLM call failed after 6 retries. Last error: 413 Client Error: Payload Too Large for url: https://api.groq.com/openai/v1/chat/completions
+		lineageTag: a9f060d2-5d2a-4518-82b1-02926f148af1
 
-        summarizeBy: none
+	column Id
+		dataType: string
+		lineageTag: 3151ad70-89a2-4740-b390-62c16d7b2a14
+		summarizeBy: none
+		sourceColumn: Id
 
-    measure 'Visits % Contribution (LOD)' =
-        BLANK()
+	column Name
+		dataType: string
+		lineageTag: ff5ebca1-d5ba-469a-8fc1-24013b204162
+		summarizeBy: none
+		sourceColumn: Name
 
+	column ADDRESS
+		dataType: string
+		lineageTag: c8f91446-5156-4978-8060-2511eee22f7f
+		summarizeBy: none
+		sourceColumn: ADDRESS
 
-    measure 'Total Patients (LOD)' =
-        CALCULATE(DISTINCTCOUNT('patients'[Id]), ALL('patients'))
+	column CITY
+		dataType: string
+		lineageTag: 3aec410e-73ab-4cdf-91fc-039bac137e69
+		summarizeBy: none
+		sourceColumn: CITY
 
+	column STATE
+		dataType: string
+		lineageTag: de614034-2021-49a2-a428-203ce850c303
+		summarizeBy: none
+		sourceColumn: STATE
 
-    measure 'Total Procedures (LOD)' =
-        CALCULATE(COUNT('encounters'[Code]), ALL('encounters'))
+	column ZIP
+		dataType: double
+		lineageTag: 02e8230a-f276-4429-8434-7c01930a4805
+		summarizeBy: none
+		sourceColumn: ZIP
 
+	column LAT
+		dataType: double
+		lineageTag: 4da6f809-401e-410a-a3c2-3e68e99f43b9
+		summarizeBy: none
+		sourceColumn: LAT
 
-    measure 'Total Visits (LOD)' =
-        CALCULATE(COUNT('organizations'[Id]), ALL('organizations'))
+	column LON
+		dataType: double
+		lineageTag: 4de36caa-a278-4602-b0e3-c905764d3fc5
+		summarizeBy: none
+		sourceColumn: LON
 
+	column Username = SELECTEDVALUE('organizations'[Name])
+		dataType: string
+		lineageTag: a045469c-0791-4b61-bbc6-00653342f390
+		summarizeBy: none
 
-    measure 'Visits per Patient' =
-        CALCULATE(COUNT('organizations'[Id]), ALLEXCEPT('patients', 'patients'[Id]))
+	partition organizations = m
+		mode: import
+		source =
+				let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Gfqr930PI28eveUiJrS8ikSsyzDUbPE4pJy7nG9ZIUc"),
+				#"Navigation 1" = Source{[name = "organizations", ItemKind = "Table"]}[Data],
+				#"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+				#"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"NAME", "Name"}}),
+				#"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"Id", type text}, {"Name", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE", type text}, {"ZIP", Int64.Type}, {"LAT", type number}, {"LON", type number}}),
+				                #"Final Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"NAME", "Name"}}, MissingField.Ignore)
+				            in
+				                #"Final Renamed Columns"
 
-
-    measure 'Avg Visits per Patient' =
-        CALCULATE(AVERAGE('patients'[Visits per Patient]), ALLEXCEPT('patients', 'patients'[Gender]))
-
-
-    measure 'SUM of Visits per Patient' =
-        SUM('organizations'[Visits per Patient])
-
-
-    measure 'RLS - Organization Access' =
-        -- ERROR: LLM call failed after 6 retries. Last error: 413 Client Error: Payload Too Large for url: https://api.groq.com/openai/v1/chat/completions
-
-
-    partition 'organizations' = m
-        mode: import
-        source =
-            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Gfqr930PI28eveUiJrS8ikSsyzDUbPE4pJy7nG9ZIUc"),
-            #"Navigation 1" = Source{[name = "organizations", ItemKind = "Table"]}[Data],
-            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
-            #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"NAME", "Name"}}),
-            #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"Id", type text}, {"Name", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE", type text}, {"ZIP", Int64.Type}, {"LAT", type number}, {"LON", type number}}),
-                            #"Final Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"NAME", "Name"}}, MissingField.Ignore)
-                        in
-                            #"Final Renamed Columns"

@@ -1,105 +1,111 @@
-table 'procedures'
-    lineageTag: 825d636c-497c-4738-ad56-2d5e8f6fa163
+table procedures
+	lineageTag: 825d636c-497c-4738-ad56-2d5e8f6fa163
 
-    column 'START'
-        dataType: string
-        lineageTag: 4067ba35-d8ea-434e-bf4c-136b98853da5
-        summarizeBy: none
-        sourceColumn: START
+	measure 'Top N Patients Measure' = [Patient Visits Rank (Top N Patients)] <= SELECTEDVALUE('Top N Patients'[Value])
+		lineageTag: f0ed1d16-691d-4ba4-b763-e2e47cb73986
 
-    column 'STOP'
-        dataType: string
-        lineageTag: 5cce86b1-75b7-419c-8f5c-9d7e0e944640
-        summarizeBy: none
-        sourceColumn: STOP
+	measure 'Procedure Rank(Top N Procedure Parameter)' = RANKX(ALLSELECTED('procedures'), CALCULATE(COUNT('procedures'[CODE])), BLANK(), DESC, DENSE)
+		lineageTag: d7ffc96a-4731-4318-865d-41dbf1f7d673
 
-    column 'PATIENT'
-        dataType: string
-        lineageTag: 910de9af-97f9-469a-b8cd-fc960780283d
-        summarizeBy: none
-        sourceColumn: PATIENT
+	measure 'Total Procedures' = COUNT('procedures'[CODE])
+		lineageTag: d1b3d219-6e9e-40c9-98e2-c980d300bbc6
 
-    column 'Encounter'
-        dataType: string
-        lineageTag: 7a791901-6dff-47c9-9246-fe1bd5e215fe
-        summarizeBy: none
-        sourceColumn: Encounter
+	measure 'Procedures Measure' = COUNT('procedures'[CODE])
+		lineageTag: abcbb1b9-7b35-4e7d-adff-86910b8bf055
 
-    column 'CODE'
-        dataType: double
-        lineageTag: 8bef4551-ac40-47bb-8e5a-cf62481c4ea9
-        summarizeBy: none
-        sourceColumn: CODE
+	column START
+		dataType: string
+		lineageTag: 4067ba35-d8ea-434e-bf4c-136b98853da5
+		summarizeBy: none
+		sourceColumn: START
 
-    column 'DESCRIPTION'
-        dataType: string
-        lineageTag: eb921021-eada-41e5-a9e1-0c20d7b4cd0d
-        summarizeBy: none
-        sourceColumn: DESCRIPTION
+	column STOP
+		dataType: string
+		lineageTag: 5cce86b1-75b7-419c-8f5c-9d7e0e944640
+		summarizeBy: none
+		sourceColumn: STOP
 
-    column 'Base Cost'
-        dataType: double
-        lineageTag: 6a5cbd45-12c3-48d7-bfc0-430a03d5c97d
-        summarizeBy: none
-        sourceColumn: Base Cost
+	column PATIENT
+		dataType: string
+		lineageTag: 910de9af-97f9-469a-b8cd-fc960780283d
+		summarizeBy: none
+		sourceColumn: PATIENT
 
-    column 'REASONCODE'
-        dataType: double
-        lineageTag: 7ead5698-1b03-4340-8d32-7de2ac99fc37
-        summarizeBy: none
-        sourceColumn: REASONCODE
+	column Encounter
+		dataType: string
+		lineageTag: 7a791901-6dff-47c9-9246-fe1bd5e215fe
+		summarizeBy: none
+		sourceColumn: Encounter
 
-    column 'REASONDESCRIPTION'
-        dataType: string
-        lineageTag: 5c4aaebc-e793-47c7-873e-1804e927d739
-        summarizeBy: none
-        sourceColumn: REASONDESCRIPTION
+	column CODE
+		dataType: int64
+		formatString: 0
+		lineageTag: 8bef4551-ac40-47bb-8e5a-cf62481c4ea9
+		summarizeBy: sum
+		sourceColumn: CODE
 
-    column 'DESCRIPTION__procedures__Set_Category' = IF('procedures'[DESCRIPTION] IN { "Admission to burn unit", "Admission to long stay hospital", "Admission to orthopedic department", "Admission to trauma surgery department", "Ankle X-ray", "Antenatal RhD antibody screening", "Assessment of health and social care needs (procedure)" }, "In", "Out")
-        dataType: string
+		annotation SummarizationSetBy = Automatic
 
-        summarizeBy: none
+	column DESCRIPTION
+		dataType: string
+		lineageTag: eb921021-eada-41e5-a9e1-0c20d7b4cd0d
+		summarizeBy: none
+		sourceColumn: DESCRIPTION
 
-    column 'Encounter Start Date' = DATEVALUE(LEFT('procedures'[START],10))
-        dataType: dateTime
-        formatString: Long Date
-        lineageTag: f93a5b05-cea5-4867-8718-916e9b9a6a04
-        summarizeBy: none
+	column 'Base Cost'
+		dataType: int64
+		formatString: 0
+		lineageTag: 6a5cbd45-12c3-48d7-bfc0-430a03d5c97d
+		summarizeBy: sum
+		sourceColumn: Base Cost
 
-        variation Variation
-            isDefault
-            relationship: 5f5a54d1-3e78-4ca2-a80a-3cee0f3b3316
-            defaultHierarchy: LocalDateTable_e888a8c0-797a-4048-85d6-f9d95c7e7103.'Date Hierarchy'
+		annotation SummarizationSetBy = Automatic
 
-        changedProperty = DataType
+	column REASONCODE
+		dataType: int64
+		formatString: 0
+		lineageTag: 7ead5698-1b03-4340-8d32-7de2ac99fc37
+		summarizeBy: sum
+		sourceColumn: REASONCODE
 
-        annotation UnderlyingDateTimeDataType = Date
+		annotation SummarizationSetBy = Automatic
 
-    measure 'Top N Patients Measure' =
-        [Patient Visits Rank (Top N Patients)] <= SELECTEDVALUE('Top N Patients'[Value])
+	column REASONDESCRIPTION
+		dataType: string
+		lineageTag: 5c4aaebc-e793-47c7-873e-1804e927d739
+		summarizeBy: none
+		sourceColumn: REASONDESCRIPTION
 
+	column DESCRIPTION__procedures__Set_Category = IF('procedures'[DESCRIPTION] IN { "Admission to burn unit", "Admission to long stay hospital", "Admission to orthopedic department", "Admission to trauma surgery department", "Ankle X-ray", "Antenatal RhD antibody screening", "Assessment of health and social care needs (procedure)" }, "In", "Out")
+		dataType: string
+		lineageTag: 604024aa-9bcd-418a-9eb9-5d015eaa93af
+		summarizeBy: none
 
-    measure 'Procedure Rank(Top N Procedure Parameter)' =
-        RANKX(ALLSELECTED('procedures'), CALCULATE(COUNT('procedures'[CODE])), BLANK(), DESC, DENSE)
+	column 'Encounter Start Date' = DATEVALUE(LEFT('procedures'[START],10))
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: f93a5b05-cea5-4867-8718-916e9b9a6a04
+		summarizeBy: none
 
+		variation Variation
+			isDefault
+			relationship: 5f5a54d1-3e78-4ca2-a80a-3cee0f3b3316
+			defaultHierarchy: LocalDateTable_e888a8c0-797a-4048-85d6-f9d95c7e7103.'Date Hierarchy'
 
-    measure 'Total Procedures' =
-        COUNT('procedures'[CODE])
+		changedProperty = DataType
 
+		annotation UnderlyingDateTimeDataType = Date
 
-    measure 'Procedures Measure' =
-        COUNT('procedures'[CODE])
+	partition procedures = m
+		mode: import
+		source =
+				let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo"),
+				#"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data],
+				#"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+				#"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"ENCOUNTER", "Encounter"}, {"BASE_COST", "Base Cost"}}),
+				#"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"START", type text}, {"STOP", type text}, {"PATIENT", type text}, {"Encounter", type text}, {"CODE", Int64.Type}, {"DESCRIPTION", type text}, {"Base Cost", Int64.Type}, {"REASONCODE", Int64.Type}, {"REASONDESCRIPTION", type text}}),
+				#"Filtered Blank Rows" = Table.SelectRows(#"Changed Type", each [CODE] <> null and [CODE] <> ""),
+				                #"Removed Blank Columns" = Table.SelectColumns(#"Filtered Blank Rows", {"START", "STOP", "PATIENT", "Encounter", "CODE", "DESCRIPTION", "Base Cost", "REASONCODE", "REASONDESCRIPTION"}, MissingField.Ignore)
+				            in
+				                #"Removed Blank Columns"
 
-
-    partition 'procedures' = m
-        mode: import
-        source =
-            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo"),
-            #"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data],
-            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
-            #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"ENCOUNTER", "Encounter"}, {"BASE_COST", "Base Cost"}}),
-            #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"START", type text}, {"STOP", type text}, {"PATIENT", type text}, {"Encounter", type text}, {"CODE", Int64.Type}, {"DESCRIPTION", type text}, {"Base Cost", Int64.Type}, {"REASONCODE", Int64.Type}, {"REASONDESCRIPTION", type text}}),
-            #"Filtered Blank Rows" = Table.SelectRows(#"Changed Type", each [CODE] <> null and [CODE] <> ""),
-                            #"Removed Blank Columns" = Table.SelectColumns(#"Filtered Blank Rows", {"START", "STOP", "PATIENT", "Encounter", "CODE", "DESCRIPTION", "Base Cost", "REASONCODE", "REASONDESCRIPTION"}, MissingField.Ignore)
-                        in
-                            #"Removed Blank Columns"

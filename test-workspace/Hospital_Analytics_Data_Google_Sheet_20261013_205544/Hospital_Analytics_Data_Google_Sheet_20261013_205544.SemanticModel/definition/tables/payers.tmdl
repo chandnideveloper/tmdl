@@ -1,53 +1,68 @@
-table 'payers'
-    lineageTag: da1ea7fa-8266-470a-9369-adfa7578d94d
+table payers
+	lineageTag: da1ea7fa-8266-470a-9369-adfa7578d94d
 
-    column 'Id'
-        dataType: string
-        lineageTag: 199ac527-2349-4594-b237-164ac4846ea5
-        summarizeBy: none
-        sourceColumn: Id
+	column Column1
+		dataType: string
+		lineageTag: bf466259-7631-4173-8cbb-bcb2fc4a0a97
+		summarizeBy: none
+		sourceColumn: Column1
 
-    column 'NAME'
-        dataType: string
-        lineageTag: 5d0b30c4-3e2e-400a-a1b8-5ac8f5e932d2
-        summarizeBy: none
-        sourceColumn: NAME
+		annotation SummarizationSetBy = Automatic
 
-    column 'ADDRESS'
-        dataType: string
-        lineageTag: 03b56fc0-ab34-4df6-b2e8-831cb232a4d3
-        summarizeBy: none
-        sourceColumn: ADDRESS
+	column Column2
+		dataType: string
+		lineageTag: 600fd1a2-9a69-4394-bb1b-d85dc6b3406e
+		summarizeBy: none
+		sourceColumn: Column2
 
-    column 'CITY'
-        dataType: string
-        lineageTag: 0302eaff-3bc1-4f24-a2be-e931c75c17bb
-        summarizeBy: none
-        sourceColumn: CITY
+		annotation SummarizationSetBy = Automatic
 
-    column 'State Headquartered'
-        dataType: string
-        lineageTag: 3b6be784-1a5c-41a6-8914-638ee5d0bd27
-        summarizeBy: none
-        sourceColumn: State Headquartered
+	column Column3
+		dataType: string
+		lineageTag: 2925afb7-4b38-4676-b10c-5ff0bd0d1c7b
+		summarizeBy: none
+		sourceColumn: Column3
 
-    column 'ZIP'
-        dataType: double
-        lineageTag: 9bc80bfa-47ae-4fdb-8ec4-9e4a3b9b0f3f
-        summarizeBy: none
-        sourceColumn: ZIP
+		annotation SummarizationSetBy = Automatic
 
-    column 'Phone'
-        dataType: string
-        lineageTag: f52dc2de-fb63-4e39-9f8b-6d856cda6ad0
-        summarizeBy: none
-        sourceColumn: Phone
+	column Column4
+		dataType: string
+		lineageTag: af8909d7-a825-4ff7-83c5-295691e199dc
+		summarizeBy: none
+		sourceColumn: Column4
 
-    partition 'payers' = m
-        mode: import
-        source =
-            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1NB9uAQnBa6RYGfm5addKbcToYUZJY_5OlBkWxVZRrbU"),
-            #"Navigation 1" = Source{[name = "payers", ItemKind = "Table"]}[Data],
-                            #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"STATE_HEADQUARTERED", "State Headquartered"}, {"PHONE", "Phone"}}, MissingField.Ignore)
-                        in
-                            #"Final Renamed Columns"
+		annotation SummarizationSetBy = Automatic
+
+	column Column5
+		dataType: string
+		lineageTag: cad0e159-7ab9-4d39-813f-b1dbcb3faafc
+		summarizeBy: none
+		sourceColumn: Column5
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column6
+		dataType: string
+		lineageTag: 501e60be-3ed3-4951-a434-88335ad41960
+		summarizeBy: none
+		sourceColumn: Column6
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column7
+		dataType: string
+		lineageTag: 2dd82c57-0f5b-4749-82fe-6cb90475993c
+		summarizeBy: none
+		sourceColumn: Column7
+
+		annotation SummarizationSetBy = Automatic
+
+	partition payers = m
+		mode: import
+		source =
+				let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1NB9uAQnBa6RYGfm5addKbcToYUZJY_5OlBkWxVZRrbU"),
+				#"Navigation 1" = Source{[name = "payers", ItemKind = "Table"]}[Data],
+				                #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"STATE_HEADQUARTERED", "State Headquartered"}, {"PHONE", "Phone"}}, MissingField.Ignore)
+				            in
+				                #"Final Renamed Columns"
+

@@ -1,116 +1,110 @@
-table 'procedures'
-    lineageTag: 48503263-abe4-4cd0-9976-c02b484ad6ca
+table procedures
+	lineageTag: 48503263-abe4-4cd0-9976-c02b484ad6ca
 
-    column 'START'
-        dataType: string
-        lineageTag: da22985d-f359-4c1f-8dc6-d1860eabe707
-        summarizeBy: none
-        sourceColumn: START
+	measure 'Patient Visits Rank (Top N Patients)' = BLANK()
+		lineageTag: b38e5102-72a1-47a1-b85e-bd9f86429537
 
-    column 'STOP'
-        dataType: string
-        lineageTag: 71f170fa-7025-475e-b9ff-160247c6c8ba
-        summarizeBy: none
-        sourceColumn: STOP
+	measure 'Top N Patients' = BLANK()
+		lineageTag: e7ee9326-180a-4444-9a21-afc876183d74
 
-    column 'PATIENT'
-        dataType: string
-        lineageTag: f1699671-5a62-4584-a02c-1d345f15fbb9
-        summarizeBy: none
-        sourceColumn: PATIENT
+	measure 'Procedure Rank(Top N Procedure Parameter)' = BLANK()
+		lineageTag: db07123c-019f-4ea1-8d35-ba0b096d3635
 
-    column 'Encounter'
-        dataType: string
-        lineageTag: a5de273e-985f-48d9-9c03-edc6c33d5e3c
-        summarizeBy: none
-        sourceColumn: Encounter
+	measure 'Top N Procedures Filter' = BLANK()
+		lineageTag: bd63286b-7ad3-4696-9a03-033a00064dda
 
-    column 'CODE'
-        dataType: double
-        lineageTag: 7fda900d-0c43-43df-a830-318c779db42d
-        summarizeBy: none
-        sourceColumn: CODE
+	measure 'Selected Metric' = BLANK()
+		lineageTag: 43991db1-d2f2-40e4-a91a-a66f8c0a392a
 
-    column 'DESCRIPTION'
-        dataType: string
-        lineageTag: cad4aca8-abf0-4c79-8d12-d7c43d6612dd
-        summarizeBy: none
-        sourceColumn: DESCRIPTION
+	measure 'Total Procedures' = COUNT('procedures'[CODE])
+		lineageTag: 51ea814c-98a8-49f0-bcb9-99a3bd4a5a42
 
-    column 'Base Cost'
-        dataType: double
-        lineageTag: 119ae0f5-e230-437b-9ef6-cd1033cfab35
-        summarizeBy: none
-        sourceColumn: Base Cost
+	measure Procedures = COUNT('procedures'[CODE])
+		lineageTag: 229e6b4a-d743-47c9-9650-ed2b55d58ff7
 
-    column 'REASONCODE'
-        dataType: double
-        lineageTag: 32baa36c-b1d1-4356-beb7-e4fb4d6647b7
-        summarizeBy: none
-        sourceColumn: REASONCODE
+	column START
+		dataType: string
+		lineageTag: da22985d-f359-4c1f-8dc6-d1860eabe707
+		summarizeBy: none
+		sourceColumn: START
 
-    column 'REASONDESCRIPTION'
-        dataType: string
-        lineageTag: 14953d22-582d-489c-a7b4-b09d61bf59c7
-        summarizeBy: none
-        sourceColumn: REASONDESCRIPTION
+	column STOP
+		dataType: string
+		lineageTag: 71f170fa-7025-475e-b9ff-160247c6c8ba
+		summarizeBy: none
+		sourceColumn: STOP
 
-    column 'DESCRIPTION__procedures__Set_Category' = IF('procedures'[DESCRIPTION] IN { "Admission to burn unit", "Admission to long stay hospital", "Admission to orthopedic department", "Admission to trauma surgery department", "Ankle X-ray", "Antenatal RhD antibody screening", "Assessment of health and social care needs (procedure)" }, "In", "Out")
-        dataType: string
+	column PATIENT
+		dataType: string
+		lineageTag: f1699671-5a62-4584-a02c-1d345f15fbb9
+		summarizeBy: none
+		sourceColumn: PATIENT
 
-        summarizeBy: none
+	column Encounter
+		dataType: string
+		lineageTag: a5de273e-985f-48d9-9c03-edc6c33d5e3c
+		summarizeBy: none
+		sourceColumn: Encounter
 
-    column 'Encounter Start Date' = DATEVALUE(LEFT('procedures'[START],10))
-        dataType: dateTime
-        formatString: Long Date
-        lineageTag: 3f89a24b-a173-43aa-abb5-dcf8fcb30c1f
-        summarizeBy: none
+	column CODE
+		dataType: double
+		lineageTag: 7fda900d-0c43-43df-a830-318c779db42d
+		summarizeBy: none
+		sourceColumn: CODE
 
-        variation Variation
-            isDefault
-            relationship: 8ffe28cd-6668-44c9-b9c7-103b772bbf20
-            defaultHierarchy: LocalDateTable_d29258ce-faeb-4e33-8252-ed52e471fbfb.'Date Hierarchy'
+	column DESCRIPTION
+		dataType: string
+		lineageTag: cad4aca8-abf0-4c79-8d12-d7c43d6612dd
+		summarizeBy: none
+		sourceColumn: DESCRIPTION
 
-        changedProperty = DataType
+	column 'Base Cost'
+		dataType: double
+		lineageTag: 119ae0f5-e230-437b-9ef6-cd1033cfab35
+		summarizeBy: none
+		sourceColumn: Base Cost
 
-        annotation UnderlyingDateTimeDataType = Date
+	column REASONCODE
+		dataType: double
+		lineageTag: 32baa36c-b1d1-4356-beb7-e4fb4d6647b7
+		summarizeBy: none
+		sourceColumn: REASONCODE
 
-    measure 'Patient Visits Rank (Top N Patients)' =
-        BLANK()
+	column REASONDESCRIPTION
+		dataType: string
+		lineageTag: 14953d22-582d-489c-a7b4-b09d61bf59c7
+		summarizeBy: none
+		sourceColumn: REASONDESCRIPTION
 
+	column DESCRIPTION__procedures__Set_Category = IF('procedures'[DESCRIPTION] IN { "Admission to burn unit", "Admission to long stay hospital", "Admission to orthopedic department", "Admission to trauma surgery department", "Ankle X-ray", "Antenatal RhD antibody screening", "Assessment of health and social care needs (procedure)" }, "In", "Out")
+		dataType: string
+		lineageTag: 01b8a4cb-8518-42ca-8055-d233db35a871
+		summarizeBy: none
 
-    measure 'Top N Patients' =
-        BLANK()
+	column 'Encounter Start Date' = DATEVALUE(LEFT('procedures'[START],10))
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 3f89a24b-a173-43aa-abb5-dcf8fcb30c1f
+		summarizeBy: none
 
+		variation Variation
+			isDefault
+			relationship: 8ffe28cd-6668-44c9-b9c7-103b772bbf20
+			defaultHierarchy: LocalDateTable_d29258ce-faeb-4e33-8252-ed52e471fbfb.'Date Hierarchy'
 
-    measure 'Procedure Rank(Top N Procedure Parameter)' =
-        BLANK()
+		changedProperty = DataType
 
+		annotation UnderlyingDateTimeDataType = Date
 
-    measure 'Top N Procedures Filter' =
-        BLANK()
+	partition procedures = m
+		mode: import
+		source =
+				let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo"),
+				#"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data],
+				#"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+				#"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"ENCOUNTER", "Encounter"}, {"BASE_COST", "Base Cost"}}),
+				#"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"START", type text}, {"STOP", type text}, {"PATIENT", type text}, {"Encounter", type text}, {"CODE", Int64.Type}, {"DESCRIPTION", type text}, {"Base Cost", Int64.Type}, {"REASONCODE", Int64.Type}, {"REASONDESCRIPTION", type text}}),
+				                #"Final Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"ENCOUNTER", "Encounter"}, {"BASE_COST", "Base Cost"}}, MissingField.Ignore)
+				            in
+				                #"Final Renamed Columns"
 
-
-    measure 'Selected Metric' =
-        BLANK()
-
-
-    measure 'Total Procedures' =
-        COUNT('procedures'[CODE])
-
-
-    measure 'Procedures' =
-        COUNT('procedures'[CODE])
-
-
-    partition 'procedures' = m
-        mode: import
-        source =
-            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo"),
-            #"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data],
-            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
-            #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"ENCOUNTER", "Encounter"}, {"BASE_COST", "Base Cost"}}),
-            #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"START", type text}, {"STOP", type text}, {"PATIENT", type text}, {"Encounter", type text}, {"CODE", Int64.Type}, {"DESCRIPTION", type text}, {"Base Cost", Int64.Type}, {"REASONCODE", Int64.Type}, {"REASONDESCRIPTION", type text}}),
-                            #"Final Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"ENCOUNTER", "Encounter"}, {"BASE_COST", "Base Cost"}}, MissingField.Ignore)
-                        in
-                            #"Final Renamed Columns"

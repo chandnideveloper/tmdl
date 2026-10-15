@@ -1,82 +1,98 @@
-table 'procedures'
-    lineageTag: 5dcf3fd8-3a12-48d1-b504-ea77158e4cd7
+table procedures
+	lineageTag: 5dcf3fd8-3a12-48d1-b504-ea77158e4cd7
 
-    column 'START (procedures)'
-        dataType: string
-        lineageTag: 4f04052d-ca47-4703-8e6d-827aaab820fd
-        summarizeBy: none
-        sourceColumn: START (procedures)
+	measure 'Procedure Rank(Top N Procedure Parameter)' = -- SKIPPED BY USER
+		lineageTag: ce6a84e8-c260-4d92-b992-49d491b90d65
 
-    column 'STOP (procedures)'
-        dataType: string
-        lineageTag: d5c56f63-4e30-4cc8-b164-84fe2d9b455f
-        summarizeBy: none
-        sourceColumn: STOP (procedures)
+	measure 'Top N Procedures Filter' = -- SKIPPED BY USER
+		lineageTag: 26bbaaa0-e1ee-4d69-ac73-966901e29986
 
-    column 'PATIENT (procedures)'
-        dataType: string
-        lineageTag: 2ba6a7e3-39de-43a6-8b5a-de6a0e92116f
-        summarizeBy: none
-        sourceColumn: PATIENT (procedures)
+	measure 'Selected Metric' = -- SKIPPED BY USER
+		lineageTag: 6afe455f-8ae3-409f-aae5-8923ed0907dc
 
-    column 'Encounter'
-        dataType: string
-        lineageTag: f89b6227-6bcf-4277-b1b6-6c782838384d
-        summarizeBy: none
-        sourceColumn: Encounter
+	column 'DESCRIPTION (procedures) Set' = -- SKIPPED
+		dataType: string
+		lineageTag: fc81cd4a-7aa7-4234-a3de-c9652b6d1bd2
+		summarizeBy: none
 
-    column 'CODE (procedures)'
-        dataType: double
-        lineageTag: 83416d00-bb01-441f-8397-9ea5081da919
-        summarizeBy: none
-        sourceColumn: CODE (procedures)
+	column Column1
+		dataType: string
+		lineageTag: 0854a0c6-7fd6-499d-a8ee-a87bbf421861
+		summarizeBy: none
+		sourceColumn: Column1
 
-    column 'DESCRIPTION (procedures)'
-        dataType: string
-        lineageTag: 6ecab48c-4716-44f7-a678-53839cb1ece6
-        summarizeBy: none
-        sourceColumn: DESCRIPTION (procedures)
+		annotation SummarizationSetBy = Automatic
 
-    column 'Base Cost'
-        dataType: double
-        lineageTag: 0dfa127a-093f-40ca-99bb-9c1a036264fa
-        summarizeBy: none
-        sourceColumn: Base Cost
+	column Column2
+		dataType: string
+		lineageTag: 382d0228-4f0e-43b4-87e2-611ccdfb5fb1
+		summarizeBy: none
+		sourceColumn: Column2
 
-    column 'REASONCODE (procedures)'
-        dataType: double
-        lineageTag: c278d3fb-7783-4185-8a2f-7cce790ebfab
-        summarizeBy: none
-        sourceColumn: REASONCODE (procedures)
+		annotation SummarizationSetBy = Automatic
 
-    column 'REASONDESCRIPTION (procedures)'
-        dataType: string
-        lineageTag: 034ca8c8-f6e2-4879-a9d4-8d590191ba8c
-        summarizeBy: none
-        sourceColumn: REASONDESCRIPTION (procedures)
+	column Column3
+		dataType: string
+		lineageTag: 42f6125b-9d8b-4eef-a6a0-1747073c34bf
+		summarizeBy: none
+		sourceColumn: Column3
 
-    column 'DESCRIPTION (procedures) Set' = -- SKIPPED
-        dataType: string
+		annotation SummarizationSetBy = Automatic
 
-        summarizeBy: none
+	column Column4
+		dataType: string
+		lineageTag: 5f1ce07b-0fe8-41bf-a88e-b801317db208
+		summarizeBy: none
+		sourceColumn: Column4
 
-    measure 'Procedure Rank(Top N Procedure Parameter)' =
-        -- SKIPPED BY USER
+		annotation SummarizationSetBy = Automatic
 
+	column Column5
+		dataType: string
+		lineageTag: 346846c6-1422-4722-aeeb-bfbdc1059783
+		summarizeBy: none
+		sourceColumn: Column5
 
-    measure 'Top N Procedures Filter' =
-        -- SKIPPED BY USER
+		annotation SummarizationSetBy = Automatic
 
+	column Column6
+		dataType: string
+		lineageTag: 49416a0b-4b2c-4490-a3ad-8ea898aa74b3
+		summarizeBy: none
+		sourceColumn: Column6
 
-    measure 'Selected Metric' =
-        -- SKIPPED BY USER
+		annotation SummarizationSetBy = Automatic
 
+	column Column7
+		dataType: string
+		lineageTag: 60c97574-c818-4833-9b1f-28a0754b21c6
+		summarizeBy: none
+		sourceColumn: Column7
 
-    partition 'procedures' = m
-        mode: import
-        source =
-            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo"),
-            #"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data],
-                            #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"START", "START (procedures)"}, {"STOP", "STOP (procedures)"}, {"PATIENT", "PATIENT (procedures)"}, {"ENCOUNTER", "Encounter"}, {"CODE", "CODE (procedures)"}, {"DESCRIPTION", "DESCRIPTION (procedures)"}, {"BASE_COST", "Base Cost"}, {"REASONCODE", "REASONCODE (procedures)"}, {"REASONDESCRIPTION", "REASONDESCRIPTION (procedures)"}}, MissingField.Ignore)
-                        in
-                            #"Final Renamed Columns"
+		annotation SummarizationSetBy = Automatic
+
+	column Column8
+		dataType: string
+		lineageTag: b5fd2e6d-cb5e-4dee-91fc-0c169e88823e
+		summarizeBy: none
+		sourceColumn: Column8
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column9
+		dataType: string
+		lineageTag: 795c81af-e1ef-424a-9902-ec35d9450b82
+		summarizeBy: none
+		sourceColumn: Column9
+
+		annotation SummarizationSetBy = Automatic
+
+	partition procedures = m
+		mode: import
+		source =
+				let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo"),
+				#"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data],
+				                #"Final Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"START", "START (procedures)"}, {"STOP", "STOP (procedures)"}, {"PATIENT", "PATIENT (procedures)"}, {"ENCOUNTER", "Encounter"}, {"CODE", "CODE (procedures)"}, {"DESCRIPTION", "DESCRIPTION (procedures)"}, {"BASE_COST", "Base Cost"}, {"REASONCODE", "REASONCODE (procedures)"}, {"REASONDESCRIPTION", "REASONDESCRIPTION (procedures)"}}, MissingField.Ignore)
+				            in
+				                #"Final Renamed Columns"
+

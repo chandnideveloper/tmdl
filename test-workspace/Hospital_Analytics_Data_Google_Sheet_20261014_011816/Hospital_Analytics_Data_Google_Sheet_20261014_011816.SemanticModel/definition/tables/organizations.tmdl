@@ -1,75 +1,89 @@
-table 'organizations'
-    lineageTag: e88c2acf-da59-452c-8a78-8fbed0c0abdc
+table organizations
+	lineageTag: e88c2acf-da59-452c-8a78-8fbed0c0abdc
 
-    column 'Id'
-        dataType: string
-        lineageTag: 29d7ff84-e064-4c45-bea7-6bbe6119433f
-        summarizeBy: none
-        sourceColumn: Id
+	measure 'Visits % Contribution (LOD)' = -- ERROR: LLM call failed after 6 retries. Last error: 413 Client Error: Payload Too Large for url: https://api.groq.com/openai/v1/chat/completions
+		lineageTag: 6e05f905-c666-44e0-bb63-8831d6b1b82a
 
-    column 'Name'
-        dataType: string
-        lineageTag: 531cf0a9-adf2-42bc-acfa-5fe7dcb7cf71
-        summarizeBy: none
-        sourceColumn: Name
+	measure 'RLS - Organization Access' = -- ERROR: LLM call failed after 6 retries. Last error: 413 Client Error: Payload Too Large for url: https://api.groq.com/openai/v1/chat/completions
+		lineageTag: ec750d73-f5a9-40d6-89ae-113e8055f6ab
 
-    column 'ADDRESS'
-        dataType: string
-        lineageTag: c5729a6f-a811-457c-9fb5-dc9f82672303
-        summarizeBy: none
-        sourceColumn: ADDRESS
+	column Username = -- ERROR: LLM call failed after 6 retries. Last error: None
+		dataType: string
+		lineageTag: 09bb3e05-09b1-49a1-a3f2-c9aa3970f59e
+		summarizeBy: none
 
-    column 'CITY'
-        dataType: string
-        lineageTag: 3c5e6e34-7308-4a60-998a-32111694477a
-        summarizeBy: none
-        sourceColumn: CITY
+	column Column1
+		dataType: string
+		lineageTag: 9edc1ca9-6180-424e-a386-7a510ca9681e
+		summarizeBy: none
+		sourceColumn: Column1
 
-    column 'STATE'
-        dataType: string
-        lineageTag: 975c4ef1-7995-46be-8950-980ea992f7ab
-        summarizeBy: none
-        sourceColumn: STATE
+		annotation SummarizationSetBy = Automatic
 
-    column 'ZIP'
-        dataType: double
-        lineageTag: 2c86760b-d79c-4f05-a0cd-80d83e5c2ff1
-        summarizeBy: none
-        sourceColumn: ZIP
+	column Column2
+		dataType: string
+		lineageTag: 6b69be93-d456-4093-b7cd-933661ddafe8
+		summarizeBy: none
+		sourceColumn: Column2
 
-    column 'LAT'
-        dataType: double
-        lineageTag: 0b05bf5a-314a-4cc1-9a3b-cf0d6e6de2ec
-        summarizeBy: none
-        sourceColumn: LAT
+		annotation SummarizationSetBy = Automatic
 
-    column 'LON'
-        dataType: double
-        lineageTag: 88d534dc-9d84-4b10-a9ff-77585c5caa81
-        summarizeBy: none
-        sourceColumn: LON
+	column Column3
+		dataType: string
+		lineageTag: 53fc47f6-2f18-46c7-a543-ca4c9df9e1bc
+		summarizeBy: none
+		sourceColumn: Column3
 
-    column 'Username' = -- ERROR: LLM call failed after 6 retries. Last error: None
-        dataType: string
+		annotation SummarizationSetBy = Automatic
 
-        summarizeBy: none
+	column Column4
+		dataType: string
+		lineageTag: 8763c9b5-21d1-423a-8075-1a97d25ab0c5
+		summarizeBy: none
+		sourceColumn: Column4
 
-    measure 'Visits % Contribution (LOD)' =
-        -- ERROR: LLM call failed after 6 retries. Last error: 413 Client Error: Payload Too Large for url: https://api.groq.com/openai/v1/chat/completions
+		annotation SummarizationSetBy = Automatic
 
+	column Column5
+		dataType: string
+		lineageTag: 9c463d56-2218-4f50-8a2f-dc3b95119f5a
+		summarizeBy: none
+		sourceColumn: Column5
 
-    measure 'RLS - Organization Access' =
-        -- ERROR: LLM call failed after 6 retries. Last error: 413 Client Error: Payload Too Large for url: https://api.groq.com/openai/v1/chat/completions
+		annotation SummarizationSetBy = Automatic
 
+	column Column6
+		dataType: string
+		lineageTag: 6242f6dc-2903-4cd1-b3d6-49cb6a75084f
+		summarizeBy: none
+		sourceColumn: Column6
 
-    partition 'organizations' = m
-        mode: import
-        source =
-            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Gfqr930PI28eveUiJrS8ikSsyzDUbPE4pJy7nG9ZIUc"),
-            #"Navigation 1" = Source{[name = "organizations", ItemKind = "Table"]}[Data],
-            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
-            #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"NAME", "Name"}}),
-            #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"Id", type text}, {"Name", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE", type text}, {"ZIP", Int64.Type}, {"LAT", type number}, {"LON", type number}}),
-                            #"Final Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"NAME", "Name"}}, MissingField.Ignore)
-                        in
-                            #"Final Renamed Columns"
+		annotation SummarizationSetBy = Automatic
+
+	column Column7
+		dataType: string
+		lineageTag: 934cb976-2909-433b-88cc-ad7a36ec5e4e
+		summarizeBy: none
+		sourceColumn: Column7
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column8
+		dataType: string
+		lineageTag: 2a00751a-5a80-453c-89fb-d92b94baf165
+		summarizeBy: none
+		sourceColumn: Column8
+
+		annotation SummarizationSetBy = Automatic
+
+	partition organizations = m
+		mode: import
+		source =
+				let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Gfqr930PI28eveUiJrS8ikSsyzDUbPE4pJy7nG9ZIUc"),
+				#"Navigation 1" = Source{[name = "organizations", ItemKind = "Table"]}[Data]
+				
+				in
+				  #"Navigation 1"
+
+	annotation PBI_ResultType = Table
+

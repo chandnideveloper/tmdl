@@ -1,0 +1,78 @@
+table organizations
+	lineageTag: dc3fe1db-6453-4661-9da8-b1a5f5b3ff4e
+
+	column Column1
+		dataType: string
+		lineageTag: 3db718ba-ef38-41c7-9d2c-275d29db64da
+		summarizeBy: none
+		sourceColumn: Column1
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column2
+		dataType: string
+		lineageTag: b5664279-8451-40a2-b2c1-7cfb6b35873c
+		summarizeBy: none
+		sourceColumn: Column2
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column3
+		dataType: string
+		lineageTag: 1a57eb56-eae3-41a5-82d5-8a5e10543632
+		summarizeBy: none
+		sourceColumn: Column3
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column4
+		dataType: string
+		lineageTag: a6f8ea28-31ae-4cb2-a1b6-c2a7780d9bcb
+		summarizeBy: none
+		sourceColumn: Column4
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column5
+		dataType: string
+		lineageTag: 5a8db930-89c0-46a5-88f7-79771554870f
+		summarizeBy: none
+		sourceColumn: Column5
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column6
+		dataType: string
+		lineageTag: 9aafef0e-e408-4973-a863-968eb89973fd
+		summarizeBy: none
+		sourceColumn: Column6
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column7
+		dataType: string
+		lineageTag: 4fc94974-260a-4fab-b575-ae16ce5c95ee
+		summarizeBy: none
+		sourceColumn: Column7
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column8
+		dataType: string
+		lineageTag: 58557a27-9f51-4219-8434-fd12f3f739da
+		summarizeBy: none
+		sourceColumn: Column8
+
+		annotation SummarizationSetBy = Automatic
+
+	partition organizations = m
+		mode: import
+		source =
+				let
+				  Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Gfqr930PI28eveUiJrS8ikSsyzDUbPE4pJy7nG9ZIUc"),
+				  #"Navigation 1" = Source{[name = "organizations", ItemKind = "Table"]}[Data]
+				in
+				  #"Navigation 1"
+
+	annotation PBI_ResultType = Table
+

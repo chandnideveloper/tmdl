@@ -1,20 +1,19 @@
 table 'Metric Selector'
+	lineageTag: 1be95416-ec62-4b41-8758-292cff27f38c
 
-    column 'Value'
-        formatString: General
-        summarizeBy: none
-        isNameInferred
-        sourceColumn: 'Metric Selector'[Value]
-        annotation SummarizationSetBy = Automatic
+	measure SelectedMetricSelector = SELECTEDVALUE('Metric Selector'[Value], "Visits")
+		formatString: General
+		isHidden
+		lineageTag: 4a3eef35-e388-4b85-9440-9ab8c4a9b67f
 
-    partition 'Metric Selector' = calculated
-        mode: import
-        source = DATATABLE("Value", STRING, {{"Visits"}, {"Patients"}, {"Procedures"}})
+	column Value
+		lineageTag: 502cd781-7ec4-42a4-b8bf-cb1f8ea041a7
+		isNameInferred
+		sourceColumn: [Value]
 
-    measure 'SelectedMetricSelector'
-        expression: SELECTEDVALUE('Metric Selector'[Value], "Visits")
-        formatString: General
-        isHidden: true
+	partition 'Metric Selector' = calculated
+		mode: import
+		source = DATATABLE("Value", STRING, {{"Visits"}, {"Patients"}, {"Procedures"}})
 
-    annotation PBI_Id = 2d3c2db245da45a0b7838ed881936590
-    
+	annotation PBI_Id = 2d3c2db245da45a0b7838ed881936590
+

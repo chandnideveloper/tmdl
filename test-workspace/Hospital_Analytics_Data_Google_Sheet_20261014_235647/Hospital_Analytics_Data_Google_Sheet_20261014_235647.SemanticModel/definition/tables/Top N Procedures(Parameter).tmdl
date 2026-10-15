@@ -1,19 +1,23 @@
 table 'Top N Procedures(Parameter)'
+	lineageTag: 767e31fe-613e-4883-9b64-8219e6e31d01
 
-    column 'Value'
-        formatString: 0
-        summarizeBy: sum
-        isNameInferred
-        sourceColumn: [Value]
-        annotation SummarizationSetBy = Automatic
+	measure SelectedTopNProcedures(Parameter) = SELECTEDVALUE('Top N Procedures(Parameter)'[Value], 10)
+		formatString: 0
+		isHidden
+		lineageTag: 9051cde3-46d4-4267-a1a2-cd5230ac1e59
 
-    partition 'Top N Procedures(Parameter)' = calculated
-        mode: import
-        source = DATATABLE("Value", INTEGER, {{5}, {10}, {20}, {30}, {50}, {9999}})
+	column Value
+		formatString: 0
+		lineageTag: 6eef3fc5-edbf-4edf-afe8-dc2eff3d75ec
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Value]
 
-    measure 'SelectedTopNProcedures(Parameter)' = SELECTEDVALUE('Top N Procedures(Parameter)'[Value], 10)
-        formatString: 0
-        isHidden: true
+		annotation SummarizationSetBy = Automatic
 
-    annotation PBI_Id = ed427beee54d45d88e569d5fc9ba02cf
-    
+	partition 'Top N Procedures(Parameter)' = calculated
+		mode: import
+		source = DATATABLE("Value", INTEGER, {{5}, {10}, {20}, {30}, {50}, {9999}})
+
+	annotation PBI_Id = ed427beee54d45d88e569d5fc9ba02cf
+
