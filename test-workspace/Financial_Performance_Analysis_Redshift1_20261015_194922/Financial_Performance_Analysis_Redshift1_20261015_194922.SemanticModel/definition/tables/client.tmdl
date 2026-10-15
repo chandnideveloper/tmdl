@@ -1,0 +1,70 @@
+table 'client'
+    lineageTag: 06ec2a4f-78dd-4d86-824b-70e0796cefd7
+
+    column 'Client Id'
+        dataType: double
+        lineageTag: 3ae499ff-969c-4174-916f-a5581d53887c
+        summarizeBy: none
+        sourceColumn: Client Id
+
+    column 'Gender'
+        dataType: string
+        lineageTag: ff67bc2e-03ba-4c2d-85f0-e7a35d68a060
+        summarizeBy: none
+        sourceColumn: Gender
+
+    column 'Birth Date'
+        sourceColumn: Birth Date
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: 22e5d2b8-472a-4f7b-804c-b283f5e27ea8
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: 41673421-2460-40d6-880f-0721dd6704bb
+            defaultHierarchy: LocalDateTable_f3dc6add-3b67-43ff-9767-99d5282ca123.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    column 'District Id'
+        dataType: double
+        lineageTag: 77ef06b6-79b2-4bb7-af42-153ae37c7099
+        summarizeBy: none
+        sourceColumn: District Id
+
+    measure 'Total Customers' =
+        BLANK()
+
+
+    measure 'Avg Loan per Customer' =
+        BLANK()
+
+
+    measure '% Contribution' =
+        BLANK()
+
+
+    measure 'Rolling 12-Month Clients' =
+        BLANK()
+
+
+    measure 'Current Month Clients:' =
+        BLANK()
+
+
+    measure 'Previous Month Clients' =
+        BLANK()
+
+
+    partition 'client' = m
+        mode: import
+        source =
+            let Source = AmazonRedshift.Database("bank-analytics-wg.881226714470.ap-southeast-2.redshift-serverless.amazonaws.com", "dev"),
+            #"Navigation 1" = Source{[Schema = "public", Item = "client"]}[Data],
+            #"Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"client_id", "Client Id"}, {"gender", "Gender"}, {"birth_date", "Birth Date"}, {"district_id", "District Id"}}),
+                            #"Removed Blank Columns" = Table.SelectColumns(#"Renamed Columns", {"Client Id", "Gender", "Birth Date", "District Id"}, MissingField.Ignore)
+                        in
+                            #"Removed Blank Columns"
