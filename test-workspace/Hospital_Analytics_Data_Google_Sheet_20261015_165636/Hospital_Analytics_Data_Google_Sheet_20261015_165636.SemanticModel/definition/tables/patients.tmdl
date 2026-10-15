@@ -1,0 +1,181 @@
+table 'patients'
+    lineageTag: b307884f-3f90-4780-844d-9e8093464c44
+
+    column 'Id'
+        dataType: string
+        lineageTag: 9ae04d82-24ef-4d4c-aa28-548aef274f5f
+        summarizeBy: none
+        sourceColumn: Id
+
+    column 'Birthdate'
+        sourceColumn: Birthdate
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: 1aa4da05-a0ca-430c-bcd7-4ac1838ef401
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: e6727d1b-c7da-4d16-aa31-ac3083f78414
+            defaultHierarchy: LocalDateTable_a86c970c-091f-45df-836c-49b3b91499d6.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    column 'Deathdate'
+        sourceColumn: Deathdate
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: e8bcefde-cd09-4c59-a297-717343b655a7
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: ebcd00c0-c2cb-4d7a-bcb2-baf9b7f6bb74
+            defaultHierarchy: LocalDateTable_89628c19-ecba-43ec-92db-13f0a6b3ef0f.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    column 'Prefix'
+        dataType: string
+        lineageTag: 1dc1f7a6-5a01-4f92-9330-612178ca94a6
+        summarizeBy: none
+        sourceColumn: Prefix
+
+    column 'First'
+        dataType: string
+        lineageTag: 1dc70e5e-aca8-48ab-92cb-4cadf24f45aa
+        summarizeBy: none
+        sourceColumn: First
+
+    column 'Last'
+        dataType: string
+        lineageTag: 9ef55411-251c-49ce-8496-1d4e00322eea
+        summarizeBy: none
+        sourceColumn: Last
+
+    column 'Suffix'
+        dataType: string
+        lineageTag: 3bf5f706-f704-4cb5-89dd-9d7f22630498
+        summarizeBy: none
+        sourceColumn: Suffix
+
+    column 'Maiden'
+        dataType: string
+        lineageTag: 4c313506-0cf0-4758-874c-9477047b240f
+        summarizeBy: none
+        sourceColumn: Maiden
+
+    column 'Marital'
+        dataType: string
+        lineageTag: b450e92f-bd20-470e-8bd1-a45217db510a
+        summarizeBy: none
+        sourceColumn: Marital
+
+    column 'Race'
+        dataType: string
+        lineageTag: 534ad2e3-ebe6-47ba-8308-6feb5a498642
+        summarizeBy: none
+        sourceColumn: Race
+
+    column 'Ethnicity'
+        dataType: string
+        lineageTag: 6fa5b27b-8cb2-4cf6-b7ee-93ff29fb4be8
+        summarizeBy: none
+        sourceColumn: Ethnicity
+
+    column 'Gender'
+        dataType: string
+        lineageTag: 8c5f1439-9f0d-47c6-a70d-3ed46d431048
+        summarizeBy: none
+        sourceColumn: Gender
+
+    column 'Birthplace'
+        dataType: string
+        lineageTag: 6cd2b0f6-20f2-4f31-ac2e-d5571a7b60f6
+        summarizeBy: none
+        sourceColumn: Birthplace
+
+    column 'Address'
+        dataType: string
+        lineageTag: 2d941a1d-6716-49a0-880b-1f4403471f00
+        summarizeBy: none
+        sourceColumn: Address
+
+    column 'City'
+        dataType: string
+        lineageTag: 53196c4e-b303-4b6f-977e-e970fa6acc32
+        summarizeBy: none
+        sourceColumn: City
+
+    column 'State'
+        dataType: string
+        lineageTag: 0428ddf6-dd99-4314-8dbf-e08935542852
+        summarizeBy: none
+        sourceColumn: State
+
+    column 'County'
+        dataType: string
+        lineageTag: 1ed5741c-d674-405a-971c-f17c6b3d5fc4
+        summarizeBy: none
+        sourceColumn: County
+
+    column 'ZIP'
+        dataType: double
+        lineageTag: 20906856-32cf-42c8-bdb8-75f01f76a251
+        summarizeBy: none
+        sourceColumn: ZIP
+
+    column 'LAT'
+        dataType: double
+        lineageTag: c18d9b49-41c3-4924-bc27-7ada147b4452
+        summarizeBy: none
+        sourceColumn: LAT
+
+    column 'LON'
+        dataType: double
+        lineageTag: 5bcac446-f5cb-496b-b6b8-435bae9115cf
+        summarizeBy: none
+        sourceColumn: LON
+
+    measure 'Selected Metric' =
+        VAR _Metric = SELECTEDVALUE('Metric Selector'[Value])
+        RETURN SWITCH(TRUE(),
+            _Metric = "Visits", COUNT('encounters'[Id]),
+            _Metric = "Patients", DISTINCTCOUNT('patients'[Id]),
+            _Metric = "Procedures", COUNT('procedures'[CODE]),
+            BLANK()
+        )
+
+
+    measure 'Total Patients (LOD)' =
+        CALCULATE(DISTINCTCOUNT('patients'[Id]), ALL('patients'))
+
+
+    measure 'Total Visits (LOD)' =
+        CALCULATE(COUNT('organizations'[Id]), ALL('organizations'))
+
+
+    measure 'Visits per Patient' =
+        CALCULATE(COUNT('organizations'[Id]), ALLEXCEPT('patients', 'patients'[Id]))
+
+
+    measure 'Avg Visits per Patient' =
+        CALCULATE(AVERAGEX(VALUES('patients'[Id]), [Visits per Patient]), ALLEXCEPT('patients', 'patients'[Gender]))
+
+
+    partition 'patients' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Sd4bEK0Fm9q7yTVOwI4GdtixeeY8hPkKqpvnI4WdixA"),
+            #"Navigation 1" = Source{[name = "patients", ItemKind = "Table"]}[Data],
+            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+            #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"BIRTHDATE", "Birthdate"}, {"DEATHDATE", "Deathdate"}, {"PREFIX", "Prefix"}, {"FIRST", "First"}, {"LAST", "Last"}, {"SUFFIX", "Suffix"}, {"MAIDEN", "Maiden"}, {"MARITAL", "Marital"}, {"RACE", "Race"}, {"ETHNICITY", "Ethnicity"}, {"GENDER", "Gender"}, {"BIRTHPLACE", "Birthplace"}, {"ADDRESS", "Address"}, {"CITY", "City"}, {"STATE", "State"}, {"COUNTY", "County"}}),
+            #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"Id", type text}, {"Birthdate", type date}, {"Deathdate", type date}, {"Prefix", type text}, {"First", type text}, {"Last", type text}, {"Suffix", type text}, {"Maiden", type text}, {"Marital", type text}, {"Race", type text}, {"Ethnicity", type text}, {"Gender", type text}, {"Birthplace", type text}, {"Address", type text}, {"City", type text}, {"State", type text}, {"County", type text}, {"ZIP", Int64.Type}, {"LAT", type number}, {"LON", type number}}),
+            #"Filtered Blank Rows" = Table.SelectRows(#"Changed Type", each [Id] <> null and [Id] <> ""),
+                            #"Removed Blank Columns" = Table.SelectColumns(#"Filtered Blank Rows", {"Id", "Birthdate", "Deathdate", "Prefix", "First", "Last", "Suffix", "Maiden", "Marital", "Race", "Ethnicity", "Gender", "Birthplace", "Address", "City", "State", "County", "ZIP", "LAT", "LON"}, MissingField.Ignore)
+                        in
+                            #"Removed Blank Columns"
