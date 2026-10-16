@@ -1,0 +1,94 @@
+table 'organizations'
+    lineageTag: efc9a6fb-556b-470d-9111-1fba44d15522
+
+    column 'Id'
+        dataType: string
+        lineageTag: a6690330-9ab9-4b10-bbd8-bed0698d16af
+        summarizeBy: none
+        sourceColumn: Id
+
+    column 'Name'
+        dataType: string
+        lineageTag: b3059eb8-620f-4a3e-8250-c7ad55a8c348
+        summarizeBy: none
+        sourceColumn: Name
+
+    column 'ADDRESS'
+        dataType: string
+        lineageTag: 7e573555-f380-4b9f-a268-9ac48311b786
+        summarizeBy: none
+        sourceColumn: ADDRESS
+
+    column 'CITY'
+        dataType: string
+        lineageTag: e43e48ac-1e44-4608-ac63-e2ac5451f08d
+        summarizeBy: none
+        sourceColumn: CITY
+
+    column 'STATE'
+        dataType: string
+        lineageTag: 52de4aca-f604-462a-987e-ee41aed9ded7
+        summarizeBy: none
+        sourceColumn: STATE
+
+    column 'ZIP'
+        dataType: double
+        lineageTag: 53fd731b-730f-41dc-813e-17457fb41dec
+        summarizeBy: none
+        sourceColumn: ZIP
+
+    column 'LAT'
+        dataType: double
+        lineageTag: d5e30e4d-7303-4013-891b-f599efd45c79
+        summarizeBy: none
+        sourceColumn: LAT
+
+    column 'LON'
+        dataType: double
+        lineageTag: 3818ba1c-fd1d-489f-9c48-27918f6ea00c
+        summarizeBy: none
+        sourceColumn: LON
+
+    column 'RLS - Organization Access'
+        dataType: string
+        lineageTag: 725980d1-6388-4565-8153-fdb58e30adf5
+        summarizeBy: none
+        sourceColumn: RLS - Organization Access
+
+    column 'Username'
+        dataType: string
+        lineageTag: b8db1b49-69ff-4a21-89fd-f657f46c6434
+        summarizeBy: none
+        sourceColumn: Username
+
+    column 'Encounter Start Date' = BLANK()
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: a408b96f-0011-4a24-baa6-76d0c6ba6aa7
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: 02ea0a01-7008-46a2-93ee-7837b3dc8b6c
+            defaultHierarchy: LocalDateTable_f8cf4504-1f49-43d5-a73b-e89833074918.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    measure 'RLS - Organization Access Measure' =
+        BLANK()
+
+
+    partition 'organizations' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Gfqr930PI28eveUiJrS8ikSsyzDUbPE4pJy7nG9ZIUc"),
+            #"Navigation 1" = Source{[name = "organizations", ItemKind = "Table"]}[Data],
+            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+            #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"NAME", "Name"}}),
+            #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"Id", type text}, {"Name", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE", type text}, {"ZIP", Int64.Type}, {"LAT", type number}, {"LON", type number}}),
+            #"Filtered Blank Rows" = Table.SelectRows(#"Changed Type", each [Id] <> null and [Id] <> ""),
+                            #"Removed Blank Columns" = Table.SelectColumns(#"Filtered Blank Rows", {"Id", "Name", "ADDRESS", "CITY", "STATE", "ZIP", "LAT", "LON", "RLS - Organization Access", "Username"}, MissingField.Ignore)
+                        in
+                            #"Removed Blank Columns"
