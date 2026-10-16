@@ -1,0 +1,113 @@
+table 'procedures'
+    lineageTag: 561fbdb2-e6fb-4158-8207-17f55cedfe97
+
+    column 'START'
+        dataType: string
+        lineageTag: 53b71209-f035-4183-8599-b0b5fb7dbbdb
+        summarizeBy: none
+        sourceColumn: START
+
+    column 'STOP'
+        dataType: string
+        lineageTag: 2ab3be50-7b54-44f6-bfc1-4ca4eeb10324
+        summarizeBy: none
+        sourceColumn: STOP
+
+    column 'PATIENT'
+        dataType: string
+        lineageTag: e95a8423-3bc4-4673-850e-750ece60db58
+        summarizeBy: none
+        sourceColumn: PATIENT
+
+    column 'Encounter'
+        dataType: string
+        lineageTag: 48a9465c-efe9-4927-8d37-02c9da959cee
+        summarizeBy: none
+        sourceColumn: Encounter
+
+    column 'CODE'
+        dataType: double
+        lineageTag: fce48f6b-1f9c-4e9b-9996-94c6a0b3b82e
+        summarizeBy: none
+        sourceColumn: CODE
+
+    column 'DESCRIPTION'
+        dataType: string
+        lineageTag: 6cc58913-6234-4c9f-a7b0-78247852c633
+        summarizeBy: none
+        sourceColumn: DESCRIPTION
+
+    column 'Base Cost'
+        dataType: double
+        lineageTag: a1d5c3e1-2d66-4ec3-a787-5247793e9d91
+        summarizeBy: none
+        sourceColumn: Base Cost
+
+    column 'REASONCODE'
+        dataType: double
+        lineageTag: 7705de90-6b1c-4bf6-bd2a-2c9c3a71c738
+        summarizeBy: none
+        sourceColumn: REASONCODE
+
+    column 'REASONDESCRIPTION'
+        dataType: string
+        lineageTag: 2b4347bc-c57f-4a17-8005-2908218d6200
+        summarizeBy: none
+        sourceColumn: REASONDESCRIPTION
+
+    column 'DESCRIPTION__procedures__Set_Category'
+        dataType: string
+        lineageTag: 4e75ff98-5347-4473-941b-8f832ef49143
+        summarizeBy: none
+        sourceColumn: DESCRIPTION__procedures__Set_Category
+
+    column 'DESCRIPTION__procedures__Set_Category_In_Out'
+        dataType: string
+        lineageTag: be40abe6-ac78-46cd-b261-15bdf306d3a3
+        summarizeBy: none
+        sourceColumn: DESCRIPTION__procedures__Set_Category_In_Out
+
+    column 'DESCRIPTION__procedures__Set_In_Out'
+        dataType: string
+        lineageTag: 66c52035-b72b-4d09-a549-4a2cd1d2c2e6
+        summarizeBy: none
+        sourceColumn: DESCRIPTION__procedures__Set_In_Out
+
+    column 'DESCRIPTION__procedures__Set'
+        dataType: string
+        lineageTag: 83dee4f4-3ac9-4c14-ac4b-87509dbe56e5
+        summarizeBy: none
+        sourceColumn: DESCRIPTION__procedures__Set
+
+    measure 'Procedure Rank(Top N Procedure Parameter)' =
+        BLANK()
+
+
+    measure 'Top N Procedures Filter' =
+        BLANK()
+
+
+    measure 'Total Procedures (LOD)' =
+        CALCULATE(COUNT('procedures'[CODE]), ALL('procedures'))
+
+
+    measure 'Total Procedures' =
+        COUNT('procedures'[CODE])
+
+
+    measure 'Procedures Measure' =
+        COUNT('procedures'[CODE])
+
+
+    partition 'procedures' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo"),
+            #"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data],
+            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+            #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"ENCOUNTER", "Encounter"}, {"BASE_COST", "Base Cost"}}),
+            #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"START", type text}, {"STOP", type text}, {"PATIENT", type text}, {"Encounter", type text}, {"CODE", Int64.Type}, {"DESCRIPTION", type text}, {"Base Cost", Int64.Type}, {"REASONCODE", Int64.Type}, {"REASONDESCRIPTION", type text}}),
+            #"Filtered Blank Rows" = Table.SelectRows(#"Changed Type", each [CODE] <> null and [CODE] <> ""),
+                            #"Removed Blank Columns" = Table.SelectColumns(#"Filtered Blank Rows", {"START", "STOP", "PATIENT", "Encounter", "CODE", "DESCRIPTION", "Base Cost", "REASONCODE", "REASONDESCRIPTION", "DESCRIPTION__procedures__Set_Category", "DESCRIPTION__procedures__Set_Category_In_Out", "DESCRIPTION__procedures__Set_In_Out", "DESCRIPTION__procedures__Set"}, MissingField.Ignore)
+                        in
+                            #"Removed Blank Columns"
