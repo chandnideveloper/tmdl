@@ -1,0 +1,137 @@
+table 'encounters'
+    lineageTag: 99a499c5-412a-4144-b5ca-3ba7d06e31f7
+
+    column 'Id'
+        dataType: string
+        lineageTag: eaca9944-0374-4427-b1fe-c5c70d3a0fa2
+        summarizeBy: none
+        sourceColumn: Id
+
+    column 'Start'
+        dataType: string
+        lineageTag: 56a9c7b1-8966-4d3a-9808-1a9cfc7c6876
+        summarizeBy: none
+        sourceColumn: Start
+
+    column 'Stop'
+        dataType: string
+        lineageTag: cd498119-5810-49c9-b8f0-645fdd2d480d
+        summarizeBy: none
+        sourceColumn: Stop
+
+    column 'Patient'
+        dataType: string
+        lineageTag: 1c7faed3-3532-471b-a05f-eed6e58b3a7e
+        summarizeBy: none
+        sourceColumn: Patient
+
+    column 'Organization'
+        dataType: string
+        lineageTag: 8176841b-b696-4c9e-bab8-ee65d43735cf
+        summarizeBy: none
+        sourceColumn: Organization
+
+    column 'Payer'
+        dataType: string
+        lineageTag: 084c1265-e4ab-49f4-8ac5-f03f6f8a770a
+        summarizeBy: none
+        sourceColumn: Payer
+
+    column 'Encounterclass'
+        dataType: string
+        lineageTag: c861e2b4-8f6b-48d1-acf4-4ddd1d1a4bf5
+        summarizeBy: none
+        sourceColumn: Encounterclass
+
+    column 'Code'
+        dataType: double
+        lineageTag: 30c4e175-1af8-44b3-8284-6d9a17815086
+        summarizeBy: none
+        sourceColumn: Code
+
+    column 'Description'
+        dataType: string
+        lineageTag: bcc3b791-3fde-4844-9bd2-412720758022
+        summarizeBy: none
+        sourceColumn: Description
+
+    column 'Base Encounter Cost'
+        dataType: double
+        lineageTag: a85888f3-0e8a-49e2-91be-0115b79ad48c
+        summarizeBy: none
+        sourceColumn: Base Encounter Cost
+
+    column 'Total Claim Cost'
+        dataType: double
+        lineageTag: 643d7afe-b92a-49c8-b32f-fb6c3311b343
+        summarizeBy: none
+        sourceColumn: Total Claim Cost
+
+    column 'Payer Coverage'
+        dataType: double
+        lineageTag: 853ef527-5ae7-4c32-b379-fac239febac6
+        summarizeBy: none
+        sourceColumn: Payer Coverage
+
+    column 'Reasoncode'
+        dataType: double
+        lineageTag: 5c1e249b-f8cc-40b8-9ccb-34277918ea48
+        summarizeBy: none
+        sourceColumn: Reasoncode
+
+    column 'Reasondescription'
+        dataType: string
+        lineageTag: f63f8502-c83b-469b-84c2-dc2d81b21ace
+        summarizeBy: none
+        sourceColumn: Reasondescription
+
+    column 'Encounter Start Date'
+        dataType: string
+        lineageTag: 3ccd96d9-7c75-4dbb-9e95-47b51bb35f5e
+        summarizeBy: none
+        sourceColumn: Encounter Start Date
+
+    measure 'Patient Visits Rank (Top N Patients)' =
+        BLANK()
+
+
+    measure 'Top N Patients Measure' =
+        BLANK()
+
+
+    measure 'Visits % Contribution (LOD)' =
+        DIVIDE(COUNT('encounters'[Id]), [Total Visits (LOD)], 0)
+
+
+    measure 'Total Visits (LOD)' =
+        CALCULATE(COUNT('encounters'[Id]), ALL('encounters'))
+
+
+    measure 'Visits per Patient' =
+        CALCULATE(COUNT('encounters'[Id]), ALLEXCEPT('patients', 'patients'[Id]))
+
+
+    measure 'COUNT of Id (encounters)' =
+        COUNT('encounters'[Id])
+
+
+    measure 'Total Visits' =
+        COUNT('encounters'[Id])
+
+
+    measure 'SUM of Base Encounter Cost (encounters)' =
+        SUM('encounters'[Base Encounter Cost])
+
+
+    partition 'encounters' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1UFffx5ngb7j1Y2kqRzPCPVA0uvA88GLaftek_fwOjKY"),
+            #"Navigation 1" = Source{[name = "encounters", ItemKind = "Table"]}[Data],
+            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+            #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"START", "Start"}, {"STOP", "Stop"}, {"PATIENT", "Patient"}, {"ORGANIZATION", "Organization"}, {"PAYER", "Payer"}, {"ENCOUNTERCLASS", "Encounterclass"}, {"CODE", "Code"}, {"DESCRIPTION", "Description"}, {"BASE_ENCOUNTER_COST", "Base Encounter Cost"}, {"TOTAL_CLAIM_COST", "Total Claim Cost"}, {"PAYER_COVERAGE", "Payer Coverage"}, {"REASONCODE", "Reasoncode"}, {"REASONDESCRIPTION", "Reasondescription"}}),
+            #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"Id", type text}, {"Start", type text}, {"Stop", type text}, {"Patient", type text}, {"Organization", type text}, {"Payer", type text}, {"Encounterclass", type text}, {"Code", Int64.Type}, {"Description", type text}, {"Base Encounter Cost", type number}, {"Total Claim Cost", type number}, {"Payer Coverage", type number}, {"Reasoncode", Int64.Type}, {"Reasondescription", type text}}),
+            #"Filtered Blank Rows" = Table.SelectRows(#"Changed Type", each [Id] <> null and [Id] <> ""),
+                            #"Removed Blank Columns" = Table.SelectColumns(#"Filtered Blank Rows", {"Id", "Start", "Stop", "Patient", "Organization", "Payer", "Encounterclass", "Code", "Description", "Base Encounter Cost", "Total Claim Cost", "Payer Coverage", "Reasoncode", "Reasondescription", "Encounter Start Date"}, MissingField.Ignore)
+                        in
+                            #"Removed Blank Columns"
