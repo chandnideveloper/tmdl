@@ -49,9 +49,9 @@ table 'organizations'
         summarizeBy: none
         sourceColumn: LON
 
-    column 'Username' =
-        'organizations'[Name]
+    column 'Username' = 'organizations'[Name]
         dataType: string
+        lineageTag: dae5b72e-3c22-48df-b601-52598be6041a
         summarizeBy: none
 
     measure 'RLS - Organization Access' =
