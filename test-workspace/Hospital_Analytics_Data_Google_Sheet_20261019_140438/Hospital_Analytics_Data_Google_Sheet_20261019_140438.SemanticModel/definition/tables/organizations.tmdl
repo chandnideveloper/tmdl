@@ -1,0 +1,71 @@
+table 'organizations'
+    lineageTag: ed43176b-2578-4471-b5b5-852d7b64f282
+
+    column 'Id (organizations)'
+        dataType: string
+        lineageTag: 552bfc91-41ea-4e08-9058-4c7a54b25ff3
+        summarizeBy: none
+        sourceColumn: Id (organizations)
+
+    column 'Name'
+        dataType: string
+        lineageTag: 567716c3-e8cf-44be-b565-500d661bb9a9
+        summarizeBy: none
+        sourceColumn: Name
+
+    column 'ADDRESS (organizations)'
+        dataType: string
+        lineageTag: 81b10333-488f-4827-a898-9b354e91c01e
+        summarizeBy: none
+        sourceColumn: ADDRESS (organizations)
+
+    column 'CITY (organizations)'
+        dataType: string
+        lineageTag: 7ca38ee5-f1d2-491a-ac6a-1ce85a4c8b8c
+        summarizeBy: none
+        sourceColumn: CITY (organizations)
+
+    column 'STATE (organizations)'
+        dataType: string
+        lineageTag: 833c3c57-82e2-44ad-b4d0-85c1d42a53a3
+        summarizeBy: none
+        sourceColumn: STATE (organizations)
+
+    column 'ZIP (organizations)'
+        dataType: double
+        lineageTag: 79551cf8-dc8e-41c2-b30a-e63822063258
+        summarizeBy: none
+        sourceColumn: ZIP (organizations)
+
+    column 'LAT (organizations)'
+        dataType: double
+        lineageTag: d136025f-ff28-4255-9037-0a6e4a894738
+        summarizeBy: none
+        sourceColumn: LAT (organizations)
+
+    column 'LON (organizations)'
+        dataType: double
+        lineageTag: e150eb0d-2601-4489-a57b-95ded87c09b0
+        summarizeBy: none
+        sourceColumn: LON (organizations)
+
+    column 'Username' = BLANK()
+        dataType: string
+
+        summarizeBy: none
+
+    measure 'RLS - Organization Access' =
+        BLANK()
+
+
+    partition 'organizations' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Sd4bEK0Fm9q7yTVOwI4GdtixeeY8hPkKqpvnI4WdixA"),
+            #"Navigation 1" = Source{[name="organizations", ItemKind="Table"]}[Data],
+            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars=true]),
+            #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"Id", type text}, {"NAME", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE", type text}, {"ZIP", type number}, {"LAT", type number}, {"LON", type number}}),
+            #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"Id", "Id (organizations)"}, {"NAME", "Name"}, {"ADDRESS", "ADDRESS (organizations)"}, {"CITY", "CITY (organizations)"}, {"STATE", "STATE (organizations)"}, {"ZIP", "ZIP (organizations)"}, {"LAT", "LAT (organizations)"}, {"LON", "LON (organizations)"}}),
+                            #"Removed Blank Columns" = Table.SelectColumns(#"Renamed Columns", {"Id (organizations)", "Name", "ADDRESS (organizations)", "CITY (organizations)", "STATE (organizations)", "ZIP (organizations)", "LAT (organizations)", "LON (organizations)"}, MissingField.Ignore)
+                        in
+                            #"Removed Blank Columns"

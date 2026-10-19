@@ -1,0 +1,56 @@
+table 'payers'
+    lineageTag: 8cce9f95-eece-4553-8bb1-eaa7b2bde660
+
+    column 'Id (payers)'
+        dataType: string
+        lineageTag: d18213f9-6608-4393-b490-6ed8d9602708
+        summarizeBy: none
+        sourceColumn: Id (payers)
+
+    column 'NAME (payers)'
+        dataType: string
+        lineageTag: 11d50594-b297-4345-be51-9c0076baa60b
+        summarizeBy: none
+        sourceColumn: NAME (payers)
+
+    column 'ADDRESS (payers)'
+        dataType: string
+        lineageTag: dec20f63-0824-476f-b6d4-d196750bc570
+        summarizeBy: none
+        sourceColumn: ADDRESS (payers)
+
+    column 'CITY (payers)'
+        dataType: string
+        lineageTag: a62281ee-3ec5-47b8-a97e-091fd7d41932
+        summarizeBy: none
+        sourceColumn: CITY (payers)
+
+    column 'State Headquartered'
+        dataType: string
+        lineageTag: 7fbf22b4-2459-44cc-b307-9d3bf77bf1fa
+        summarizeBy: none
+        sourceColumn: State Headquartered
+
+    column 'ZIP (payers)'
+        dataType: double
+        lineageTag: 35df96d1-97c2-43f4-b162-8ae58111665e
+        summarizeBy: none
+        sourceColumn: ZIP (payers)
+
+    column 'Phone'
+        dataType: string
+        lineageTag: e3d72f8b-32d7-4a55-a766-9c4778060418
+        summarizeBy: none
+        sourceColumn: Phone
+
+    partition 'payers' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Sd4bEK0Fm9q7yTVOwI4GdtixeeY8hPkKqpvnI4WdixA"),
+            #"Navigation 1" = Source{[name="payers", ItemKind="Table"]}[Data],
+            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars=true]),
+            #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"Id", type text}, {"NAME", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE_HEADQUARTERED", type text}, {"ZIP", type number}, {"PHONE", type text}}),
+            #"Renamed Columns" = Table.RenameColumns(#"Changed Type", {{"Id", "Id (payers)"}, {"NAME", "NAME (payers)"}, {"ADDRESS", "ADDRESS (payers)"}, {"CITY", "CITY (payers)"}, {"STATE_HEADQUARTERED", "State Headquartered"}, {"ZIP", "ZIP (payers)"}, {"PHONE", "Phone"}}),
+                            #"Removed Blank Columns" = Table.SelectColumns(#"Renamed Columns", {"Id (payers)", "NAME (payers)", "ADDRESS (payers)", "CITY (payers)", "State Headquartered", "ZIP (payers)", "Phone"}, MissingField.Ignore)
+                        in
+                            #"Removed Blank Columns"
