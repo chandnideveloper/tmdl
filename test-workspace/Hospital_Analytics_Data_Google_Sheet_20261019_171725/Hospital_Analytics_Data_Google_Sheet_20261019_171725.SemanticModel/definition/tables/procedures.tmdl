@@ -55,29 +55,28 @@ table 'procedures'
         summarizeBy: none
         sourceColumn: REASONDESCRIPTION
 
-    column 'DESCRIPTION__procedures__Set_Category' =
-        IF('procedures'[DESCRIPTION] IN { "Admission to burn unit", "Admission to long stay hospital", "Admission to orthopedic department", "Admission to trauma surgery department", "Ankle X-ray", "Antenatal RhD antibody screening", "Assessment of health and social care needs (procedure)" }, "In", "Out")
+    column 'DESCRIPTION__procedures__Set_Category' = IF('procedures'[DESCRIPTION] IN { "Admission to burn unit", "Admission to long stay hospital", "Admission to orthopedic department", "Admission to trauma surgery department", "Ankle X-ray", "Antenatal RhD antibody screening", "Assessment of health and social care needs (procedure)" }, "In", "Out")
         dataType: string
+        lineageTag: 686ea78e-0cf3-40e9-bbf2-b6be3503a4cf
         summarizeBy: none
 
-    column 'DESCRIPTION__procedures__Set_Category_In_Out' =
-        'procedures'[DESCRIPTION__procedures__Set_Category]
+    column 'DESCRIPTION__procedures__Set_Category_In_Out' = 'procedures'[DESCRIPTION__procedures__Set_Category]
         dataType: string
+        lineageTag: 88725f77-2b8b-4a57-8ff7-e170dafd9619
         summarizeBy: none
 
-    column 'DESCRIPTION__procedures__Set_In_Out' =
-        'procedures'[DESCRIPTION__procedures__Set_Category]
+    column 'DESCRIPTION__procedures__Set_In_Out' = 'procedures'[DESCRIPTION__procedures__Set_Category]
         dataType: string
+        lineageTag: 86b46401-26c6-47b2-9cb7-789fbc7da7b7
         summarizeBy: none
 
-    column 'DESCRIPTION__procedures__Set' =
-        'procedures'[DESCRIPTION__procedures__Set_Category]
+    column 'DESCRIPTION__procedures__Set' = 'procedures'[DESCRIPTION__procedures__Set_Category]
         dataType: string
+        lineageTag: 81ca275c-7d72-4665-b13c-c5ae1ffc5651
         summarizeBy: none
 
     column 'DESCRIPTION (procedures) Set' = IF('procedures'[DESCRIPTION] IN { "Admission to burn unit", "Admission to long stay hospital", "Admission to orthopedic department", "Admission to trauma surgery department", "Ankle X-ray", "Antenatal RhD antibody screening", "Assessment of health and social care needs (procedure)" }, "In", "Out")
         dataType: string
-
         summarizeBy: none
 
     measure 'Procedure Rank(Top N Procedure Parameter)' =
