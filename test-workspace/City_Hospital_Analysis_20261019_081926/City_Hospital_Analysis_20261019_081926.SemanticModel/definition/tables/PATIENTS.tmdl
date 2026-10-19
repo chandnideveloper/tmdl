@@ -1,0 +1,96 @@
+table PATIENTS
+	lineageTag: 551dc5ee-9930-5af4-9791-199e0584e4e9
+
+	column CONTACT_NUMBER
+		dataType: string
+		lineageTag: 88f52d56-48cc-54f8-9846-1fc10e8a5918
+		summarizeBy: none
+		sourceColumn: CONTACT_NUMBER
+
+		annotation SummarizationSetBy = Automatic
+
+	column PATIENT_ID
+		dataType: string
+		lineageTag: 41184e5a-8428-57e1-a10e-4aba26c29c52
+		summarizeBy: none
+		sourceColumn: PATIENT_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column FIRST_NAME
+		dataType: string
+		lineageTag: a2a82c43-b868-5126-8bb1-ce05d7451d2f
+		summarizeBy: none
+		sourceColumn: FIRST_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column LAST_NAME
+		dataType: string
+		lineageTag: b2d80cf4-cd09-5bbe-841b-97b231227c2d
+		summarizeBy: none
+		sourceColumn: LAST_NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column DATE_OF_BIRTH
+		dataType: dateTime
+		lineageTag: c7647f82-eb68-5240-a6a0-12dfbcb97b0e
+		summarizeBy: none
+		sourceColumn: DATE_OF_BIRTH
+		formatString: General Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column GENDER
+		dataType: string
+		lineageTag: 3fc8fe67-6d7b-5e6e-81e0-8da129b01a42
+		summarizeBy: none
+		sourceColumn: GENDER
+
+		annotation SummarizationSetBy = Automatic
+
+	column EMAIL_ADDRESS
+		dataType: string
+		lineageTag: 068ed764-80f6-58d9-bd86-f8ba2bb5928c
+		summarizeBy: none
+		sourceColumn: EMAIL_ADDRESS
+
+		annotation SummarizationSetBy = Automatic
+
+	column ADDRESS
+		dataType: string
+		lineageTag: 5f3517f3-3e75-5829-bf6f-de20706af131
+		summarizeBy: none
+		sourceColumn: ADDRESS
+
+		annotation SummarizationSetBy = Automatic
+
+	column INSURANCE_PROVIDER
+		dataType: string
+		lineageTag: 63ad992f-a82d-5f22-af2f-b0932f5d1e22
+		summarizeBy: none
+		sourceColumn: INSURANCE_PROVIDER
+
+		annotation SummarizationSetBy = Automatic
+
+	column INSURANCE_POLICY_NO
+		dataType: string
+		lineageTag: a24b32cc-deaa-5e85-aff9-4be12301970e
+		summarizeBy: none
+		sourceColumn: INSURANCE_POLICY_NO
+
+		annotation SummarizationSetBy = Automatic
+
+	partition PATIENTS = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("", null, [Role = null, CreateNavigationProperties = null, ConnectionTimeout = null, CommandTimeout = null, Implementation = "2.0"]),
+				    #"Navigation 1" = Source{[Name = "CITY_HOSPITAL", Kind = "Database"]}[Data],
+				    #"Navigation 2" = #"Navigation 1"{[Name = "PUBLIC", Kind = "Schema"]}[Data],
+				    #"Navigation 3" = #"Navigation 2"{[Name = "PATIENTS", Kind = "Table"]}[Data]
+				in
+				    #"Navigation 3"
+
+	annotation PBI_ResultType = Table
