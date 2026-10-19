@@ -85,9 +85,9 @@ table 'encounters'
         summarizeBy: none
         sourceColumn: Reasondescription
 
-    column 'Encounter Start Date' =
-        DATEVALUE(LEFT('encounters'[Start], 10))
+    column 'Encounter Start Date' = DATEVALUE(LEFT('encounters'[Start], 10))
         dataType: string
+        lineageTag: 71b7fca1-15ee-45df-bb78-7510e1948512
         summarizeBy: none
 
     measure 'Total Procedures (LOD)' =
