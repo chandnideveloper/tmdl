@@ -1,0 +1,53 @@
+model Model
+    culture: en-US
+    defaultPowerBIDataSourceVersion: powerBI_V3
+    sourceQueryCulture: en-US
+    dataAccessOptions
+        legacyRedirects
+        returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+annotation PBIDesktopVersion = 2.138.1004.0 (24.11)
+
+ref table 'organizations'
+ref table 'patients'
+ref table 'payers'
+ref table 'procedures'
+ref table 'encounters'
+ref table 'Top N Procedures(Parameter)'
+ref table 'Metric Selector'
+ref table 'Top N Patients'
+ref table 'LocalDateTable_eb9b8bb7-9940-4fcf-97d5-d945a2573565'
+ref table 'LocalDateTable_04e16c45-936d-4b4e-9ed5-81ac1eb864c6'
+
+ref cultureInfo en-US
+
+relationship c8a8ad62-fba9-4a9d-bbdd-9144ff3948cd
+    fromColumn: 'encounters'.'Organization'
+    toColumn: 'organizations'.'Id'
+    crossFilteringBehavior: bothDirections
+
+relationship f1fa484d-62b0-4286-8cb3-c64cccd4a3ee
+    fromColumn: 'encounters'.'Patient'
+    toColumn: 'patients'.'Id'
+    crossFilteringBehavior: bothDirections
+
+relationship 26d02dcb-90aa-4b5c-9f02-13d411a80d0e
+    fromColumn: 'encounters'.'Payer'
+    toColumn: 'payers'.'Id'
+    crossFilteringBehavior: bothDirections
+
+relationship a8c0d018-1eec-46ba-b364-af2c77899959
+    fromColumn: 'procedures'.'Encounter'
+    toColumn: 'encounters'.'Id'
+    crossFilteringBehavior: bothDirections
+
+relationship a16997df-85aa-4a49-9426-c13424fafe46
+    fromColumn: 'patients'.'Birthdate'
+    toColumn: 'LocalDateTable_eb9b8bb7-9940-4fcf-97d5-d945a2573565'.'Date'
+    joinOnDateBehavior: datePartOnly
+
+relationship 91ed5545-d486-4b3a-85b7-0e75aee8b858
+    fromColumn: 'patients'.'Deathdate'
+    toColumn: 'LocalDateTable_04e16c45-936d-4b4e-9ed5-81ac1eb864c6'.'Date'
+    joinOnDateBehavior: datePartOnly
