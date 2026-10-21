@@ -1,0 +1,57 @@
+table 'payers'
+    lineageTag: df96e8e2-2fea-422a-a77c-da065fb53c4c
+
+    column 'Id'
+        dataType: string
+        lineageTag: d9d0308b-9159-4e01-a14c-a1439e3a5c39
+        summarizeBy: none
+        sourceColumn: Id
+
+    column 'NAME'
+        dataType: string
+        lineageTag: 4eae8ae2-afe9-45ce-9ec1-7a47660ee103
+        summarizeBy: none
+        sourceColumn: NAME
+
+    column 'ADDRESS'
+        dataType: string
+        lineageTag: 6b6d959c-c707-45ff-9a08-ff2747fbe510
+        summarizeBy: none
+        sourceColumn: ADDRESS
+
+    column 'CITY'
+        dataType: string
+        lineageTag: 5dd5360e-ae94-4b50-b986-0e618b7c137f
+        summarizeBy: none
+        sourceColumn: CITY
+
+    column 'State Headquartered'
+        dataType: string
+        lineageTag: 430b9100-6872-4fd0-9400-deb2c7e35964
+        summarizeBy: none
+        sourceColumn: State Headquartered
+
+    column 'ZIP'
+        dataType: double
+        lineageTag: bae4672f-c19d-4e66-848d-3918a6fd2dd6
+        summarizeBy: none
+        sourceColumn: ZIP
+
+    column 'Phone'
+        dataType: string
+        lineageTag: 9640ab3d-a598-488e-aaaf-3dcea8e8a1f9
+        summarizeBy: none
+        sourceColumn: Phone
+
+    partition 'payers' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1NB9uAQnBa6RYGfm5addKbcToYUZJY_5OlBkWxVZRrbU"),
+            #"Navigation 1" = Source{[name = "payers", ItemKind = "Table"]}[Data],
+            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+            #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"STATE_HEADQUARTERED", "State Headquartered"}, {"PHONE", "Phone"}}),
+            #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"Id", type text}, {"NAME", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"State Headquartered", type text}, {"ZIP", Int64.Type}, {"Phone", type text}}),
+            #"Filtered Blank Rows" = Table.SelectRows(#"Changed Type", each [Id] <> null and [Id] <> ""),
+                            #"Removed Blank Columns" = Table.SelectColumns(#"Filtered Blank Rows", {"Id", "NAME", "ADDRESS", "CITY", "State Headquartered", "ZIP", "Phone"}, MissingField.Ignore)
+                        in
+                            #"Removed Blank Columns"
