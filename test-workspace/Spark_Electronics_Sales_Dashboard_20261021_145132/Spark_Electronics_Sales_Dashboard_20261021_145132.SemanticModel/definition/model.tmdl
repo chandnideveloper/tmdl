@@ -1,0 +1,15 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+
+	annotation PBI_QueryOrder = ["Sales", "Stores", "Products"]
+	annotation PBI_ProTooling = ["DevMode"]
+
+ref table Sales
+ref table Stores
+ref table Products
+ref table LocalDateTable_3595948679262f0d4b899f180509933c
+
+ref cultureInfo en-US
