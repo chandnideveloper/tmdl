@@ -1,0 +1,72 @@
+table 'organizations'
+    lineageTag: 62dd4362-ebbf-4ee3-9433-5f3321c457bf
+
+    column 'Id'
+        dataType: string
+        lineageTag: 35a57bba-35e3-4604-a683-79336cfcb757
+        summarizeBy: none
+        sourceColumn: Id
+
+    column 'Name'
+        dataType: string
+        lineageTag: 0ac86560-4c2a-4866-b385-43aea0861219
+        summarizeBy: none
+        sourceColumn: Name
+
+    column 'ADDRESS'
+        dataType: string
+        lineageTag: 503870c9-c3d7-4a8c-8d8a-17c1919b8ff1
+        summarizeBy: none
+        sourceColumn: ADDRESS
+
+    column 'CITY'
+        dataType: string
+        lineageTag: 13e8c2f3-7c8b-4983-8205-d9bc95e9e443
+        summarizeBy: none
+        sourceColumn: CITY
+
+    column 'STATE'
+        dataType: string
+        lineageTag: 631fc689-972b-4378-bd75-afce6bb96a00
+        summarizeBy: none
+        sourceColumn: STATE
+
+    column 'ZIP'
+        dataType: double
+        lineageTag: 3e9d69f0-a49e-4c0a-b327-f38057e22a97
+        summarizeBy: none
+        sourceColumn: ZIP
+
+    column 'LAT'
+        dataType: double
+        lineageTag: 464205a7-d7fe-42bd-afd8-d4b1a269c3f9
+        summarizeBy: none
+        sourceColumn: LAT
+
+    column 'LON'
+        dataType: double
+        lineageTag: 778a728a-228e-4bc6-9ece-0ae26d55e507
+        summarizeBy: none
+        sourceColumn: LON
+
+    column 'Username' = 'organizations'[Name]
+        dataType: string
+        lineageTag: e940beb1-3061-4e9f-8317-46e64be59a46
+        summarizeBy: none
+
+    measure 'RLS - Organization Access' =
+        IF(USERPRINCIPALNAME() = "akash020102@gmail.com", TRUE(), SELECTEDVALUE('organizations'[Name]) = "MASSACHUSETTS GENERAL HOSPITAL")
+
+
+    partition 'organizations' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1Gfqr930PI28eveUiJrS8ikSsyzDUbPE4pJy7nG9ZIUc"),
+            #"Navigation 1" = Source{[name = "organizations", ItemKind = "Table"]}[Data],
+            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+            #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"NAME", "Name"}}),
+            #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"Id", type text}, {"Name", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE", type text}, {"ZIP", Int64.Type}, {"LAT", type number}, {"LON", type number}}),
+            #"Filtered Blank Rows" = Table.SelectRows(#"Changed Type", each [Id] <> null and [Id] <> ""),
+                            #"Removed Blank Columns" = Table.SelectColumns(#"Filtered Blank Rows", {"Id", "Name", "ADDRESS", "CITY", "STATE", "ZIP", "LAT", "LON", "Username"}, MissingField.Ignore)
+                        in
+                            #"Removed Blank Columns"
