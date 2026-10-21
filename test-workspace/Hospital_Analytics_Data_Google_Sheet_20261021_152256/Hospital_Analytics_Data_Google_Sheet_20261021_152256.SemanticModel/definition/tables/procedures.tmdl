@@ -1,0 +1,110 @@
+table 'procedures'
+    lineageTag: b535ac8e-1c53-4385-944d-e088b37a86b0
+
+    column 'START'
+        dataType: string
+        lineageTag: 5d80fb6e-373c-4e8c-87b2-68a0541683a2
+        summarizeBy: none
+        sourceColumn: START
+
+    column 'STOP'
+        dataType: string
+        lineageTag: 44113514-f991-4a39-835b-8b8e15c3bebc
+        summarizeBy: none
+        sourceColumn: STOP
+
+    column 'PATIENT'
+        dataType: string
+        lineageTag: e79fb3d2-e421-4739-97a6-252fcef80297
+        summarizeBy: none
+        sourceColumn: PATIENT
+
+    column 'Encounter'
+        dataType: string
+        lineageTag: c47c1bfb-449a-4222-82a2-0aeced03b003
+        summarizeBy: none
+        sourceColumn: Encounter
+
+    column 'CODE'
+        dataType: double
+        lineageTag: 2aa74e9e-2d3f-464a-957d-0fb572a1f639
+        summarizeBy: none
+        sourceColumn: CODE
+
+    column 'DESCRIPTION'
+        dataType: string
+        lineageTag: 91d53b0d-4e8a-4a2f-9ece-f2091496046b
+        summarizeBy: none
+        sourceColumn: DESCRIPTION
+
+    column 'Base Cost'
+        dataType: double
+        lineageTag: f7dd43fc-ad69-468a-a9ac-e07f4fcf94ac
+        summarizeBy: none
+        sourceColumn: Base Cost
+
+    column 'REASONCODE'
+        dataType: double
+        lineageTag: 6df32502-be94-4e86-a9ee-c01240dfbf35
+        summarizeBy: none
+        sourceColumn: REASONCODE
+
+    column 'REASONDESCRIPTION'
+        dataType: string
+        lineageTag: b96a9303-59f0-4f47-b814-9ebe917d1449
+        summarizeBy: none
+        sourceColumn: REASONDESCRIPTION
+
+    column 'DESCRIPTION__procedures__Set_Category' = IF('procedures'[DESCRIPTION] IN { "Admission to burn unit", "Admission to long stay hospital", "Admission to orthopedic department", "Admission to trauma surgery department", "Ankle X-ray", "Antenatal RhD antibody screening", "Assessment of health and social care needs (procedure)" }, "In", "Out")
+        dataType: string
+        lineageTag: 5a4e7189-da8e-41d5-a54a-2f5009ddee62
+        summarizeBy: none
+
+    column 'DESCRIPTION__procedures__Set_Category_In_Out' = 'procedures'[DESCRIPTION__procedures__Set_Category]
+        dataType: string
+        lineageTag: eeaf7e34-20ed-49fa-b1f6-76276e855eb9
+        summarizeBy: none
+
+    column 'DESCRIPTION__procedures__Set_In_Out' = 'procedures'[DESCRIPTION__procedures__Set_Category]
+        dataType: string
+        lineageTag: 31e38ca2-0e6a-41bf-88ef-6f9c133ebd9d
+        summarizeBy: none
+
+    column 'DESCRIPTION__procedures__Set' = 'procedures'[DESCRIPTION__procedures__Set_Category]
+        dataType: string
+        lineageTag: cece6bea-e412-4eae-a17d-1a1b017e5372
+        summarizeBy: none
+
+    column 'DESCRIPTION (procedures) Set' = IF('procedures'[DESCRIPTION] IN { "Admission to burn unit", "Admission to long stay hospital", "Admission to orthopedic department", "Admission to trauma surgery department", "Ankle X-ray", "Antenatal RhD antibody screening", "Assessment of health and social care needs (procedure)" }, "In", "Out")
+        dataType: string
+        lineageTag: e65ef74b-65d8-4811-b028-a72ad2acbd1f
+        summarizeBy: none
+
+    measure 'Procedure Rank(Top N Procedure Parameter)' =
+        RANKX(ALLSELECTED('procedures'), CALCULATE(COUNT('procedures'[CODE])), , DESC, DENSE)
+
+
+    measure 'Top N Procedures Filter' =
+        IF([Procedure Rank(Top N Procedure Parameter)] <= SELECTEDVALUE('Top N Procedures(Parameter)'[Value]), 1, 0)
+
+
+    measure 'Total Procedures' =
+        COUNT('procedures'[CODE])
+
+
+    measure 'Procedures Measure' =
+        COUNT('procedures'[CODE])
+
+
+    partition 'procedures' = m
+        mode: import
+        source =
+            let Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/10X1xQHkGidpz_0qYh7o9mxmsRJsOHRB9bNnSKFnUNgo"),
+            #"Navigation 1" = Source{[name = "procedures", ItemKind = "Table"]}[Data],
+            #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+            #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"ENCOUNTER", "Encounter"}, {"BASE_COST", "Base Cost"}}),
+            #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"START", type text}, {"STOP", type text}, {"PATIENT", type text}, {"Encounter", type text}, {"CODE", Int64.Type}, {"DESCRIPTION", type text}, {"Base Cost", Int64.Type}, {"REASONCODE", Int64.Type}, {"REASONDESCRIPTION", type text}}),
+            #"Filtered Blank Rows" = Table.SelectRows(#"Changed Type", each [CODE] <> null and [CODE] <> ""),
+                            #"Removed Blank Columns" = Table.SelectColumns(#"Filtered Blank Rows", {"START", "STOP", "PATIENT", "Encounter", "CODE", "DESCRIPTION", "Base Cost", "REASONCODE", "REASONDESCRIPTION", "DESCRIPTION__procedures__Set_Category", "DESCRIPTION__procedures__Set_Category_In_Out", "DESCRIPTION__procedures__Set_In_Out", "DESCRIPTION__procedures__Set"}, MissingField.Ignore)
+                        in
+                            #"Removed Blank Columns"
