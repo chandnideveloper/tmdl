@@ -1,0 +1,14 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/pbip/pbipProperties/1.0.0/schema.json",
+  "version": "1.0",
+  "artifacts": [
+    {
+      "report": {
+        "path": "6350c8a8_b92c_4e21_b12e_5cb8e6af008c_20261021_024310.Report"
+      }
+    }
+  ],
+  "settings": {
+    "enableAutoRecovery": true
+  }
+}
