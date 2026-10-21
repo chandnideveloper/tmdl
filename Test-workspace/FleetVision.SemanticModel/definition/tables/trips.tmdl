@@ -1,0 +1,128 @@
+table trips
+	lineageTag: 72155add-3ebe-4d34-b076-fd156ea4842e
+
+	column trip_id
+		dataType: string
+		lineageTag: 933ea416-d649-49e1-bda8-889ab82f6019
+		summarizeBy: none
+		sourceColumn: trip_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column load_id
+		dataType: string
+		lineageTag: 2baf8b0f-8ace-40b3-a94e-736e30785bbd
+		summarizeBy: none
+		sourceColumn: load_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column driver_id
+		dataType: string
+		lineageTag: f254a893-8a37-4ed2-b295-b9680e3141d2
+		summarizeBy: none
+		sourceColumn: driver_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column truck_id
+		dataType: string
+		lineageTag: 022a5773-cd71-413c-8324-60fb1623499c
+		summarizeBy: none
+		sourceColumn: truck_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column trailer_id
+		dataType: string
+		lineageTag: 54d38f99-0bba-4159-9f38-237f1c423b76
+		summarizeBy: none
+		sourceColumn: trailer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column dispatch_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 9ea50ac2-61e2-4875-b60f-582b1e1b7f04
+		summarizeBy: none
+		sourceColumn: dispatch_date
+
+		variation Variation
+			isDefault
+			relationship: 0bd7dee1-4ad7-47c8-b2f2-cac928a23eae
+			defaultHierarchy: LocalDateTable_7bb8e36e-b442-421c-935e-3f6a8af966d4.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column actual_distance_miles
+		dataType: int64
+		formatString: 0
+		lineageTag: 84cb75fe-d7fa-421c-8ca6-99fbeefdde8b
+		summarizeBy: sum
+		sourceColumn: actual_distance_miles
+
+		annotation SummarizationSetBy = Automatic
+
+	column actual_duration_hours
+		dataType: double
+		lineageTag: 51ed87f6-cc8b-477f-a30b-8097d1789c5d
+		summarizeBy: sum
+		sourceColumn: actual_duration_hours
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fuel_gallons_used
+		dataType: double
+		lineageTag: 8f22c2c4-fbe1-4b45-944c-3de1f23780fe
+		summarizeBy: sum
+		sourceColumn: fuel_gallons_used
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column average_mpg
+		dataType: double
+		lineageTag: 0188140f-441f-45e7-b8f8-bdad7a33bfe0
+		summarizeBy: sum
+		sourceColumn: average_mpg
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column idle_time_hours
+		dataType: double
+		lineageTag: 6cc05253-1665-4155-905c-01edc76146dc
+		summarizeBy: sum
+		sourceColumn: idle_time_hours
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column trip_status
+		dataType: string
+		lineageTag: 8b9c3ae3-1ab5-423b-8593-6a23ff620799
+		summarizeBy: none
+		sourceColumn: trip_status
+
+		annotation SummarizationSetBy = Automatic
+
+	partition trips = m
+		mode: import
+		source =
+				let
+				  Source = AmazonRedshift.Database("fleetvision-wg.881226714470.ap-southeast-2.redshift-serverless.amazonaws.com", "dev", [ProviderName = null, BatchSize = null]),
+				  #"Navigation 1" = Source{[Name = "fleetvision"]}[Data],
+				  #"Navigation 2" = #"Navigation 1"{[Name = "trips"]}[Data]
+				in
+				  #"Navigation 2"
+
+	annotation PBI_ResultType = Table
+
