@@ -1,0 +1,36 @@
+table 'disp'
+    lineageTag: dcbc7691-96ba-4bdd-95e2-c3c36a7c658b
+
+    column 'Disp Id'
+        dataType: double
+        lineageTag: 92c9d753-1af8-4f8b-88bc-40546acdaf3a
+        summarizeBy: none
+        sourceColumn: Disp Id
+
+    column 'client_id'
+        dataType: double
+        lineageTag: fd6f16ce-69f4-46b6-8cc5-0127707bf2fc
+        summarizeBy: none
+        sourceColumn: client_id
+
+    column 'Account Id'
+        dataType: double
+        lineageTag: 87e4a8f0-9fec-478f-ae73-24d14e73d2ea
+        summarizeBy: none
+        sourceColumn: Account Id
+
+    column 'Type'
+        dataType: string
+        lineageTag: 4d7969aa-cf9c-4da4-9781-202d857c8cb0
+        summarizeBy: none
+        sourceColumn: Type
+
+    partition 'disp' = m
+        mode: import
+        source =
+            let Source = AmazonRedshift.Database("bank-analytics-wg.881226714470.ap-southeast-2.redshift-serverless.amazonaws.com:5439", "dev"),
+            #"Navigation 1" = Source{[Schema = "public", Item = "disp"]}[Data],
+            #"Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"disp_id", "Disp Id"}, {"account_id", "Account Id"}, {"type", "Type"}}),
+                            #"Removed Blank Columns" = Table.SelectColumns(#"Renamed Columns", {"Disp Id", "client_id", "Account Id", "Type"}, MissingField.Ignore)
+                        in
+                            #"Removed Blank Columns"

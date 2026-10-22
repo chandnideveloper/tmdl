@@ -1,0 +1,46 @@
+table 'card'
+    lineageTag: f0274063-bb89-4ca0-aff7-028155ada947
+
+    column 'Card Id'
+        dataType: double
+        lineageTag: 252ac324-3380-458a-ac5b-06b8bf6e2853
+        summarizeBy: none
+        sourceColumn: Card Id
+
+    column 'disp_id'
+        dataType: double
+        lineageTag: 18ca2047-6f69-4c62-83d2-df3d88fd5ebf
+        summarizeBy: none
+        sourceColumn: disp_id
+
+    column 'type'
+        dataType: string
+        lineageTag: 6ce3bca4-e534-4048-94c6-4a27b973dd90
+        summarizeBy: none
+        sourceColumn: type
+
+    column 'Issued'
+        sourceColumn: Issued
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: 9472d3f5-54a3-491f-9840-ec1abf744811
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: 0d1e0bc5-7471-4a34-bd2d-ff1a27288913
+            defaultHierarchy: LocalDateTable_4773da2f-9b22-4341-8520-73e807b13e5a.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    partition 'card' = m
+        mode: import
+        source =
+            let Source = AmazonRedshift.Database("bank-analytics-wg.881226714470.ap-southeast-2.redshift-serverless.amazonaws.com:5439", "dev"),
+            #"Navigation 1" = Source{[Schema = "public", Item = "card"]}[Data],
+            #"Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"card_id", "Card Id"}, {"issued", "Issued"}}),
+                            #"Removed Blank Columns" = Table.SelectColumns(#"Renamed Columns", {"Card Id", "disp_id", "type", "Issued"}, MissingField.Ignore)
+                        in
+                            #"Removed Blank Columns"

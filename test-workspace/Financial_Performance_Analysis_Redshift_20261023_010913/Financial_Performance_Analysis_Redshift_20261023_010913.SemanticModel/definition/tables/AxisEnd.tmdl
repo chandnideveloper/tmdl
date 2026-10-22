@@ -1,0 +1,19 @@
+table 'AxisEnd'
+
+    column 'Value'
+        formatString: 0
+        summarizeBy: sum
+        isNameInferred
+        sourceColumn: AxisEnd[Value]
+        annotation SummarizationSetBy = Automatic
+
+    partition 'AxisEnd' = calculated
+        mode: import
+        source = DATATABLE("Value", INTEGER, {{0}})
+
+    measure 'SelectedAxisEnd' = SELECTEDVALUE('AxisEnd'[Value], 142)
+        formatString: 0
+        isHidden: true
+
+    annotation PBI_Id = 93e2b1cae66242409eb7037953a1d456
+    

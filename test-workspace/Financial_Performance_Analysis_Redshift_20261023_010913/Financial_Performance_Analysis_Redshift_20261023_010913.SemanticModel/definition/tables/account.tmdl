@@ -1,0 +1,46 @@
+table 'account'
+    lineageTag: 926d9e7f-b202-45cc-9b76-a71c836ebb15
+
+    column 'account_id'
+        dataType: double
+        lineageTag: 22f7f991-8c30-4a0c-ba5a-aaeddbab6c83
+        summarizeBy: none
+        sourceColumn: account_id
+
+    column 'district_id'
+        dataType: double
+        lineageTag: 49e968e8-074e-469d-8467-8d9cfb896270
+        summarizeBy: none
+        sourceColumn: district_id
+
+    column 'Frequency'
+        dataType: string
+        lineageTag: 84ed0deb-ec87-4de1-af50-bb530c298be9
+        summarizeBy: none
+        sourceColumn: Frequency
+
+    column 'date_opened'
+        sourceColumn: date_opened
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: 197e2314-26b4-498b-ac10-26b37f92a6de
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: 897aff8d-22e3-4323-98c4-fa5c64a9f677
+            defaultHierarchy: LocalDateTable_7a75dead-42ef-4d11-af16-512399fd224d.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    partition 'account' = m
+        mode: import
+        source =
+            let Source = AmazonRedshift.Database("bank-analytics-wg.881226714470.ap-southeast-2.redshift-serverless.amazonaws.com:5439", "dev"),
+            #"Navigation 1" = Source{[Schema = "public", Item = "account"]}[Data],
+            #"Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"frequency", "Frequency"}}),
+                            #"Removed Blank Columns" = Table.SelectColumns(#"Renamed Columns", {"account_id", "district_id", "Frequency", "date_opened"}, MissingField.Ignore)
+                        in
+                            #"Removed Blank Columns"
