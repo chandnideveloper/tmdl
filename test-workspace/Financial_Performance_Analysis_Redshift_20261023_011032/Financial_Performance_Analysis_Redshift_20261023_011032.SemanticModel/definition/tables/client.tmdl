@@ -1,0 +1,70 @@
+table 'client'
+    lineageTag: d1bb4f92-e02a-4573-875a-5181efad491b
+
+    column 'Client Id'
+        dataType: double
+        lineageTag: 6b84af41-b7e5-454e-a140-c5de72fea521
+        summarizeBy: none
+        sourceColumn: Client Id
+
+    column 'Gender'
+        dataType: string
+        lineageTag: 2c08591d-016b-441b-a58e-e8686c7b308f
+        summarizeBy: none
+        sourceColumn: Gender
+
+    column 'Birth Date'
+        sourceColumn: Birth Date
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: 6c993c99-95bc-412a-83ba-7fa2ca1b8d25
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: 5ba878ef-6ae7-4f54-af85-bf342a23c33f
+            defaultHierarchy: LocalDateTable_b1793651-2794-4809-80f7-39873ffab537.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    column 'District Id'
+        dataType: double
+        lineageTag: c89c368f-fdb9-4ba3-bb4b-6930a19123c8
+        summarizeBy: none
+        sourceColumn: District Id
+
+    measure 'Total Customers' =
+        DISTINCTCOUNT('client'[Client Id])
+
+
+    measure 'Avg Loan per Customer' =
+        DIVIDE(SUM('loan'[Amount]), DISTINCTCOUNT('client'[Client Id]), 0)
+
+
+    measure '% Contribution' =
+        DIVIDE(DISTINCTCOUNT('client'[Client Id]), CALCULATE(DISTINCTCOUNT('client'[Client Id]), ALLSELECTED()), 0) * 100
+
+
+    measure 'Rolling 12-Month Clients' =
+        VAR _MaxDate = MAX('loan'[Loan Date])
+        VAR _MinDate = EDATE(_MaxDate, -12)
+        RETURN
+        CALCULATE(
+            DISTINCTCOUNT('client'[Client Id]),
+            REMOVEFILTERS('loan'[Loan Date]),
+            'loan'[Loan Date] >= _MinDate,
+            'loan'[Loan Date] <= _MaxDate
+        )
+
+
+    partition 'client' = m
+        mode: import
+        source =
+            let Source = AmazonRedshift.Database("bank-analytics-wg.881226714470.ap-southeast-2.redshift-serverless.amazonaws.com:5439", "dev"),
+            #"Navigation 1" = Source{[Schema = "public", Item = "client"]}[Data],
+            #"Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"client_id", "Client Id"}, {"gender", "Gender"}, {"birth_date", "Birth Date"}, {"district_id", "District Id"}}),
+                            #"Removed Blank Columns" = Table.SelectColumns(#"Renamed Columns", {"Client Id", "Gender", "Birth Date", "District Id"}, MissingField.Ignore)
+                        in
+                            #"Removed Blank Columns"

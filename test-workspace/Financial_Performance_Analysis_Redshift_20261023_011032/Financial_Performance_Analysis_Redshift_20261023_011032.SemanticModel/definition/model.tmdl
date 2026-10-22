@@ -1,0 +1,46 @@
+model Model
+    culture: en-US
+    defaultPowerBIDataSourceVersion: powerBI_V3
+    sourceQueryCulture: en-US
+    dataAccessOptions
+        legacyRedirects
+        returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+annotation PBIDesktopVersion = 2.138.1004.0 (24.11)
+
+ref table 'district'
+ref table 'account'
+ref table 'card'
+ref table 'client'
+ref table 'loan'
+ref table 'disp'
+ref table 'Select Metric'
+ref table 'AxisEnd'
+ref table 'ColorStart'
+ref table 'LocalDateTable_df6cc99e-f391-4e6c-9675-1668b604ffb0'
+ref table 'LocalDateTable_5ab3121d-bc42-4b58-a42b-96e33d32a1b8'
+ref table 'LocalDateTable_b1793651-2794-4809-80f7-39873ffab537'
+ref table 'LocalDateTable_cca7cfa7-6052-43d6-835b-0eb8ea708144'
+
+ref cultureInfo en-US
+
+relationship 222d15a6-ca04-48b4-a016-4a2413fd0eac
+    fromColumn: 'account'.'date_opened'
+    toColumn: 'LocalDateTable_df6cc99e-f391-4e6c-9675-1668b604ffb0'.'Date'
+    joinOnDateBehavior: datePartOnly
+
+relationship e60e8b2a-8b79-43fa-9fe5-81da2768b9eb
+    fromColumn: 'card'.'Issued'
+    toColumn: 'LocalDateTable_5ab3121d-bc42-4b58-a42b-96e33d32a1b8'.'Date'
+    joinOnDateBehavior: datePartOnly
+
+relationship 5ba878ef-6ae7-4f54-af85-bf342a23c33f
+    fromColumn: 'client'.'Birth Date'
+    toColumn: 'LocalDateTable_b1793651-2794-4809-80f7-39873ffab537'.'Date'
+    joinOnDateBehavior: datePartOnly
+
+relationship f5533295-bc04-4150-ada4-266151aae54b
+    fromColumn: 'loan'.'date_granted'
+    toColumn: 'LocalDateTable_cca7cfa7-6052-43d6-835b-0eb8ea708144'.'Date'
+    joinOnDateBehavior: datePartOnly

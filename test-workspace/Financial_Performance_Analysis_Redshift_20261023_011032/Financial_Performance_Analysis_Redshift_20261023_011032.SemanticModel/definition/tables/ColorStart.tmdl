@@ -1,0 +1,19 @@
+table 'ColorStart'
+
+    column 'Value'
+        formatString: General
+        summarizeBy: sum
+        isNameInferred
+        sourceColumn: ColorStart[Value]
+        annotation SummarizationSetBy = Automatic
+
+    partition 'ColorStart' = calculated
+        mode: import
+        source = DATATABLE("Value", INTEGER, {{0}})
+
+    measure 'SelectedColorStart' = SELECTEDVALUE('ColorStart'[Value], 1219.)
+        formatString: General
+        isHidden: true
+
+    annotation PBI_Id = 5ef4bd25b3704e399e746797c2a48d1f
+    

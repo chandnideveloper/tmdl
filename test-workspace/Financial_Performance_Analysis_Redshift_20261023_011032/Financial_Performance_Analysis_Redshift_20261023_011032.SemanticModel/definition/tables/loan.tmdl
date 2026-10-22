@@ -1,0 +1,146 @@
+table 'loan'
+    lineageTag: 8406d6e2-6f63-488a-a3e9-d460eb4ee855
+
+    column 'Loan Id'
+        dataType: double
+        lineageTag: 46caed79-13a8-4044-91f8-17c94025d354
+        summarizeBy: none
+        sourceColumn: Loan Id
+
+    column 'account_id'
+        dataType: double
+        lineageTag: 5d6345b2-b773-4043-b5e8-9797633550a5
+        summarizeBy: none
+        sourceColumn: account_id
+
+    column 'date_granted'
+        sourceColumn: date_granted
+        dataType: dateTime
+        formatString: Long Date
+        lineageTag: 32c282f0-303b-4b4a-9dfe-cf403984277f
+        summarizeBy: none
+
+        variation Variation
+            isDefault
+            relationship: f5533295-bc04-4150-ada4-266151aae54b
+            defaultHierarchy: LocalDateTable_cca7cfa7-6052-43d6-835b-0eb8ea708144.'Date Hierarchy'
+
+        changedProperty = DataType
+
+        annotation UnderlyingDateTimeDataType = Date
+
+    column 'Amount'
+        dataType: double
+        lineageTag: 1d648423-cc75-4881-9242-e01c569c5e1c
+        summarizeBy: none
+        sourceColumn: Amount
+
+    column 'Duration'
+        dataType: double
+        lineageTag: d161f929-29e8-4599-b06f-91914c1bf302
+        summarizeBy: none
+        sourceColumn: Duration
+
+    column 'Payments'
+        dataType: double
+        lineageTag: 8b0b82a8-d0a9-4193-a904-02c6a4c674ec
+        summarizeBy: none
+        sourceColumn: Payments
+
+    column 'Status'
+        dataType: string
+        lineageTag: 2e141c9c-ba99-42f3-868b-944aa69ef047
+        summarizeBy: none
+        sourceColumn: Status
+
+    column 'Loan Risk Category' = IF('loan'[Status] = "A", "Low Risk", IF('loan'[Status] = "B", "Medium Risk", "High Risk"))
+        dataType: string
+        lineageTag: 5faf8cfe-0c4a-4900-b735-6ecdb615c57c
+        summarizeBy: none
+
+    column 'Loan Status Category (Business Logic)' = IF('loan'[Status] = "A", "Good Loan", IF('loan'[Status] = "B", "Defaulter", "Risky"))
+        dataType: string
+        lineageTag: 6024586f-762c-4f1c-8bc3-62705e3502b3
+        summarizeBy: none
+
+    column 'Customer Segmentation' = IF([Customer Level Loan (FIXED LOD)] > 100000, "High Value", IF([Customer Level Loan (FIXED LOD)] > 50000, "Medium", "Low"))
+        dataType: string
+        lineageTag: 63263356-5f4d-4775-8810-c91c7e3b961e
+        summarizeBy: none
+
+    column 'Loan Date' = DATEVALUE('loan'[date_granted])
+        dataType: string
+        lineageTag: 57044415-bd33-4e61-9b8d-a5e55b863b39
+        summarizeBy: none
+
+    measure 'Total Loan' =
+        SUM('loan'[Amount])
+
+
+    measure 'Total Loans' =
+        COUNT('loan'[Loan Id])
+
+
+    measure 'Select Metric Measure' =
+        VAR _SelectedMetric = SELECTEDVALUE('Select Metric'[Value])
+        RETURN
+        SWITCH(
+            _SelectedMetric,
+            "Total Loans", COUNT('loan'[Loan Id]),
+            "Total Amount", SUM('loan'[Amount]),
+            "Avg Loan", AVERAGE('loan'[Amount]),
+            BLANK()
+        )
+
+
+    measure 'Current Month Clients:' =
+        VAR _MaxDate = CALCULATE(MAX('loan'[Loan Date]), ALLSELECTED('loan'))
+        VAR _MinDate = EOMONTH(_MaxDate, -1) + 1
+        VAR _MaxEOM = EOMONTH(_MaxDate, 0)
+        RETURN
+        CALCULATE(
+            DISTINCTCOUNT('client'[Client Id]),
+            REMOVEFILTERS('loan'[Loan Date]),
+            'loan'[Loan Date] >= _MinDate,
+            'loan'[Loan Date] <= _MaxEOM
+        )
+
+
+    measure 'Previous Month Clients' =
+        VAR _MaxDate = CALCULATE(MAX('loan'[Loan Date]), ALLSELECTED('loan'))
+        VAR _MinDate = EOMONTH(_MaxDate, -2) + 1
+        VAR _MaxEOM = EOMONTH(_MaxDate, -1)
+        RETURN
+        CALCULATE(
+            DISTINCTCOUNT('client'[Client Id]),
+            REMOVEFILTERS('loan'[Loan Date]),
+            'loan'[Loan Date] >= _MinDate,
+            'loan'[Loan Date] <= _MaxEOM
+        )
+
+
+    measure 'Customer Level Loan (FIXED LOD)' =
+        CALCULATE(SUM('loan'[Amount]), ALLEXCEPT('client', 'client'[Client Id]))
+
+
+    measure 'Account Level Loan' =
+        CALCULATE(SUM('loan'[Amount]), ALLEXCEPT('disp', 'disp'[Account Id]))
+
+
+    measure 'District Level Loan' =
+        CALCULATE(SUM('loan'[Amount]), ALLEXCEPT('client', 'client'[District Id]))
+
+
+    measure 'Loans' =
+        AVERAGE('loan'[Duration])
+
+
+    partition 'loan' = m
+        mode: import
+        source =
+            let Source = AmazonRedshift.Database("bank-analytics-wg.881226714470.ap-southeast-2.redshift-serverless.amazonaws.com:5439", "dev"),
+            #"Navigation 1" = Source{[Schema = "public", Item = "loan"]}[Data],
+            #"Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"loan_id", "Loan Id"}, {"amount", "Amount"}, {"duration", "Duration"}, {"payments", "Payments"}, {"status", "Status"}}),
+                            #"Removed Blank Columns" = Table.SelectColumns(#"Renamed Columns", {"Loan Id", "account_id", "date_granted", "Amount", "Duration", "Payments", "Status", "Loan Risk Category", "Loan Status Category (Business Logic)", "Customer Segmentation", "Loan Date"}, MissingField.Ignore)
+                        in
+                            #"Removed Blank Columns"

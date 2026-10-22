@@ -1,0 +1,113 @@
+table 'district'
+    lineageTag: 5680ab70-b66d-47d1-8eda-b40f0223a2e9
+
+    column 'district_id'
+        dataType: double
+        lineageTag: f5026c81-9126-407e-b43a-87632b10af07
+        summarizeBy: none
+        sourceColumn: district_id
+
+    column 'District Name'
+        dataType: string
+        lineageTag: 74c857f7-e907-4b16-ad34-5a80fae91a73
+        summarizeBy: none
+        sourceColumn: District Name
+
+    column 'Region'
+        dataType: string
+        lineageTag: f37e4e6d-c06b-4308-bf46-9883aade509c
+        summarizeBy: none
+        sourceColumn: Region
+
+    column 'Population'
+        dataType: double
+        lineageTag: 9201aed6-146e-456d-9896-77ee10fef838
+        summarizeBy: none
+        sourceColumn: Population
+
+    column 'Number of municipalities (< 499 inhabitants)'
+        dataType: double
+        lineageTag: 03cc076f-10d6-4518-b89e-ccdd5c8e9e1b
+        summarizeBy: none
+        sourceColumn: Number of municipalities (< 499 inhabitants)
+
+    column 'Number of municipalities (500–1999 inhabitants)'
+        dataType: double
+        lineageTag: f9f91859-54b0-47a1-9096-1f6fa2e107bd
+        summarizeBy: none
+        sourceColumn: Number of municipalities (500–1999 inhabitants)
+
+    column 'Number of municipalities (2000–9999 inhabitants)'
+        dataType: double
+        lineageTag: 8e617eb5-8d54-48b9-aa99-6565f3d0b0fc
+        summarizeBy: none
+        sourceColumn: Number of municipalities (2000–9999 inhabitants)
+
+    column 'Number of municipalities (> 10000 inhabitants)'
+        dataType: double
+        lineageTag: de07881d-6d55-4c9d-9ffc-3b321b6ea45f
+        summarizeBy: none
+        sourceColumn: Number of municipalities (> 10000 inhabitants)
+
+    column 'Number of cities'
+        dataType: double
+        lineageTag: 7a340b06-7576-4393-aea9-3dfeb3b537ad
+        summarizeBy: none
+        sourceColumn: Number of cities
+
+    column 'Urban population ratio'
+        dataType: double
+        lineageTag: 222487b8-f7d3-4b77-94fc-98591f31eac5
+        summarizeBy: none
+        sourceColumn: Urban population ratio
+
+    column 'Average Salary'
+        dataType: double
+        lineageTag: 7a1c66de-2db1-4713-9744-ab5357b3287c
+        summarizeBy: none
+        sourceColumn: Average Salary
+
+    column 'Unemployment rate (1995)'
+        dataType: double
+        lineageTag: 299a1d12-1c29-4e0e-b344-844a15da95f1
+        summarizeBy: none
+        sourceColumn: Unemployment rate (1995)
+
+    column 'Unemployment rate (1996)'
+        dataType: double
+        lineageTag: 29032d85-6ac8-4d9b-b281-382014356fab
+        summarizeBy: none
+        sourceColumn: Unemployment rate (1996)
+
+    column 'Number of entrepreneurs per 1000 inhabitants'
+        dataType: double
+        lineageTag: aef1ec4e-2e69-4b18-819d-cb884090332c
+        summarizeBy: none
+        sourceColumn: Number of entrepreneurs per 1000 inhabitants
+
+    column 'Number of committed crimes (1995)'
+        dataType: double
+        lineageTag: f351d312-8f7f-44cf-bb80-88decbcfe98e
+        summarizeBy: none
+        sourceColumn: Number of committed crimes (1995)
+
+    column 'Number of committed crimes (1996)'
+        dataType: double
+        lineageTag: d2183053-90ae-4578-a4bd-40a0d6733c3a
+        summarizeBy: none
+        sourceColumn: Number of committed crimes (1996)
+
+    column 'Customer Segmentation' = IF([Customer Level Loan (FIXED LOD)] > 100000, "High Value", IF([Customer Level Loan (FIXED LOD)] > 50000, "Medium", "Low"))
+        dataType: string
+        lineageTag: 7e84ff95-9c97-42d8-ba0e-e7c9a13524fd
+        summarizeBy: none
+
+    partition 'district' = m
+        mode: import
+        source =
+            let Source = AmazonRedshift.Database("bank-analytics-wg.881226714470.ap-southeast-2.redshift-serverless.amazonaws.com:5439", "dev"),
+            #"Navigation 1" = Source{[Schema = "public", Item = "district"]}[Data],
+            #"Renamed Columns" = Table.RenameColumns(#"Navigation 1", {{"a2", "District Name"}, {"a3", "Region"}, {"a4", "Population"}, {"a5", "Number of municipalities (< 499 inhabitants)"}, {"a6", "Number of municipalities (500–1999 inhabitants)"}, {"a7", "Number of municipalities (2000–9999 inhabitants)"}, {"a8", "Number of municipalities (> 10000 inhabitants)"}, {"a9", "Number of cities"}, {"a10", "Urban population ratio"}, {"a11", "Average Salary"}, {"a12", "Unemployment rate (1995)"}, {"a13", "Unemployment rate (1996)"}, {"a14", "Number of entrepreneurs per 1000 inhabitants"}, {"a15", "Number of committed crimes (1995)"}, {"a16", "Number of committed crimes (1996)"}}),
+                            #"Removed Blank Columns" = Table.SelectColumns(#"Renamed Columns", {"district_id", "District Name", "Region", "Population", "Number of municipalities (< 499 inhabitants)", "Number of municipalities (500–1999 inhabitants)", "Number of municipalities (2000–9999 inhabitants)", "Number of municipalities (> 10000 inhabitants)", "Number of cities", "Urban population ratio", "Average Salary", "Unemployment rate (1995)", "Unemployment rate (1996)", "Number of entrepreneurs per 1000 inhabitants", "Number of committed crimes (1995)", "Number of committed crimes (1996)"}, MissingField.Ignore)
+                        in
+                            #"Removed Blank Columns"

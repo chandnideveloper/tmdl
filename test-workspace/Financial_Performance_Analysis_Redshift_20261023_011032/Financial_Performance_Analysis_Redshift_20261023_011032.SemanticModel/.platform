@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Financial_Performance_Analysis_Redshift_20261023_011032"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "0a873af2-d345-4dcb-a5a3-b9143256cc74"
+  }
+}
