@@ -1,7 +1,0 @@
-relationship b2ded384-b796-5f8d-8b80-ff876d59eb98
-	fromColumn: Sales.StoreID
-	toColumn: Stores.StoreID
-
-relationship e99c8ad5-dad3-51e6-bba6-12fbcb2c6fda
-	fromColumn: Sales.ProductID
-	toColumn: Products.ProductID
