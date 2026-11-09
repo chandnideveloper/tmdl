@@ -1,0 +1,16 @@
+relationship ba00daed-87f1-5295-b4d0-fd49af27bb08
+	fromColumn: Encounters.PatientId
+	toColumn: Patients.PatientId
+	crossFilteringBehavior: bothDirections
+
+relationship 4b78771d-2750-5703-aa03-dee5c2def7c8
+	fromColumn: Procedures.PatientId
+	toColumn: Patients.PatientId
+
+relationship 7a20db72-a0be-5c73-8fb2-bcdda2dc9b87
+	fromColumn: Encounters.PayerId
+	toColumn: Payers.PayerId
+
+relationship 612be52f-847e-5a68-9f6a-b3da0041a0fc
+	fromColumn: Encounters.OrganizationId
+	toColumn: Organizations.OrganizationId

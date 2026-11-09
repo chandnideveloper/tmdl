@@ -1,0 +1,204 @@
+table Parameters
+	lineageTag: 0fe49ea5-fe5c-5a45-9ff7-e50b75dc067a
+
+	column Parameter
+		dataType: string
+		lineageTag: 22a0bd0b-9463-5b42-9a2d-5cfbd1cf63df
+		summarizeBy: none
+		sourceColumn: Parameter
+
+		annotation SummarizationSetBy = Automatic
+
+	column Value
+		dataType: string
+		lineageTag: 70b4627b-915e-51c1-9f8a-945f135294b6
+		summarizeBy: none
+		sourceColumn: Value
+
+		annotation SummarizationSetBy = Automatic
+
+	column Label
+		dataType: string
+		lineageTag: 5946bfca-d13d-5640-80d8-f86e9e9334a9
+		summarizeBy: none
+		sourceColumn: Label
+
+		annotation SummarizationSetBy = Automatic
+
+	column Order
+		dataType: int64
+		lineageTag: 3a397789-8015-5220-bf8f-5696fa2e68c5
+		summarizeBy: none
+		sourceColumn: Order
+
+		annotation SummarizationSetBy = Automatic
+
+	measure 'vMaxDate' = 
+		VAR _paramVal = LOOKUPVALUE('Parameters'[Value], 'Parameters'[Parameter], "vMaxDate")
+		RETURN IF(ISBLANK(_paramVal), BLANK(), IF(ISNUMBER(VALUE(_paramVal)), VALUE(_paramVal), _paramVal))
+		lineageTag: e3f35e31-cdd2-52bc-bce3-43956fd49c5c
+
+	measure 'vMaxDate Value' = 
+		VAR _sel = SELECTEDVALUE('Parameters'[Value])
+		VAR _def = LOOKUPVALUE('Parameters'[Value], 'Parameters'[Parameter], "vMaxDate")
+		VAR _active = COALESCE(_sel, _def)
+		RETURN IF(ISBLANK(_active), BLANK(), IF(ISNUMBER(VALUE(_active)), VALUE(_active), _active))
+		lineageTag: 35acab52-675c-5da4-bc3b-462f3421b88f
+
+	measure 'vTopN' = 
+		VAR _paramVal = LOOKUPVALUE('Parameters'[Value], 'Parameters'[Parameter], "vTopN")
+		RETURN IF(ISBLANK(_paramVal), BLANK(), IF(ISNUMBER(VALUE(_paramVal)), VALUE(_paramVal), _paramVal))
+		lineageTag: 3fde786d-acb9-55c4-bfef-94d4fcacafd1
+
+	measure 'vTopN Value' = 
+		VAR _sel = SELECTEDVALUE('Parameters'[Value])
+		VAR _def = LOOKUPVALUE('Parameters'[Value], 'Parameters'[Parameter], "vTopN")
+		VAR _active = COALESCE(_sel, _def)
+		RETURN IF(ISBLANK(_active), BLANK(), IF(ISNUMBER(VALUE(_active)), VALUE(_active), _active))
+		lineageTag: 2f19ebd4-d8b9-543e-8a5f-98ce952cd1fa
+
+	measure 'vPayerCoverage' = 
+		VAR _paramVal = LOOKUPVALUE('Parameters'[Value], 'Parameters'[Parameter], "vPayerCoverage")
+		RETURN IF(ISBLANK(_paramVal), BLANK(), IF(ISNUMBER(VALUE(_paramVal)), VALUE(_paramVal), _paramVal))
+		lineageTag: 5726592b-3718-524d-ab54-727bb37e53bc
+
+	measure 'vPayerCoverage Value' = 
+		VAR _sel = SELECTEDVALUE('Parameters'[Value])
+		VAR _def = LOOKUPVALUE('Parameters'[Value], 'Parameters'[Parameter], "vPayerCoverage")
+		VAR _active = COALESCE(_sel, _def)
+		RETURN IF(ISBLANK(_active), BLANK(), IF(ISNUMBER(VALUE(_active)), VALUE(_active), _active))
+		lineageTag: 62f51d3f-a0cd-5ff4-aa02-a809e16ab3b5
+
+	measure 'vCurrency' = 
+		VAR _paramVal = LOOKUPVALUE('Parameters'[Value], 'Parameters'[Parameter], "vCurrency")
+		RETURN IF(ISBLANK(_paramVal), BLANK(), IF(ISNUMBER(VALUE(_paramVal)), VALUE(_paramVal), _paramVal))
+		lineageTag: f61d93dc-3350-558f-afb2-f1928665a5a4
+
+	measure 'vCurrency Value' = 
+		VAR _sel = SELECTEDVALUE('Parameters'[Value])
+		VAR _def = LOOKUPVALUE('Parameters'[Value], 'Parameters'[Parameter], "vCurrency")
+		VAR _active = COALESCE(_sel, _def)
+		RETURN IF(ISBLANK(_active), BLANK(), IF(ISNUMBER(VALUE(_active)), VALUE(_active), _active))
+		lineageTag: 4a3f67a2-a9e3-5bcb-92fe-af2560015fdb
+
+	measure 'vMinDate' = 
+		VAR _paramVal = LOOKUPVALUE('Parameters'[Value], 'Parameters'[Parameter], "vMinDate")
+		RETURN IF(ISBLANK(_paramVal), BLANK(), IF(ISNUMBER(VALUE(_paramVal)), VALUE(_paramVal), _paramVal))
+		lineageTag: 9199a9f8-5f92-5ced-9189-6155666dc511
+
+	measure 'vMinDate Value' = 
+		VAR _sel = SELECTEDVALUE('Parameters'[Value])
+		VAR _def = LOOKUPVALUE('Parameters'[Value], 'Parameters'[Parameter], "vMinDate")
+		VAR _active = COALESCE(_sel, _def)
+		RETURN IF(ISBLANK(_active), BLANK(), IF(ISNUMBER(VALUE(_active)), VALUE(_active), _active))
+		lineageTag: fb021211-b6f3-5f4f-8fca-aca2157c823b
+
+	measure 'vPatientResponsibility' = 
+		VAR _paramVal = LOOKUPVALUE('Parameters'[Value], 'Parameters'[Parameter], "vPatientResponsibility")
+		RETURN IF(ISBLANK(_paramVal), BLANK(), IF(ISNUMBER(VALUE(_paramVal)), VALUE(_paramVal), _paramVal))
+		lineageTag: 85b52444-9956-5424-9f3f-b54cb7b230d5
+
+	measure 'vPatientResponsibility Value' = 
+		VAR _sel = SELECTEDVALUE('Parameters'[Value])
+		VAR _def = LOOKUPVALUE('Parameters'[Value], 'Parameters'[Parameter], "vPatientResponsibility")
+		VAR _active = COALESCE(_sel, _def)
+		RETURN IF(ISBLANK(_active), BLANK(), IF(ISNUMBER(VALUE(_active)), VALUE(_active), _active))
+		lineageTag: bd5ec220-e12c-579c-8304-de2ee2f067ea
+
+	measure 'vMediumCostThreshold' = 
+		VAR _paramVal = LOOKUPVALUE('Parameters'[Value], 'Parameters'[Parameter], "vMediumCostThreshold")
+		RETURN IF(ISBLANK(_paramVal), BLANK(), IF(ISNUMBER(VALUE(_paramVal)), VALUE(_paramVal), _paramVal))
+		lineageTag: cba2c29a-0595-5f71-aaa9-c6c42855309b
+
+	measure 'vMediumCostThreshold Value' = 
+		VAR _sel = SELECTEDVALUE('Parameters'[Value])
+		VAR _def = LOOKUPVALUE('Parameters'[Value], 'Parameters'[Parameter], "vMediumCostThreshold")
+		VAR _active = COALESCE(_sel, _def)
+		RETURN IF(ISBLANK(_active), BLANK(), IF(ISNUMBER(VALUE(_active)), VALUE(_active), _active))
+		lineageTag: db597fb1-3834-5b10-9b8e-4e27419f9bb8
+
+	measure 'vLowCostThreshold' = 
+		VAR _paramVal = LOOKUPVALUE('Parameters'[Value], 'Parameters'[Parameter], "vLowCostThreshold")
+		RETURN IF(ISBLANK(_paramVal), BLANK(), IF(ISNUMBER(VALUE(_paramVal)), VALUE(_paramVal), _paramVal))
+		lineageTag: 3a8bb61a-15c3-56fc-a4b2-bb853d5f4f82
+
+	measure 'vLowCostThreshold Value' = 
+		VAR _sel = SELECTEDVALUE('Parameters'[Value])
+		VAR _def = LOOKUPVALUE('Parameters'[Value], 'Parameters'[Parameter], "vLowCostThreshold")
+		VAR _active = COALESCE(_sel, _def)
+		RETURN IF(ISBLANK(_active), BLANK(), IF(ISNUMBER(VALUE(_active)), VALUE(_active), _active))
+		lineageTag: 91fa6ce8-3dcc-5579-9414-ab4969e7270e
+
+	measure 'vDateField' = 
+		VAR _paramVal = LOOKUPVALUE('Parameters'[Value], 'Parameters'[Parameter], "vDateField")
+		RETURN IF(ISBLANK(_paramVal), BLANK(), IF(ISNUMBER(VALUE(_paramVal)), VALUE(_paramVal), _paramVal))
+		lineageTag: c6596670-d453-59d8-a8a3-a404eb878119
+
+	measure 'vDateField Value' = 
+		VAR _sel = SELECTEDVALUE('Parameters'[Value])
+		VAR _def = LOOKUPVALUE('Parameters'[Value], 'Parameters'[Parameter], "vDateField")
+		VAR _active = COALESCE(_sel, _def)
+		RETURN IF(ISBLANK(_active), BLANK(), IF(ISNUMBER(VALUE(_active)), VALUE(_active), _active))
+		lineageTag: abeab3da-4278-5524-9cd6-01c17ca8771c
+
+	measure 'vClaimCost' = 
+		VAR _paramVal = LOOKUPVALUE('Parameters'[Value], 'Parameters'[Parameter], "vClaimCost")
+		RETURN IF(ISBLANK(_paramVal), BLANK(), IF(ISNUMBER(VALUE(_paramVal)), VALUE(_paramVal), _paramVal))
+		lineageTag: a7f6215f-7dad-54e8-9225-a0550e8fbf80
+
+	measure 'vClaimCost Value' = 
+		VAR _sel = SELECTEDVALUE('Parameters'[Value])
+		VAR _def = LOOKUPVALUE('Parameters'[Value], 'Parameters'[Parameter], "vClaimCost")
+		VAR _active = COALESCE(_sel, _def)
+		RETURN IF(ISBLANK(_active), BLANK(), IF(ISNUMBER(VALUE(_active)), VALUE(_active), _active))
+		lineageTag: 8f8c356a-9111-578e-8c2e-ae73fb5dc0b6
+
+	measure 'vHighCostThreshold' = 
+		VAR _paramVal = LOOKUPVALUE('Parameters'[Value], 'Parameters'[Parameter], "vHighCostThreshold")
+		RETURN IF(ISBLANK(_paramVal), BLANK(), IF(ISNUMBER(VALUE(_paramVal)), VALUE(_paramVal), _paramVal))
+		lineageTag: 0355f91f-4f1e-514d-b917-8cc976aab59c
+
+	measure 'vHighCostThreshold Value' = 
+		VAR _sel = SELECTEDVALUE('Parameters'[Value])
+		VAR _def = LOOKUPVALUE('Parameters'[Value], 'Parameters'[Parameter], "vHighCostThreshold")
+		VAR _active = COALESCE(_sel, _def)
+		RETURN IF(ISBLANK(_active), BLANK(), IF(ISNUMBER(VALUE(_active)), VALUE(_active), _active))
+		lineageTag: 76ba5e69-b833-5cd2-b595-db932762c4f6
+
+	measure 'vSelectedMetric' = 
+		VAR _paramVal = LOOKUPVALUE('Parameters'[Value], 'Parameters'[Parameter], "vSelectedMetric")
+		RETURN IF(ISBLANK(_paramVal), BLANK(), IF(ISNUMBER(VALUE(_paramVal)), VALUE(_paramVal), _paramVal))
+		lineageTag: 78d608fa-ea66-58e3-9fa7-e86121e768dc
+
+	measure 'vSelectedMetric Value' = 
+		VAR _sel = SELECTEDVALUE('Parameters'[Value])
+		VAR _def = LOOKUPVALUE('Parameters'[Value], 'Parameters'[Parameter], "vSelectedMetric")
+		VAR _active = COALESCE(_sel, _def)
+		RETURN IF(ISBLANK(_active), BLANK(), IF(ISNUMBER(VALUE(_active)), VALUE(_active), _active))
+		lineageTag: 4a8a96b9-f932-5342-b508-cdb8da4801b5
+
+	partition Parameters = m
+		mode: import
+		source =
+				let
+				    Source = #table(
+				        type table [Parameter = text, Value = text, Label = text, #"Order" = Int64.Type],
+				        {
+			            {"vMaxDate", "44597", "vMaxDate", 1},
+			            {"vTopN", "10", "vTopN", 2},
+			            {"vPayerCoverage", "Sum([Encounters.PAYER_COVERAGE])", "vPayerCoverage", 3},
+			            {"vCurrency", "$", "vCurrency", 4},
+			            {"vMinDate", "40545", "vMinDate", 5},
+			            {"vPatientResponsibility", "Sum([Encounters.TOTAL_CLAIM_COST]) - Sum([Encounters.PAYER_COVERAGE])", "vPatientResponsibility", 6},
+			            {"vMediumCostThreshold", "2000", "vMediumCostThreshold", 7},
+			            {"vLowCostThreshold", "500", "vLowCostThreshold", 8},
+			            {"vDateField", "EncounterDate", "vDateField", 9},
+			            {"vClaimCost", "Sum([Encounters.TOTAL_CLAIM_COST])", "vClaimCost", 10},
+			            {"vHighCostThreshold", "10000", "vHighCostThreshold", 11},
+			            {"vSelectedMetric", "'Claim Cost'", "vSelectedMetric", 12}
+				        }
+				    )
+				in
+				    Source
+
+	annotation PBI_ResultType = Table

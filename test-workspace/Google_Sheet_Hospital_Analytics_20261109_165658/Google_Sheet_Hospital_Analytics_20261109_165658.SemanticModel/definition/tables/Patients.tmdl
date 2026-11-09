@@ -1,0 +1,186 @@
+table Patients
+	lineageTag: 9c4a2f5c-f686-5d7d-a80a-951f593c4ba7
+
+	measure 'Encounters per Patient' = DIVIDE(DISTINCTCOUNT('Encounters'[PatientId]), DISTINCTCOUNT('Patients'[PatientId]), BLANK())
+		lineageTag: e03f129a-3757-5215-bf7b-c825754fa9d2
+
+	column PatientId
+		dataType: string
+		lineageTag: 9781b0f2-65fa-548e-88a6-f32aee1c8135
+		summarizeBy: none
+		sourceColumn: PatientId
+
+		annotation SummarizationSetBy = Automatic
+
+	column BIRTHDATE
+		dataType: dateTime
+		lineageTag: d9bd119e-84b7-5006-9a1a-f17fde36b90c
+		summarizeBy: none
+		sourceColumn: BIRTHDATE
+		formatString: General Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column DEATHDATE
+		dataType: dateTime
+		lineageTag: e2a71528-8a3a-5e9a-838f-14074529c357
+		summarizeBy: none
+		sourceColumn: DEATHDATE
+		formatString: General Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column PREFIX
+		dataType: string
+		lineageTag: 860a1716-743a-5b55-a15c-2dea077e95a0
+		summarizeBy: none
+		sourceColumn: PREFIX
+
+		annotation SummarizationSetBy = Automatic
+
+	column FIRST
+		dataType: string
+		lineageTag: 3b73ab17-7653-54ad-8cb6-59b6a5fd0593
+		summarizeBy: none
+		sourceColumn: FIRST
+
+		annotation SummarizationSetBy = Automatic
+
+	column LAST
+		dataType: string
+		lineageTag: b5eae20d-fdc8-5c89-b5a0-5bcbc179e503
+		summarizeBy: none
+		sourceColumn: LAST
+
+		annotation SummarizationSetBy = Automatic
+
+	column SUFFIX
+		dataType: string
+		lineageTag: c3371c68-544a-52f8-983c-01c329286ca9
+		summarizeBy: none
+		sourceColumn: SUFFIX
+
+		annotation SummarizationSetBy = Automatic
+
+	column MAIDEN
+		dataType: string
+		lineageTag: 518bf4ab-47f9-5cb7-9f76-3076b2784708
+		summarizeBy: none
+		sourceColumn: MAIDEN
+
+		annotation SummarizationSetBy = Automatic
+
+	column MARITAL
+		dataType: string
+		lineageTag: 236d890e-dcc4-537e-acc2-261ebfd63895
+		summarizeBy: none
+		sourceColumn: MARITAL
+
+		annotation SummarizationSetBy = Automatic
+
+	column RACE
+		dataType: string
+		lineageTag: 64a91fb2-dca5-5197-b18c-a022b8fdfba9
+		summarizeBy: none
+		sourceColumn: RACE
+
+		annotation SummarizationSetBy = Automatic
+
+	column ETHNICITY
+		dataType: string
+		lineageTag: 233d850f-6677-51f3-bdb6-1dc42aa5938d
+		summarizeBy: none
+		sourceColumn: ETHNICITY
+
+		annotation SummarizationSetBy = Automatic
+
+	column GENDER
+		dataType: string
+		lineageTag: 20785e12-5652-547b-883a-5bd4171cb202
+		summarizeBy: none
+		sourceColumn: GENDER
+
+		annotation SummarizationSetBy = Automatic
+
+	column BIRTHPLACE
+		dataType: string
+		lineageTag: beb3a03b-0466-5cd9-b492-dd1ecccc3db6
+		summarizeBy: none
+		sourceColumn: BIRTHPLACE
+
+		annotation SummarizationSetBy = Automatic
+
+	column ADDRESS
+		dataType: string
+		lineageTag: ebe6e505-301b-5152-ab8b-017ba4281044
+		summarizeBy: none
+		sourceColumn: ADDRESS
+
+		annotation SummarizationSetBy = Automatic
+
+	column CITY
+		dataType: string
+		lineageTag: cad8ce7b-5f67-58b3-8f1f-ad4b159b3e37
+		summarizeBy: none
+		sourceColumn: CITY
+
+		annotation SummarizationSetBy = Automatic
+
+	column STATE
+		dataType: string
+		lineageTag: d062fe25-3c9e-5bbc-a46a-66dcf84145b9
+		summarizeBy: none
+		sourceColumn: STATE
+
+		annotation SummarizationSetBy = Automatic
+
+	column COUNTY
+		dataType: string
+		lineageTag: 20135f99-43e6-58bc-85ca-fd64b7f86592
+		summarizeBy: none
+		sourceColumn: COUNTY
+
+		annotation SummarizationSetBy = Automatic
+
+	column ZIP
+		dataType: string
+		lineageTag: d1eb24fa-828c-5505-94bc-afe528a230f9
+		summarizeBy: none
+		sourceColumn: ZIP
+
+		annotation SummarizationSetBy = Automatic
+
+	column LAT
+		dataType: double
+		lineageTag: 4af8d08d-fc6f-534c-bb81-a69a47856dcf
+		summarizeBy: sum
+		sourceColumn: LAT
+		formatString: #,##0.00
+
+		annotation SummarizationSetBy = Automatic
+
+	column LON
+		dataType: double
+		lineageTag: b2661b45-db37-50a0-bc70-6de2322da1e2
+		summarizeBy: sum
+		sourceColumn: LON
+		formatString: #,##0.00
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Patients = m
+		mode: import
+		source =
+				let
+				    Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1F6O5TFV3fDHfhBcrYxvKq5cDcl-B2wXOcqFs8IBYcpI"),
+				    #"Navigation 1" = Source{[name = "patients", ItemKind = "Table"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars=true]),
+				    #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"Id", "PatientId"}, {"BIRTHDATE", "BIRTHDATE"}, {"DEATHDATE", "DEATHDATE"}, {"PREFIX", "PREFIX"}, {"FIRST", "FIRST"}, {"LAST", "LAST"}, {"SUFFIX", "SUFFIX"}, {"MAIDEN", "MAIDEN"}, {"MARITAL", "MARITAL"}, {"RACE", "RACE"}, {"ETHNICITY", "ETHNICITY"}, {"GENDER", "GENDER"}, {"BIRTHPLACE", "BIRTHPLACE"}, {"ADDRESS", "ADDRESS"}, {"CITY", "CITY"}, {"STATE", "STATE"}, {"COUNTY", "COUNTY"}, {"ZIP", "ZIP"}, {"LAT", "LAT"}, {"LON", "LON"}}, MissingField.Ignore),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"PatientId", type text}, {"BIRTHDATE", type date}, {"DEATHDATE", type text}, {"PREFIX", type text}, {"FIRST", type text}, {"LAST", type text}, {"SUFFIX", type text}, {"MAIDEN", type text}, {"MARITAL", type text}, {"RACE", type text}, {"ETHNICITY", type text}, {"GENDER", type text}, {"BIRTHPLACE", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE", type text}, {"COUNTY", type text}, {"ZIP", type text}, {"LAT", type number}, {"LON", type number}}),
+				    #"Added PatientStatus" = Table.AddColumn(#"Changed Type", "PatientStatus", each if [DEATHDATE] = null or [DEATHDATE] = "" then "Alive" else "Deceased", type text),
+				    #"Added PatientAge" = Table.AddColumn(#"Added PatientStatus", "PatientAge", each Number.RoundDown( Duration.Days(Date.From(DateTime.LocalNow()) - [BIRTHDATE]) / 365.25 ), type number),
+				    #"Added AgeGroup" = Table.AddColumn(#"Added PatientAge", "AgeGroup", each if Number.RoundDown(Duration.Days(Date.From(DateTime.LocalNow()) - [BIRTHDATE]) / 365.25) < 18 then "0-17" else if Number.RoundDown(Duration.Days(Date.From(DateTime.LocalNow()) - [BIRTHDATE]) / 365.25) < 35 then "18-34" else if Number.RoundDown(Duration.Days(Date.From(DateTime.LocalNow()) - [BIRTHDATE]) / 365.25) < 50 then "35-49" else if Number.RoundDown(Duration.Days(Date.From(DateTime.LocalNow()) - [BIRTHDATE]) / 365.25) < 65 then "50-64" else "65+", type number)
+				in
+				    #"Added AgeGroup"
+
+	annotation PBI_ResultType = Table

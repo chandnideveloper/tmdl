@@ -1,0 +1,91 @@
+table Organizations
+	lineageTag: 486a9fd9-26cb-51a2-af87-2085ed991e2f
+
+	column OrganizationId
+		dataType: string
+		lineageTag: c18fccb9-705a-54ec-bc5f-8bbf3ef0a3f2
+		summarizeBy: none
+		sourceColumn: OrganizationId
+
+		annotation SummarizationSetBy = Automatic
+
+	column NAME
+		dataType: string
+		lineageTag: b5946d0a-060b-5b50-8af9-e6b856df8953
+		summarizeBy: none
+		sourceColumn: NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column ADDRESS
+		dataType: string
+		lineageTag: f71161e9-e57b-5827-9101-4f116980f8a9
+		summarizeBy: none
+		sourceColumn: ADDRESS
+
+		annotation SummarizationSetBy = Automatic
+
+	column CITY
+		dataType: string
+		lineageTag: 3ced4b95-9556-544f-b962-d3532b47d7dd
+		summarizeBy: none
+		sourceColumn: CITY
+
+		annotation SummarizationSetBy = Automatic
+
+	column STATE
+		dataType: string
+		lineageTag: ac692857-7ec1-5368-afda-d9a8b65cabb7
+		summarizeBy: none
+		sourceColumn: STATE
+
+		annotation SummarizationSetBy = Automatic
+
+	column ZIP
+		dataType: int64
+		lineageTag: ac374a6e-c6df-5849-be5f-b32a75bdd8de
+		summarizeBy: sum
+		sourceColumn: ZIP
+		formatString: #,##0
+
+		annotation SummarizationSetBy = Automatic
+
+	column LAT
+		dataType: double
+		lineageTag: 4197c610-fbc0-5874-851e-37d078c69daa
+		summarizeBy: sum
+		sourceColumn: LAT
+		formatString: #,##0.00
+
+		annotation SummarizationSetBy = Automatic
+
+	column LON
+		dataType: double
+		lineageTag: 972ef7b5-8881-5670-970f-97a35b755365
+		summarizeBy: sum
+		sourceColumn: LON
+		formatString: #,##0.00
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Organization Name'
+		dataType: string
+		lineageTag: 6d7563ce-da41-5b20-ab61-5c03a7715754
+		summarizeBy: none
+		sourceColumn: Organization Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Organizations = m
+		mode: import
+		source =
+				let
+				    Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1E3FUeo5rHa6_WlF2J-swYE24IocA3n4nPMiuWic4RbQ"),
+				    #"Navigation 1" = Source{[name = "Sheet1", ItemKind = "Table"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars=true]),
+				    #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"Id", "OrganizationId"}, {"NAME", "NAME"}, {"ADDRESS", "ADDRESS"}, {"CITY", "CITY"}, {"STATE", "STATE"}, {"ZIP", "ZIP"}, {"LAT", "LAT"}, {"LON", "LON"}}, MissingField.Ignore),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"OrganizationId", type text}, {"NAME", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE", type text}, {"ZIP", Int64.Type}, {"LAT", type number}, {"LON", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,73 @@
+table Payers
+	lineageTag: d16c14ba-676d-546e-8972-b343c8f2fe4d
+
+	column PayerId
+		dataType: string
+		lineageTag: 64a53527-52d2-5029-b4f2-a6f70fd69343
+		summarizeBy: none
+		sourceColumn: PayerId
+
+		annotation SummarizationSetBy = Automatic
+
+	column NAME
+		dataType: string
+		lineageTag: 6ff53d8d-c87c-5be6-9378-af9975e23382
+		summarizeBy: none
+		sourceColumn: NAME
+
+		annotation SummarizationSetBy = Automatic
+
+	column ADDRESS
+		dataType: string
+		lineageTag: e0818c93-601c-5b57-a81d-b4cf32b97e94
+		summarizeBy: none
+		sourceColumn: ADDRESS
+
+		annotation SummarizationSetBy = Automatic
+
+	column CITY
+		dataType: string
+		lineageTag: 53a4904d-3f23-59f4-85dc-25e53013ac10
+		summarizeBy: none
+		sourceColumn: CITY
+
+		annotation SummarizationSetBy = Automatic
+
+	column STATE_HEADQUARTERED
+		dataType: string
+		lineageTag: 15c8e033-1c61-5281-a3cc-0c612af24255
+		summarizeBy: none
+		sourceColumn: STATE_HEADQUARTERED
+
+		annotation SummarizationSetBy = Automatic
+
+	column ZIP
+		dataType: int64
+		lineageTag: d32e16ae-d110-5641-bcb6-34e0ef1d3220
+		summarizeBy: sum
+		sourceColumn: ZIP
+		formatString: #,##0
+
+		annotation SummarizationSetBy = Automatic
+
+	column PHONE
+		dataType: string
+		lineageTag: 17956304-51ca-5ad6-a8b2-3df7be1dd865
+		summarizeBy: none
+		sourceColumn: PHONE
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Payers = m
+		mode: import
+		source =
+				let
+				    Source = GoogleSheets.Contents("https://docs.google.com/spreadsheets/d/1NB9uAQnBa6RYGfm5addKbcToYUZJY_5OlBkWxVZRrbU"),
+				    #"Navigation 1" = Source{[name = "payers", ItemKind = "Table"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars=true]),
+				    #"Renamed Columns" = Table.RenameColumns(#"Promoted Headers", {{"Id", "PayerId"}, {"NAME", "NAME"}, {"ADDRESS", "ADDRESS"}, {"CITY", "CITY"}, {"STATE_HEADQUARTERED", "STATE_HEADQUARTERED"}, {"ZIP", "ZIP"}, {"PHONE", "PHONE"}}, MissingField.Ignore),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns", {{"PayerId", type text}, {"NAME", type text}, {"ADDRESS", type text}, {"CITY", type text}, {"STATE_HEADQUARTERED", type text}, {"ZIP", Int64.Type}, {"PHONE", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
