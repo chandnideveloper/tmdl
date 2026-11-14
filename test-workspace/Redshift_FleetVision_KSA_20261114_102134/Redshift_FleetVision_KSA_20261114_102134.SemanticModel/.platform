@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Redshift_FleetVision_KSA_20261114_102134"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "f7c471d8-c505-5ee1-84aa-7af796a87073"
+  }
+}
